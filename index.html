@@ -24,11 +24,11 @@
     .nav-item:hover { background: #F4F4F5; }
     .nav-item:focus-visible { outline: 2px solid #623CEA; outline-offset: -2px; }
     .nav-section { position: relative; }
-    .nav-indicator { position: absolute; left: 0; right: 0; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: top 250ms cubic-bezier(0.23,1,0.32,1), height 250ms cubic-bezier(0.23,1,0.32,1); z-index: 0; pointer-events: none; }
+    .nav-indicator { position: absolute; left: 0; right: 0; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); top: 0; transition: transform 250ms cubic-bezier(0.23,1,0.32,1); z-index: 0; pointer-events: none; }
     .nav-section .nav-item { position: relative; z-index: 1; }
     .nav-section .nav-item.active { background: transparent; }
     .nav-item-content { display: flex; align-items: center; gap: 8px; }
-    .nav-label { font-size: 14px; color: #262626; letter-spacing: -0.28px; }
+    .nav-label { font-size: 14px; color: #262626; }
     .nav-item.active .nav-label { color: #623CEA; font-weight: 500; }
     .nav-icon { width: 16px; height: 16px; flex-shrink: 0; color: #939596; overflow: visible; }
     .nav-item.active .nav-icon { color: #623CEA; }
@@ -38,19 +38,19 @@
 
     /* Tabs (F360) */
     .tab-group { background: #F4F4F5; border-radius: 8px; padding: 4px; display: flex; gap: 8px; position: relative; }
-    .tab-indicator { position: absolute; top: 4px; bottom: 4px; left: 4px; background: white; border-radius: 6px; box-shadow: 0 1px 3px rgba(16,24,40,0.1), 0 1px 2px rgba(16,24,40,0.06); transition: transform 250ms cubic-bezier(0.23,1,0.32,1), width 250ms cubic-bezier(0.23,1,0.32,1); }
-    .tab-btn { flex: 1; position: relative; z-index: 1; padding: 6px 12px; border-radius: 6px; font-size: 14px; font-weight: 500; line-height: 20px; color: #6B6C6E; cursor: pointer; border: none; background: transparent; white-space: nowrap; letter-spacing: -0.28px; transition: color 0.15s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+    .tab-indicator { position: absolute; top: 4px; bottom: 4px; left: 4px; background: white; border-radius: 6px; box-shadow: 0 1px 3px rgba(16,24,40,0.1), 0 1px 2px rgba(16,24,40,0.06); width: 100px; transform-origin: 0 50%; transition: transform 250ms cubic-bezier(0.23,1,0.32,1); }
+    .tab-btn { flex: 1; position: relative; z-index: 1; padding: 6px 12px; border-radius: 6px; font-size: 14px; font-weight: 500; line-height: 20px; color: #6B6C6E; cursor: pointer; border: none; background: transparent; white-space: nowrap; transition: color 0.15s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
     .tab-btn.active { color: #262626; }
 
     /* Buttons (F360) */
-    .btn-primary, .btn-outline { min-width: 100px; border-radius: 8px; font-size: 14px; font-weight: 500; line-height: 20px; letter-spacing: -0.28px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.15s; }
+    .btn-primary, .btn-outline { min-width: 100px; border-radius: 8px; font-size: 14px; font-weight: 500; line-height: 20px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.15s; }
     .btn-primary { padding: 10px 16px; background: #623CEA; color: #fff; border: none; }
     .btn-primary:hover { background: #5430D6; }
     .btn-primary:disabled { background: #D7CCFF; cursor: default; }
     .btn-outline { padding: 9px 15px; background: #fff; color: #623CEA; border: 1px solid #623CEA; }
     .btn-outline:hover { background: #F3F0FF; }
     .btn-outline:disabled { color: #D7CCFF; border-color: #D7CCFF; background: #fff; cursor: default; }
-    .btn-link { padding: 2px 4px; margin: -2px -4px; border: none; border-radius: 6px; background: transparent; color: #623CEA; font-size: 14px; font-weight: 500; line-height: 20px; letter-spacing: -0.28px; cursor: pointer; }
+    .btn-link { padding: 2px 4px; margin: -2px -4px; border: none; border-radius: 6px; background: transparent; color: #623CEA; font-size: 14px; font-weight: 500; line-height: 20px; cursor: pointer; }
     .btn-link:hover { background: #F3F0FF; }
     .btn-link.btn-neutral { color: #6B6C6E; }
     .btn-link.btn-neutral:hover { background: #F4F4F5; color: #262626; }
@@ -69,9 +69,9 @@
     .start { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(280px, 1fr); gap: 40px; align-items: start; padding: 32px 24px; }
     .start-main { display: flex; flex-direction: column; gap: 24px; max-width: 640px; }
     .start-h { font-size: 28px; line-height: 36px; font-weight: 500; letter-spacing: -0.56px; }
-    .start-p { font-size: 16px; line-height: 24px; letter-spacing: -0.32px; color: #6B6C6E; max-width: 60ch; margin-top: 8px; }
+    .start-p { font-size: 16px; line-height: 24px; color: #6B6C6E; max-width: 60ch; margin-top: 8px; }
     .start-steps { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; counter-reset: s; }
-    .start-steps li { display: grid; grid-template-columns: 28px 1fr; gap: 12px; align-items: baseline; font-size: 16px; line-height: 24px; letter-spacing: -0.32px; counter-increment: s; }
+    .start-steps li { display: grid; grid-template-columns: 28px 1fr; gap: 12px; align-items: baseline; font-size: 16px; line-height: 24px; counter-increment: s; }
     .start-steps li::before { content: counter(s); font-size: 14px; font-weight: 500; color: #623CEA; text-align: right; font-variant-numeric: tabular-nums; }
     .start-steps span { color: #6B6C6E; }
     .start-preview { margin-top: 8px; }
@@ -115,7 +115,7 @@
     .search input:focus { border-color: #623CEA; box-shadow: 0 0 0 3px rgba(98,60,234,0.35); }
     .table { border: 1px solid #EDEDED; border-radius: 8px; overflow: hidden; }
     .acct { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; line-height: 20px; color: #262626; }
-    .acct svg { color: #0A7343; }
+    .seal { flex-shrink: 0; }
     .acct-email { display: block; font-size: 14px; line-height: 20px; color: #6B6C6E; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .tr { display: grid; grid-template-columns: minmax(0,1fr) 220px 140px 160px 160px; gap: 16px; align-items: center; padding: 12px 16px; border-bottom: 1px solid #EDEDED; }
     .tr:not(.th) { min-height: 68px; }
@@ -124,10 +124,10 @@
     .tr .pill::before { display: none; }
     .th :last-child, .td-act { text-align: right; justify-content: flex-end; }
     .td-vendor { display: flex; align-items: center; gap: 12px; min-width: 0; }
-    .v-name { font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: -0.28px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .v-name { font-size: 14px; font-weight: 400; line-height: 20px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .v-sub { font-size: 14px; line-height: 20px; color: #6B6C6E; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .td-date { font-size: 14px; line-height: 20px; color: #262626; }
-    .td-act { display: flex; gap: 12px; align-items: center; }
+    .td-act { display: flex; gap: 20px; align-items: center; }
     .muted { color: #6B6C6E; font-size: 14px; }
     .tr.fresh { animation: row-in 1600ms cubic-bezier(0.23,1,0.32,1); }
     @keyframes row-in { 0% { opacity: 0; transform: translateY(-6px); background: #F3F0FF; } 20% { opacity: 1; transform: none; background: #F3F0FF; } 100% { background: transparent; } }
@@ -146,7 +146,7 @@
     .overlay.open .dialog { transform: none; }
     .dlg-head { padding: 24px 24px 0; display: flex; flex-direction: column; gap: 4px; }
     .dlg-title { font-size: 20px; font-weight: 500; line-height: 28px; letter-spacing: -0.4px; padding-right: 40px; }
-    .dlg-desc { font-size: 14px; line-height: 20px; letter-spacing: -0.28px; color: #6B6C6E; }
+    .dlg-desc { font-size: 14px; line-height: 20px; color: #6B6C6E; }
     .dlg-close { position: absolute; top: 20px; right: 20px; width: 32px; height: 32px; border: none; border-radius: 8px; background: transparent; color: #6B6C6E; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .dlg-close:hover { background: #F3F0FF; }
     .dlg-body { padding: 24px; display: flex; flex-direction: column; gap: 20px; }
@@ -156,10 +156,10 @@
 
     /* Fields */
     .field { display: flex; flex-direction: column; gap: 4px; }
-    .label { font-size: 14px; font-weight: 500; line-height: 20px; letter-spacing: -0.28px; color: #262626; transition: color 0.15s; }
+    .label { font-size: 14px; font-weight: 500; line-height: 20px; color: #262626; transition: color 0.15s; }
     .field.filled .label { color: #6B6C6E; }
     .label .req { color: #CC2828; }
-    .input { height: 48px; width: 100%; padding: 0 16px; border: 1px solid #D4D4D6; border-radius: 8px; font-size: 16px; letter-spacing: -0.32px; background: #fff; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
+    .input { height: 48px; width: 100%; padding: 0 16px; border: 1px solid #D4D4D6; border-radius: 8px; font-size: 16px; background: #fff; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
     .input::placeholder { color: #757678; }
     .input:focus { border-color: #623CEA; box-shadow: 0 0 0 3px rgba(98,60,234,0.35); }
     .invalid .input, .invalid .phone { border-color: #CC2828; }
@@ -171,7 +171,7 @@
     .invalid .phone:focus-within { border-color: #CC2828; box-shadow: 0 0 0 3px rgba(204,40,40,0.12); }
     .phone-cc { display: flex; align-items: center; flex-shrink: 0; padding: 0 12px 0 16px; border-right: 1px solid #E3E3E5; border-radius: 8px 0 0 8px; background: #F9FAFB; font-size: 16px; color: #262626; }
     .phone .input { border: none; box-shadow: none !important; height: 46px; }
-    .hint { display: flex; gap: 8px; padding: 12px; border-radius: 8px; background: #F3F0FF; font-size: 14px; line-height: 20px; letter-spacing: -0.28px; animation: fade-up 200ms ease; }
+    .hint { display: flex; gap: 8px; padding: 12px; border-radius: 8px; background: #F3F0FF; font-size: 14px; line-height: 20px; animation: fade-up 200ms ease; }
     .hint svg { flex-shrink: 0; color: #623CEA; margin-top: 2px; }
 
     /* Combobox (matches vendor dropdown reference) */
@@ -187,17 +187,17 @@
     .opt[aria-disabled="true"] { cursor: default; }
     .opt[aria-disabled="true"] .avatar, .opt[aria-disabled="true"] .opt-text { opacity: 0.5; }
     .opt-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-    .opt-name { font-size: 16px; line-height: 24px; letter-spacing: -0.32px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .opt-name { font-size: 16px; line-height: 24px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .opt-sub { font-size: 14px; line-height: 20px; color: #6B6C6E; }
     .opt-check { width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid #8E8F91; display: flex; align-items: center; justify-content: center; color: transparent; flex-shrink: 0; transition: background 0.15s, border-color 0.15s; }
     .opt[aria-disabled="true"] .opt-check { background: #F4F4F5; border-color: #E3E3E5; }
     .opt[aria-selected="true"] .opt-check { background: #623CEA; border-color: #623CEA; color: #fff; }
     .opt-empty { padding: 16px 12px; font-size: 14px; line-height: 20px; color: #6B6C6E; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-    .chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 4px 4px 12px; border-radius: 100px; background: #F3F0FF; color: #4A2BB8; font-size: 14px; line-height: 20px; letter-spacing: -0.28px; max-width: 100%; }
+    .chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 4px 4px 12px; border-radius: 100px; background: #F3F0FF; color: #4A2BB8; font-size: 14px; line-height: 20px; max-width: 100%; }
     .chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .chip.pop { animation: pop 250ms cubic-bezier(0.23,1,0.32,1); }
-    @keyframes pop { from { transform: scale(0.8); opacity: 0; } }
+    @keyframes pop { from { opacity: 0; } }
     .chip button { width: 24px; height: 24px; border: none; border-radius: 100px; background: transparent; color: #623CEA; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .chip button:hover { background: #E4DCFF; }
     .tag { font-size: 12px; line-height: 16px; padding: 2px 8px; border-radius: 100px; background: #F4F4F5; color: #6B6C6E; white-space: nowrap; }
@@ -209,7 +209,7 @@
     .kyb-head .avatar svg { width: 28px; height: 28px; }
     .kyb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; margin: 0; padding: 16px; border-radius: 12px; border: 1px solid #E3E3E5; }
     .kyb-sec { display: flex; flex-direction: column; gap: 8px; }
-    .kyb-sec h3 { padding-left: 10px; font-size: 18px; line-height: 28px; font-weight: 500; letter-spacing: -0.36px; color: #262626; }
+    .kyb-sec h3 { padding-left: 10px; font-size: 16px; line-height: 24px; font-weight: 500; color: #262626; }
     .kyb-sec .full { grid-column: 1 / -1; }
     /* Right-side drawer variant of .overlay */
     .overlay.drawer { justify-content: flex-end; align-items: stretch; padding: 0; }
@@ -225,7 +225,7 @@
     /* Toast */
     .toasts { position: fixed; top: 24px; left: calc(50% + 133px); transform: translateX(-50%); z-index: 2000; display: flex; flex-direction: column; gap: 8px; align-items: center; }
     /* Toast (Fuse Design System 147:777): white card, tinted alert icon, text, optional action, close */
-    .toast { width: 400px; max-width: calc(100vw - 32px); display: flex; align-items: center; gap: 12px; padding: 12px 12px 12px 12px; border-radius: 12px; background: #fff; border: 1px solid #EDEDED; color: #262626; font-size: 14px; line-height: 20px; letter-spacing: -0.28px; box-shadow: 0 8px 24px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04); animation: toast-in 250ms cubic-bezier(0.23,1,0.32,1); }
+    .toast { width: 400px; max-width: calc(100vw - 32px); display: flex; align-items: center; gap: 12px; padding: 12px 12px 12px 12px; border-radius: 12px; background: #fff; border: 1px solid #EDEDED; color: #262626; font-size: 14px; line-height: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04); animation: toast-in 250ms cubic-bezier(0.23,1,0.32,1); }
     .toast.out { opacity: 0; transform: translateY(-8px); transition: opacity 200ms, transform 200ms; }
     .toast-ic { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; }
     .toast-ic.t-success { background: #E2F5EA; } .toast-ic.t-info { background: #E6E8FA; } .toast-ic.t-warning { background: #FDEEDC; } .toast-ic.t-error { background: #FDE4E4; }
@@ -294,7 +294,7 @@
     .gm-hdr small { font-size: 12px; color: #5F6368; }
     .gm-hdr time { margin-left: auto; font-size: 12px; color: #5F6368; }
     .mailcard { font-family: 'DM Sans', sans-serif; max-width: 600px; border: 1px solid #E3E3E5; border-radius: 12px; padding: 40px; display: flex; flex-direction: column; gap: 24px; align-items: flex-start; color: #262626; animation: fade-up 300ms cubic-bezier(0.23,1,0.32,1); }
-    .mailcard p { font-size: 16px; line-height: 24px; letter-spacing: -0.32px; color: #4A4B4D; }
+    .mailcard p { font-size: 16px; line-height: 24px; color: #4A4B4D; }
     .mailcard .small { font-size: 14px; line-height: 20px; color: #6B6C6E; }
 
     /* KYB/KYC flow */
@@ -307,7 +307,7 @@
     .rx-head { display: flex; flex-direction: column; gap: 8px; }
     .kicker { font-size: 14px; line-height: 20px; font-weight: 500; color: #623CEA; }
     .rx-h1 { font-size: 28px; line-height: 36px; font-weight: 500; letter-spacing: -0.56px; }
-    .rx-sub { font-size: 16px; line-height: 24px; letter-spacing: -0.32px; color: #6B6C6E; }
+    .rx-sub { font-size: 16px; line-height: 24px; color: #6B6C6E; }
     .rx-card { background: #fff; border: 1px solid #E3E3E5; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 24px; }
     .rx-card h2 { font-size: 20px; line-height: 28px; font-weight: 500; letter-spacing: -0.4px; }
     .between { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
@@ -329,6 +329,7 @@
     .mopt:has(input:checked) .radio { border-color: #623CEA; }
     .mopt:has(input:checked) .radio::after { content: ''; width: 10px; height: 10px; border-radius: 50%; background: #623CEA; }
     .mopt-t { display: flex; align-items: center; gap: 8px; font-size: 20px; line-height: 28px; font-weight: 500; }
+    .mopt-note { font-size: 14px; line-height: 20px; font-weight: 400; color: #6B6C6E; }
     .mopt-d { font-size: 14px; line-height: 20px; color: #6B6C6E; margin-top: 4px; }
     .meta { display: flex; flex-direction: column; gap: 12px; font-size: 14px; line-height: 20px; }
     .meta p { display: flex; gap: 8px; align-items: center; }
@@ -346,7 +347,7 @@
     .dd.open .dd-list { opacity: 1; transform: none; pointer-events: auto; }
     .dd.dd-up .dd-list { top: auto; bottom: calc(100% + 8px); transform: translateY(4px); }
     .dd.dd-up.open .dd-list { transform: none; }
-    .dd-opt { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-radius: 8px; font-size: 16px; line-height: 24px; letter-spacing: -0.32px; color: #262626; cursor: pointer; }
+    .dd-opt { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-radius: 8px; font-size: 16px; line-height: 24px; color: #262626; cursor: pointer; }
     .dd-opt.active { background: #F4F4F5; }
     .dd-opt svg { flex-shrink: 0; color: #623CEA; visibility: hidden; }
     .dd-opt[aria-selected="true"] svg { visibility: visible; }
@@ -409,7 +410,7 @@
     .section-h { font-size: 20px; line-height: 28px; letter-spacing: -0.4px; }
     .tab-btn.inert { cursor: default; }
     .tab-btn:not(.active):not(.inert):hover { color: #262626; }
-    .rc-cols { grid-template-columns: minmax(0,1fr) 160px 140px 240px; }
+    .rc-cols { grid-template-columns: 140px minmax(0,1fr) 160px 240px; }
     .btn-primary.danger { background: #CC2828; }
     .btn-primary.danger:hover { background: #B32222; }
     .dialog.sm { width: 440px; }
@@ -451,7 +452,7 @@
 <div id="narrow-overlay" style="display:none; position:fixed; inset:0; background:#F9FAFB; z-index:9999; align-items:center; justify-content:center;">
   <div style="background:white; border-radius:12px; padding:48px 24px; width:432px; max-width:calc(100vw - 32px); display:flex; flex-direction:column; align-items:center; gap:32px; box-shadow:0 0 6px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.02);">
     <img src="assets/img_narrow_screen.svg" alt="" style="width:50px; height:50px;" />
-    <p style="font-size:16px; line-height:24px; letter-spacing:-0.32px; text-align:center;">Fuse360 works best on larger screens.<br>You need a screen with resolution width of<br><span style="font-weight:600;">1250px</span> or higher<br><br>If you're using a small screen, our app<br>might not work properly.</p>
+    <p style="font-size:16px; line-height:24px; text-align:center;">Fuse360 works best on larger screens.<br>You need a screen with resolution width of<br><span style="font-weight:600;">1250px</span> or higher<br><br>If you're using a small screen, our app<br>might not work properly.</p>
   </div>
 </div>
 
@@ -469,8 +470,8 @@
   <button class="user-card" data-gm-noop aria-label="Switch business">
     <span style="width:40px; height:40px; border-radius:100px; background:#FFEBF3; display:flex; align-items:center; justify-content:center; flex-shrink:0;"><img src="assets/imgProfileBuilding.svg" style="width:22px; height:22px;" alt="" /></span>
     <span style="min-width:0; flex:1; display:flex; flex-direction:column; text-align:left;">
-      <span id="uc-biz" style="font-size:14px; font-weight:500; color:#262626; letter-spacing:-0.28px; line-height:20px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Galaxy Electronics Pvt. Ltd.</span>
-      <span id="uc-role" style="font-size:14px; color:#6B6C6E; letter-spacing:-0.28px; line-height:20px;">Owner</span>
+      <span id="uc-biz" style="font-size:14px; font-weight:500; color:#262626; line-height:20px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Galaxy Electronics Pvt. Ltd.</span>
+      <span id="uc-role" style="font-size:14px; color:#6B6C6E; line-height:20px;">Owner</span>
     </span>
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#939596" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="m5 7.5 5 5 5-5"/></svg>
   </button>
@@ -659,7 +660,7 @@
 <!-- Invite dialog -->
 <div class="overlay" id="invite-dlg" hidden>
   <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="invite-title" aria-describedby="invite-desc">
-    <button class="dlg-close" data-close aria-label="Close"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M6 18 18 6M6 6l12 12"/></svg></button>
+    <button class="dlg-close" data-close aria-label="Close"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 18 18 6M6 6l12 12"/></svg></button>
     <div class="dlg-head">
       <h2 class="dlg-title" id="invite-title">Invite vendors</h2>
       <p class="dlg-desc" id="invite-desc">We'll ask them to share their KYB/KYC details with you. You'll see them here once they agree.</p>
@@ -724,7 +725,7 @@
 <div class="overlay drawer" id="kyb-dlg" hidden>
   <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="kyb-heading">
     <div class="drawer-head"><h2 class="dlg-title" id="kyb-heading">KYB/KYC Details</h2></div>
-    <button class="dlg-close" data-close aria-label="Close"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M6 18 18 6M6 6l12 12"/></svg></button>
+    <button class="dlg-close" data-close aria-label="Close"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 18 18 6M6 6l12 12"/></svg></button>
     <div class="dlg-body" id="kyb-body"></div>
   </div>
 </div>
@@ -783,17 +784,15 @@
       <div class="rx-head"><p class="kicker">Step 2 of 3</p><h1 class="rx-h1">How would you like to complete verification?</h1><p class="rx-sub">Pick the way that suits you. You can switch until you submit.</p></div>
       <fieldset class="methods"><legend class="sr" style="position:absolute;left:-9999px">Verification method</legend>
         <label class="mopt"><input type="radio" name="method" value="online" />
-          <div class="between"><span class="icon-tile"><svg class="i i24"><use href="#i-desktop"/></svg></span><span class="radio"></span></div>
-          <div><div class="mopt-t">Online <span class="pill s-sent">Faster review</span></div><p class="mopt-d">Fill in the form and upload documents right here in your browser.</p></div>
+          <div><div class="between"><div class="mopt-t">Online <span class="mopt-note">Faster review</span></div><span class="radio"></span></div><p class="mopt-d">Fill in the form and upload documents right here in your browser.</p></div>
           <div class="meta"><p><svg class="i"><use href="#i-clock"/></svg>About 10 minutes to fill</p><p><svg class="i"><use href="#i-pencil"/></svg>Sign electronically</p><p><svg class="i"><use href="#i-calendar"/></svg>Reviewed in 1-2 business days</p></div>
         </label>
         <label class="mopt"><input type="radio" name="method" value="manual" />
-          <div class="between"><span class="icon-tile"><svg class="i i24"><use href="#i-download"/></svg></span><span class="radio"></span></div>
-          <div><div class="mopt-t">Manual</div><p class="mopt-d">Download paper forms, fill and sign them by hand, then upload scans.</p></div>
+          <div><div class="between"><div class="mopt-t">Manual</div><span class="radio"></span></div><p class="mopt-d">Download paper forms, fill and sign them by hand, then upload scans.</p></div>
           <div class="meta"><p><svg class="i"><use href="#i-printer"/></svg>Print, sign and stamp</p><p><svg class="i"><use href="#i-upload"/></svg>Upload scans or photos later</p><p><svg class="i"><use href="#i-calendar"/></svg>Reviewed in 3-5 business days</p></div>
         </label>
       </fieldset>
-      <p class="err" id="choice-err" role="alert" style="display:block" hidden>Choose online or manual to continue.</p>
+      <p class="err" id="choice-err" role="alert" style="display:block" hidden>Choose online or manual to continue</p>
       <p class="note-row"><svg class="i"><use href="#i-lock"/></svg>Your documents are encrypted and shared with Galaxy Electronics only after you approve.</p>
       <div class="between"><button type="button" class="btn-outline" data-rx="welcome">Back</button><button class="btn-primary" id="choice-go">Continue</button></div>
     </form>
@@ -810,8 +809,8 @@
         <div class="field"><label class="label" for="b-reg">Business Registration Number <span class="req" aria-hidden="true">*</span></label><input class="input" id="b-reg" required placeholder="Enter registration number" data-err="Enter the business registration number" aria-describedby="b-reg-err b-reg-hint" /><span class="hint-text" id="b-reg-hint">As shown on your registration certificate</span><span class="err" id="b-reg-err"></span></div>
         <div class="field"><label class="label" for="b-tin">Tax Identification Number (9 digits) <span class="req" aria-hidden="true">*</span></label><input class="input" id="b-tin" required placeholder="Enter 9-digit TIN" data-err="Enter the 9-digit TIN" aria-describedby="b-tin-err" inputmode="numeric" maxlength="9" data-pattern="^\d{9}$" /><span class="err" id="b-tin-err"></span></div>
         <div class="field"><label class="label" for="b-addr">Business Address <span class="req" aria-hidden="true">*</span></label><input class="input" id="b-addr" required placeholder="Enter full business address" data-err="Enter the full business address" aria-describedby="b-addr-err" autocomplete="street-address" /><span class="err" id="b-addr-err"></span></div>
-        <div class="field"><label class="label" for="b-phone">Mobile Number <span class="req" aria-hidden="true">*</span></label><div class="phone"><span class="phone-cc">+248</span><input class="input" id="b-phone" type="tel" inputmode="tel" required autocomplete="tel-national" placeholder="1234567" data-err="Enter a 7-digit mobile number" data-pattern="^\d{7}$" aria-describedby="b-phone-err b-phone-note" /></div><span class="err" id="b-phone-err"></span><p class="field-note" id="b-phone-note"><svg class="i i16"><use href="#i-info"/></svg><span>This number will be available to businesses on FusePay so they can contact you.</span></p></div>
-        <div class="field"><label class="label" for="b-email">Email <span class="req" aria-hidden="true">*</span></label><div class="input-ic"><svg class="i i16"><use href="#i-mail"/></svg><input class="input" id="b-email" type="email" required autocomplete="email" placeholder="Enter valid business email" data-err="Enter a valid email, like name@business.com" data-pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$" aria-describedby="b-email-err b-email-note" /></div><span class="err" id="b-email-err"></span><p class="field-note" id="b-email-note"><svg class="i i16"><use href="#i-info"/></svg><span>This email will be available to businesses on FusePay so they can contact you.</span></p></div>
+        <div class="field"><label class="label" for="b-phone">Mobile Number <span class="req" aria-hidden="true">*</span></label><div class="phone"><span class="phone-cc">+248</span><input class="input" id="b-phone" type="tel" inputmode="tel" required autocomplete="tel-national" placeholder="1234567" data-err="Enter a 7-digit mobile number" data-pattern="^\d{7}$" aria-describedby="b-phone-err b-phone-note" /></div><span class="err" id="b-phone-err"></span><p class="field-note" id="b-phone-note"><svg class="i i16"><use href="#i-info"/></svg><span>This number will be available to businesses on FusePay so they can contact you</span></p></div>
+        <div class="field"><label class="label" for="b-email">Email <span class="req" aria-hidden="true">*</span></label><div class="input-ic"><svg class="i i16"><use href="#i-mail"/></svg><input class="input" id="b-email" type="email" required autocomplete="email" placeholder="Enter valid business email" data-err="Enter a valid email, like name@business.com" data-pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$" aria-describedby="b-email-err b-email-note" /></div><span class="err" id="b-email-err"></span><p class="field-note" id="b-email-note"><svg class="i i16"><use href="#i-info"/></svg><span>This email will be available to businesses on FusePay so they can contact you</span></p></div>
         <div class="field"><label class="label" for="b-cat">Business Category <span class="req" aria-hidden="true">*</span></label><select class="input" id="b-cat" required data-err="Select a business category" aria-describedby="b-cat-err"><option value="">Select business category</option><option>Wholesaler</option><option>Retailer</option><option>Bill Partner</option><option>Hospitality</option><option>Restaurants &amp; Catering</option><option>Other</option></select><span class="err" id="b-cat-err"></span></div>
         <div class="field"><label class="label" for="b-send">Expected Monthly Send Volume <span class="req" aria-hidden="true">*</span></label><select class="input" id="b-send" required data-err="Select an expected send volume" aria-describedby="b-send-err"><option value="">Select send volume</option><option>Less than SR 1M</option><option>SR 1M – 10M</option><option>More than SR 10M</option></select><span class="err" id="b-send-err"></span></div>
         <div class="field"><label class="label" for="b-recv">Expected Monthly Receive Volume <span class="req" aria-hidden="true">*</span></label><select class="input" id="b-recv" required data-err="Select an expected receive volume" aria-describedby="b-recv-err"><option value="">Select receive volume</option><option>Less than SR 1M</option><option>SR 1M – 10M</option><option>More than SR 10M</option></select><span class="err" id="b-recv-err"></span></div>
@@ -837,7 +836,7 @@
         <div class="field"><label class="label" for="o-addr">Residential Address <span class="req" aria-hidden="true">*</span></label><input class="input" id="o-addr" required placeholder="Enter residential address" data-err="Enter the residential address" aria-describedby="o-addr-err" autocomplete="street-address" /><span class="err" id="o-addr-err"></span></div>
         <div class="field"><label class="label" for="o-phone">Mobile Number <span class="req" aria-hidden="true">*</span></label><div class="phone"><span class="phone-cc">+248</span><input class="input" id="o-phone" type="tel" inputmode="tel" required autocomplete="tel-national" placeholder="1234567" data-err="Enter a 7-digit mobile number" data-pattern="^\d{7}$" aria-describedby="o-phone-err" /></div><span class="err" id="o-phone-err"></span></div>
         <div class="field"><label class="label" for="o-email">Email <span class="req" aria-hidden="true">*</span></label><div class="input-ic"><svg class="i i16"><use href="#i-mail"/></svg><input class="input" id="o-email" type="email" required autocomplete="email" placeholder="Enter email address" data-err="Enter a valid email, like name@business.com" data-pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$" aria-describedby="o-email-err" /></div><span class="err" id="o-email-err"></span></div>
-        <div class="field"><label class="label" for="o-pep">PEP Declaration <span class="req" aria-hidden="true">*</span></label><select class="input" id="o-pep" required data-err="Select a PEP declaration" aria-describedby="o-pep-err o-pep-hint"><option value="">Select PEP status</option><option>No, I am not a PEP</option><option>Yes, I am a PEP</option><option>Yes, I am a family member or close associate of a PEP</option></select><span class="hint-text" id="o-pep-hint">A PEP (politically exposed person) holds, or has held, a prominent public role.</span><span class="err" id="o-pep-err"></span></div>
+        <div class="field"><label class="label" for="o-pep">PEP Declaration <span class="req" aria-hidden="true">*</span></label><select class="input" id="o-pep" required data-err="Select a PEP declaration" aria-describedby="o-pep-err o-pep-hint"><option value="">Select PEP status</option><option>No, I am not a PEP</option><option>Yes, I am a PEP</option><option>Yes, I am a family member or close associate of a PEP</option></select><span class="hint-text" id="o-pep-hint">A PEP (politically exposed person) holds, or has held, a prominent public role</span><span class="err" id="o-pep-err"></span></div>
       </div>
       <div class="between"><button type="button" class="btn-outline" data-rx="online">Back</button><button class="btn-primary">Save and continue</button></div>
     </form>
@@ -919,8 +918,8 @@
     <form class="rx-col" id="setup-form" novalidate>
       <div class="rx-head"><p class="kicker">Account setup</p><h1 class="rx-h1">Set up your FusePay account</h1><p class="rx-sub">Your business is verified. Create your login to see requests from the businesses that supply you.</p></div>
       <div class="rx-card">
-        <div class="field"><label class="label" for="su-biz">Business Name</label><div class="locked"><input class="input" id="su-biz" value="Ocean Breeze Café" readonly /><span class="ok-tag"><svg class="i i16"><use href="#i-check"/></svg>Verified</span></div></div>
-        <div class="field"><label class="label" for="su-email">Business Email</label><div class="locked"><input class="input" id="su-email" value="vinoy.248@gmail.com" readonly /><span class="ok-tag"><svg class="i i16"><use href="#i-check"/></svg>Verified</span></div></div>
+        <div class="field"><label class="label" for="su-biz">Business Name</label><div class="locked"><input class="input" id="su-biz" value="Ocean Breeze Café" readonly /><span class="ok-tag"><svg class="seal" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="8" fill="#0A7343"/><path d="m4.75 8.25 2.25 2.25 4.25-4.5" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Verified</span></div></div>
+        <div class="field"><label class="label" for="su-email">Business Email</label><div class="locked"><input class="input" id="su-email" value="vinoy.248@gmail.com" readonly /><span class="ok-tag"><svg class="seal" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="8" fill="#0A7343"/><path d="m4.75 8.25 2.25 2.25 4.25-4.5" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Verified</span></div></div>
         <div class="field"><label class="label" for="su-pw">Create Password</label>
           <div class="pw"><input class="input" id="su-pw" type="password" autocomplete="new-password" aria-describedby="su-rules su-pw-err" /><button type="button" class="btn-link" id="su-pw-toggle" aria-label="Show password">Show</button></div>
           <ul class="rules" id="su-rules"><li data-rule="len"><svg class="i i16"><use href="#i-circle"/></svg>At least 8 characters<span class="sr-only"> (not met)</span></li><li data-rule="num"><svg class="i i16"><use href="#i-circle"/></svg>One number<span class="sr-only"> (not met)</span></li><li data-rule="up"><svg class="i i16"><use href="#i-circle"/></svg>One uppercase letter<span class="sr-only"> (not met)</span></li></ul>
@@ -929,7 +928,7 @@
         <div class="field"><label class="label" for="su-phone">Mobile Number</label>
           <div class="code-row"><div class="phone"><span class="phone-cc">+248</span><input class="input" id="su-phone" type="tel" value="2 514 778" autocomplete="tel-national" /></div><button type="button" class="btn-outline" id="su-send">Send code</button></div>
         </div>
-        <div class="field"><label class="label" for="su-code">Verification Code</label><input class="input" id="su-code" inputmode="numeric" maxlength="4" autocomplete="one-time-code" placeholder="4-digit code" disabled aria-describedby="su-code-hint su-code-err" /><span class="hint-text" id="su-code-hint">Enter any four-digit number for this demo.</span><span class="err" id="su-code-err"></span></div>
+        <div class="field"><label class="label" for="su-code">Verification Code</label><input class="input" id="su-code" inputmode="numeric" maxlength="4" autocomplete="one-time-code" placeholder="4-digit code" disabled aria-describedby="su-code-hint su-code-err" /><span class="hint-text" id="su-code-hint">Enter any four-digit number for this demo</span><span class="err" id="su-code-err"></span></div>
       </div>
       <div class="end"><button class="btn-primary" id="su-go">Create account</button></div>
     </form>
@@ -949,7 +948,7 @@
 <!-- Receiver: share confirmation -->
 <div class="overlay" id="share-dlg" hidden>
   <div class="dialog sm" role="dialog" aria-modal="true" aria-labelledby="share-title" aria-describedby="share-desc">
-    <button class="dlg-close" data-close aria-label="Close"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M6 18 18 6M6 6l12 12"/></svg></button>
+    <button class="dlg-close" data-close aria-label="Close"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 18 18 6M6 6l12 12"/></svg></button>
     <div class="dlg-head"><h2 class="dlg-title" id="share-title">Share with Galaxy Electronics?</h2><p class="dlg-desc" id="share-desc">They'll see your verified business registration, tax ID, address, owners and directors, and bank account. You can stop sharing any time.</p></div>
     <div class="dlg-foot" style="border-top:none;padding-top:24px"><button class="btn-outline" data-close>Cancel</button><button class="btn-primary" id="share-go">Share details</button></div>
   </div>
@@ -994,7 +993,8 @@ const palFor = name => PALETTE[[...name].reduce((a, c) => a + c.charCodeAt(0), 0
 const avatar = (pal, cls = '') => `<span class="avatar ${cls}" style="background:${pal[0]};color:${pal[1]}">${BUILDING}</span>`;
 const today = () => new Date().toISOString().slice(0, 10);
 const daysAgo = n => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
-const fmtDate = iso => new Date(iso + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+// MMM DD, YYYY, e.g. Nov 07, 2026
+const fmtDate = iso => new Date(iso + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // ---------- State (localStorage, demo only) ----------
@@ -1055,7 +1055,7 @@ function renderTracker() {
     const pal = i.vendorId ? byId(i.vendorId).pal : palFor(i.name);
     const sub = esc(i.vendorId ? i.type : i.area || (i.email === RX_EMAIL ? 'Victoria' : ''));
     const acct = i.vendorId
-      ? '<span class="acct"><svg class="i i16"><use href="#i-check"/></svg>FusePay user</span>'
+      ? '<span class="acct"><svg class="seal" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="8" fill="#0A7343"/><path d="m4.75 8.25 2.25 2.25 4.25-4.5" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>FusePay user</span>'
       : `<span class="acct-email" title="Invite sent to ${esc(i.email)}">${esc(i.email)}</span>`;
     const act = i.status === 'shared' ? `<button class="btn-link" data-act="kyb" data-id="${i.id}">View KYB</button>`
       : i.status === 'sent' ? `<button class="btn-link" data-act="resend" data-id="${i.id}">Resend</button><button class="btn-link" data-act="cancel" data-id="${i.id}" style="color:#CC2828">Cancel</button>`
@@ -1068,15 +1068,15 @@ function renderTracker() {
       <span role="cell"><span class="pill ${cls}">${label}</span></span>
       <div class="td-act" role="cell">${act}</div>
     </div>`;
-  }).join('') : `<div class="empty-row" role="row"><span role="cell">No vendors match${q ? ` "${esc(q)}"` : ''} in this view.</span></div>`;
+  }).join('') : `<div class="empty-row" role="row"><span role="cell">No vendors match${q ? ` "${esc(q)}"` : ''} in this view</span></div>`;
   fresh = new Set();
 }
 
 function moveIndicator(id, btn) {
   if (!btn) return;
   const ind = document.getElementById(id);
-  ind.style.width = btn.offsetWidth + 'px';
-  ind.style.transform = `translateX(${btn.offsetLeft - 4}px)`;
+  // fixed 100px pill scaled to the tab width, so only transform animates
+  ind.style.transform = `translateX(${btn.offsetLeft - 4}px) scaleX(${btn.offsetWidth / 100})`;
 }
 
 // ---------- Field labels: grey once the field has a value ----------
@@ -1118,7 +1118,7 @@ function toast(msg, actionLabel, onAction, kind = toastKind(msg)) {
   const x = document.createElement('button');
   x.className = 'toast-x';
   x.setAttribute('aria-label', 'Dismiss');
-  x.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M6 18 18 6M6 6l12 12"/></svg>';
+  x.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 18 18 6M6 6l12 12"/></svg>';
   x.onclick = () => dismiss();
   t.appendChild(x);
   document.getElementById('toasts').prepend(t); // newest always lands at the 24px top slot; older ones move down
@@ -1447,7 +1447,7 @@ document.getElementById('rows').addEventListener('click', e => {
 // ---------- KYB stub ----------
 function openKyb(inv) {
   const pal = inv.vendorId ? byId(inv.vendorId).pal : palFor(inv.name);
-  const ok = '<span class="verified" role="img" aria-label="Verified" title="Verified"><svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8" fill="#0E8F53"/><path d="m4.75 8.25 2.25 2.25 4.25-4.5" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+  const ok = '<span class="verified" role="img" aria-label="Verified" title="Verified"><svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8" fill="#0A7343"/><path d="m4.75 8.25 2.25 2.25 4.25-4.5" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
   const loc = esc(inv.vendorId ? inv.type : inv.area || (inv.email === RX_EMAIL ? 'Victoria' : 'Mahé'));
   const k = inv.email === RX_EMAIL ? state.rx.kyb : null; // receiver's own KYB answers, when they submitted them
   const sections = [
@@ -1498,7 +1498,7 @@ function moveNavIndicator(item) {
   let top = 0, el = item;
   while (el && el !== wrapper) { top += el.offsetTop; el = el.offsetParent; }
   const ind = document.getElementById('nav-indicator');
-  ind.style.top = top + 'px';
+  ind.style.transform = `translateY(${top}px)`;
   ind.style.height = item.offsetHeight + 'px';
 }
 document.querySelectorAll('.nav-item').forEach(item => {
@@ -1694,7 +1694,7 @@ choiceForm.addEventListener('submit', e => { e.preventDefault(); if (!choiceForm
 
 // ---------- Dropdowns: styled listbox over a native <select> ----------
 const DD_CHEV = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 7.5 5 5 5-5"/></svg>';
-const DD_TICK = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4.5 10.5 3.5 3.5 7.5-8"/></svg>';
+const DD_TICK = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4.5 10.5 3.5 3.5 7.5-8"/></svg>';
 function enhanceSelect(sel) {
   const wrap = document.createElement('div');
   wrap.className = 'dd';
@@ -1963,7 +1963,7 @@ function renderRecv() {
     .sort((a, b) => b.pending - a.pending);
 
   const q = document.getElementById('rc-search').value.trim().toLowerCase();
-  document.getElementById('rc-head').innerHTML = '<span role="columnheader">Vendor</span><span role="columnheader">Status</span><span role="columnheader">Date</span><span role="columnheader">Action</span>';
+  document.getElementById('rc-head').innerHTML = '<span role="columnheader">Date</span><span role="columnheader">Vendor</span><span role="columnheader">Status</span><span role="columnheader">Action</span>';
   const list = rows.filter(x => !q || x.v.name.toLowerCase().includes(q));
   document.getElementById('rc-rows').innerHTML = list.length ? list.map(({ v, pending, since }) => {
     const [label, cls] = pending ? ['Requested', 's-sent'] : ['Access granted', 's-shared'];
@@ -1971,9 +1971,9 @@ function renderRecv() {
       ? `<button class="btn-link" data-accept="${v.id}" aria-label="Accept request from ${esc(v.name)}">Accept</button><button class="btn-link btn-neutral" data-decline="${v.id}" aria-label="Decline request from ${esc(v.name)}">Decline</button>`
       : `<button class="btn-link" style="color:#CC2828" data-revoke="${v.id}" aria-label="Revoke access for ${esc(v.name)}">Revoke access</button>`;
     return `<div class="tr rc-cols${recvFresh === v.id ? ' fresh' : ''}" role="row">
+      <span class="td-date" role="cell">${fmtDate(pending ? reqDate(v) : since)}</span>
       <div class="td-vendor" role="cell">${avatar(palFor(v.name))}<div style="min-width:0"><div class="v-name">${esc(v.name)}</div><div class="v-sub">${esc(v.area)}</div></div></div>
       <span role="cell"><span class="pill ${cls}">${label}</span></span>
-      <span class="td-date" role="cell">${fmtDate(pending ? reqDate(v) : since)}</span>
       <div class="td-act" role="cell">${act}</div>
     </div>`;
   }).join('') : `<div class="empty-row" role="row"><span role="cell">${q ? `No vendors match "${esc(q)}".` : "No requests yet. When a business that supplies you asks to see your KYB/KYC, it shows up here."}</span></div>`;
