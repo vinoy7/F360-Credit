@@ -150,8 +150,9 @@
     .dlg-foot .left { margin-right: auto; font-size: 14px; color: #8C8D8F; }
 
     /* Fields */
-    .field { display: flex; flex-direction: column; gap: 8px; }
-    .label { font-size: 14px; font-weight: 500; line-height: 20px; letter-spacing: -0.28px; color: #6B6C6E; }
+    .field { display: flex; flex-direction: column; gap: 4px; }
+    .label { font-size: 14px; font-weight: 500; line-height: 20px; letter-spacing: -0.28px; color: #262626; transition: color 0.15s; }
+    .field.filled .label { color: #8C8D8F; }
     .label .req { color: #CC2828; }
     .input { height: 48px; width: 100%; padding: 0 16px; border: 1px solid #D4D4D6; border-radius: 8px; font-size: 16px; letter-spacing: -0.32px; background: #fff; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
     .input::placeholder { color: #B5B6B8; }
@@ -245,7 +246,8 @@
     .demo-bar span { padding: 0 8px; font-size: 12px; line-height: 16px; color: #8C8D8F; }
     .demo-bar button { border: none; background: none; color: #fff; padding: 6px 8px; border-radius: 6px; font-size: 12px; line-height: 16px; cursor: pointer; }
     .demo-bar button:hover { background: #333336; }
-    .seg { display: flex; gap: 2px; padding: 2px; margin-left: 4px; border-radius: 8px; background: #333336; }
+    .seg { display: flex; gap: 2px; padding: 2px; border-radius: 8px; background: #333336; }
+    .demo-bar .demo-div { width: 1px; height: 20px; padding: 0; margin: 0 4px; background: #48484B; }
     .demo-bar .seg button.on { background: #623CEA; }
     .demo-link { align-self: flex-start; border: 1px dashed #C0AEFF; background: #FAF8FF; color: #623CEA; border-radius: 8px; padding: 6px 12px; font-size: 14px; line-height: 20px; font-weight: 500; cursor: pointer; }
     .demo-link:hover { background: #F3F0FF; }
@@ -669,18 +671,18 @@
       <!-- New business -->
       <form class="panel" id="panel-new" role="tabpanel" novalidate hidden>
         <div class="field" data-field="name">
-          <label class="label" for="nb-name">Business name <span class="req">*</span></label>
+          <label class="label" for="nb-name">Business Name <span class="req">*</span></label>
           <input class="input" id="nb-name" name="name" autocomplete="organization" placeholder="e.g. Ocean Breeze Café" aria-describedby="err-name" />
           <span class="err" id="err-name"></span>
         </div>
         <div class="field" data-field="email">
-          <label class="label" for="nb-email">Business email <span class="req">*</span></label>
+          <label class="label" for="nb-email">Business Email <span class="req">*</span></label>
           <input class="input" id="nb-email" name="email" type="email" autocomplete="email" placeholder="name@business.com" aria-describedby="err-email" />
           <span class="err" id="err-email"></span>
           <div id="dup-hint"></div>
         </div>
         <div class="field" data-field="phone">
-          <label class="label" for="nb-phone">Mobile number <span class="req">*</span></label>
+          <label class="label" for="nb-phone">Mobile Number <span class="req">*</span></label>
           <div class="phone">
             <select id="nb-code" aria-label="Country code">
               <option value="+248" selected>+248</option>
@@ -795,10 +797,10 @@
       <div class="rx-head"><p class="kicker">Step 3 of 3</p><h1 class="rx-h1">Business details</h1><p class="rx-sub">Online form, part 1 of 4. Your progress saves automatically.</p></div>
       <button type="button" class="demo-link" data-autofill>Demo: autofill</button>
       <div class="rx-card">
-        <div class="field"><label class="label" for="b-name">Registered business name</label><input class="input" id="b-name" required autocomplete="organization" data-err="Enter your registered business name" aria-describedby="b-name-err" /><span class="err" id="b-name-err"></span></div>
-        <div class="field"><label class="label" for="b-reg">Business registration number</label><input class="input" id="b-reg" required data-err="Enter your business registration number" aria-describedby="b-reg-h b-reg-err" /><span class="hint-text" id="b-reg-h">As shown on your registration certificate</span><span class="err" id="b-reg-err"></span></div>
-        <div class="field"><label class="label" for="b-tin">Tax identification number (TIN)</label><input class="input" id="b-tin" required data-err="Enter your tax identification number" aria-describedby="b-tin-err" /><span class="err" id="b-tin-err"></span></div>
-        <div class="field"><label class="label" for="b-addr">Registered address</label><input class="input" id="b-addr" required autocomplete="street-address" data-err="Enter your registered address" aria-describedby="b-addr-err" /><span class="err" id="b-addr-err"></span></div>
+        <div class="field"><label class="label" for="b-name">Registered Business Name</label><input class="input" id="b-name" required autocomplete="organization" data-err="Enter your registered business name" aria-describedby="b-name-err" /><span class="err" id="b-name-err"></span></div>
+        <div class="field"><label class="label" for="b-reg">Business Registration Number</label><input class="input" id="b-reg" required data-err="Enter your business registration number" aria-describedby="b-reg-h b-reg-err" /><span class="hint-text" id="b-reg-h">As shown on your registration certificate</span><span class="err" id="b-reg-err"></span></div>
+        <div class="field"><label class="label" for="b-tin">Tax Identification Number (TIN)</label><input class="input" id="b-tin" required data-err="Enter your tax identification number" aria-describedby="b-tin-err" /><span class="err" id="b-tin-err"></span></div>
+        <div class="field"><label class="label" for="b-addr">Registered Address</label><input class="input" id="b-addr" required autocomplete="street-address" data-err="Enter your registered address" aria-describedby="b-addr-err" /><span class="err" id="b-addr-err"></span></div>
       </div>
       <div class="between"><button type="button" class="btn-link" data-rx="download">Switch to paper forms</button><button class="btn-primary">Save and continue</button></div>
     </form>
@@ -811,16 +813,16 @@
       <div class="rx-head"><p class="kicker">Step 3 of 3</p><h1 class="rx-h1">Owner details</h1><p class="rx-sub">Online form, part 2 of 4. Tell us about the main owner or director.</p></div>
       <button type="button" class="demo-link" data-autofill>Demo: autofill</button>
       <div class="rx-card">
-        <div class="field"><label class="label" for="o-name">Full name</label><input class="input" id="o-name" required autocomplete="name" data-err="Enter the owner's full name" aria-describedby="o-name-err" /><span class="err" id="o-name-err"></span></div>
+        <div class="field"><label class="label" for="o-name">Full Name</label><input class="input" id="o-name" required autocomplete="name" data-err="Enter the owner's full name" aria-describedby="o-name-err" /><span class="err" id="o-name-err"></span></div>
         <div class="two">
           <div class="field"><label class="label" for="o-role">Role</label><select class="input" id="o-role" required data-err="Select a role" aria-describedby="o-role-err"><option value="">Select a role</option><option>Owner</option><option>Director</option><option>Partner</option></select><span class="err" id="o-role-err"></span></div>
-          <div class="field"><label class="label" for="o-dob">Date of birth</label><input class="input" id="o-dob" type="date" required autocomplete="bday" data-err="Enter a date of birth" aria-describedby="o-dob-err" /><span class="err" id="o-dob-err"></span></div>
+          <div class="field"><label class="label" for="o-dob">Date Of Birth</label><input class="input" id="o-dob" type="date" required autocomplete="bday" data-err="Enter a date of birth" aria-describedby="o-dob-err" /><span class="err" id="o-dob-err"></span></div>
         </div>
         <div class="two">
           <div class="field"><label class="label" for="o-nat">Nationality</label><input class="input" id="o-nat" required data-err="Enter a nationality" aria-describedby="o-nat-err" /><span class="err" id="o-nat-err"></span></div>
-          <div class="field"><label class="label" for="o-id">National ID or passport number</label><input class="input" id="o-id" required data-err="Enter an ID or passport number" aria-describedby="o-id-err" /><span class="err" id="o-id-err"></span></div>
+          <div class="field"><label class="label" for="o-id">National ID Or Passport Number</label><input class="input" id="o-id" required data-err="Enter an ID or passport number" aria-describedby="o-id-err" /><span class="err" id="o-id-err"></span></div>
         </div>
-        <div class="field"><label class="label" for="o-addr">Residential address</label><input class="input" id="o-addr" required autocomplete="street-address" data-err="Enter a residential address" aria-describedby="o-addr-err" /><span class="err" id="o-addr-err"></span></div>
+        <div class="field"><label class="label" for="o-addr">Residential Address</label><input class="input" id="o-addr" required autocomplete="street-address" data-err="Enter a residential address" aria-describedby="o-addr-err" /><span class="err" id="o-addr-err"></span></div>
       </div>
       <div class="between"><button type="button" class="btn-outline" data-rx="online">Back</button><button class="btn-primary">Save and continue</button></div>
     </form>
@@ -846,7 +848,7 @@
       <div class="rx-card"><div class="between"><h2>Owner details</h2><button class="btn-link" data-rx="online-owner">Edit</button></div><dl class="rv" data-from="online-owner"></dl></div>
       <div class="rx-card"><div class="between"><h2>Documents</h2><button class="btn-link" data-rx="online-docs">Edit</button></div><p style="font-size:14px;line-height:20px" id="doc-sum"></p></div>
       <div class="rx-card"><h2>Sign electronically</h2>
-        <div class="field"><label class="label" for="sign">Type your full name to sign</label><input class="input" id="sign" autocomplete="name" /></div>
+        <div class="field"><label class="label" for="sign">Type Your Full Name To Sign</label><input class="input" id="sign" autocomplete="name" /></div>
         <div class="sig" id="sig-preview" aria-hidden="true"></div>
         <label class="chk"><input type="checkbox" id="agree" />I confirm the information is correct, I am authorised to sign for this business, and I agree to FusePay verifying these details.</label>
       </div>
@@ -902,17 +904,17 @@
     <form class="rx-col" id="setup-form" novalidate>
       <div class="rx-head"><p class="kicker">Account setup</p><h1 class="rx-h1">Set up your Fusepay account</h1><p class="rx-sub">Your business is verified. Create your login to see requests from the businesses that supply you.</p></div>
       <div class="rx-card">
-        <div class="field"><label class="label" for="su-biz">Business name</label><div class="locked"><input class="input" id="su-biz" value="Ocean Breeze Café" readonly /><span class="ok-tag"><svg class="i i16"><use href="#i-check"/></svg>Verified</span></div></div>
-        <div class="field"><label class="label" for="su-email">Business email</label><div class="locked"><input class="input" id="su-email" value="vinoy.248@gmail.com" readonly /><span class="ok-tag"><svg class="i i16"><use href="#i-check"/></svg>Verified</span></div></div>
-        <div class="field"><label class="label" for="su-pw">Create password</label>
+        <div class="field"><label class="label" for="su-biz">Business Name</label><div class="locked"><input class="input" id="su-biz" value="Ocean Breeze Café" readonly /><span class="ok-tag"><svg class="i i16"><use href="#i-check"/></svg>Verified</span></div></div>
+        <div class="field"><label class="label" for="su-email">Business Email</label><div class="locked"><input class="input" id="su-email" value="vinoy.248@gmail.com" readonly /><span class="ok-tag"><svg class="i i16"><use href="#i-check"/></svg>Verified</span></div></div>
+        <div class="field"><label class="label" for="su-pw">Create Password</label>
           <div class="pw"><input class="input" id="su-pw" type="password" autocomplete="new-password" aria-describedby="su-rules su-pw-err" /><button type="button" class="btn-link" id="su-pw-toggle" aria-label="Show password">Show</button></div>
           <ul class="rules" id="su-rules"><li data-rule="len"><svg class="i i16"><use href="#i-check"/></svg>At least 8 characters</li><li data-rule="num"><svg class="i i16"><use href="#i-check"/></svg>One number</li><li data-rule="up"><svg class="i i16"><use href="#i-check"/></svg>One uppercase letter</li></ul>
           <span class="err" id="su-pw-err"></span>
         </div>
-        <div class="field"><label class="label" for="su-phone">Mobile number</label>
+        <div class="field"><label class="label" for="su-phone">Mobile Number</label>
           <div class="code-row"><div class="phone"><select aria-label="Country code"><option>+248</option></select><input class="input" id="su-phone" type="tel" value="2 514 778" autocomplete="tel-national" /></div><button type="button" class="btn-outline" id="su-send">Send code</button></div>
         </div>
-        <div class="field"><label class="label" for="su-code">Verification code</label><input class="input" id="su-code" inputmode="numeric" maxlength="4" autocomplete="one-time-code" placeholder="4-digit code" disabled aria-describedby="su-code-err" /><span class="err" id="su-code-err"></span></div>
+        <div class="field"><label class="label" for="su-code">Verification Code</label><input class="input" id="su-code" inputmode="numeric" maxlength="4" autocomplete="one-time-code" placeholder="4-digit code" disabled aria-describedby="su-code-err" /><span class="err" id="su-code-err"></span></div>
       </div>
       <div class="end"><button class="btn-primary" id="su-go">Create account</button></div>
     </form>
@@ -922,10 +924,11 @@
 <!-- Demo controls (all views) -->
 <div class="demo-bar" role="region" aria-label="Demo controls">
   <span>Demo</span>
+  <div class="seg" role="group" aria-label="View as"><button data-persona="tx" title="Wholesaler" aria-label="Wholesaler">WH</button><button data-persona="rx" title="New business" aria-label="New business">NB</button><button data-persona="fx" title="FusePay user" aria-label="FusePay user">FP</button></div>
+  <span class="demo-div" aria-hidden="true"></span>
   <button class="tx-only" id="demo-load">Load sample data</button>
   <button class="rx-only" id="demo-inbox">Open inbox</button>
   <button id="demo-reset">Reset demo</button>
-  <div class="seg" role="group" aria-label="View as"><button data-persona="tx">Wholesaler</button><button data-persona="rx">New business</button><button data-persona="fx">FusePay user</button></div>
 </div>
 
 <!-- Receiver: share confirmation -->
@@ -1059,6 +1062,15 @@ function moveIndicator(id, btn) {
   ind.style.width = btn.offsetWidth + 'px';
   ind.style.transform = `translateX(${btn.offsetLeft - 4}px)`;
 }
+
+// ---------- Field labels: grey once the field has a value ----------
+function syncFilled(scope = document) {
+  scope.querySelectorAll('.field').forEach(f => {
+    if (f.querySelector('#combo-input')) return f.classList.toggle('filled', selected.length > 0); // multi-select: filled when vendors are picked
+    f.classList.toggle('filled', [...f.querySelectorAll('.input')].some(i => i.value.trim()));
+  });
+}
+['input', 'change'].forEach(ev => document.addEventListener(ev, e => { const f = e.target.closest?.('.field'); if (f) syncFilled(f.parentElement); }));
 
 // ---------- Toast ----------
 // Alert icons from Fuse Design System (128:6616)
@@ -1214,6 +1226,7 @@ function renderChips() {
   send.disabled = n === 0;
   send.textContent = n > 1 ? `Send ${n} invites` : 'Send invite';
   document.getElementById('sel-count').textContent = n ? `${n} selected` : '';
+  syncFilled(document.getElementById('panel-fuse'));
 }
 
 comboInput.addEventListener('focus', openList);
@@ -1324,6 +1337,7 @@ function resetForm() {
   form.querySelectorAll('[aria-invalid]').forEach(i => i.removeAttribute('aria-invalid'));
   document.getElementById('dup-hint').innerHTML = '';
   document.getElementById('dup-hint').dataset.key = '';
+  syncFilled(form);
 }
 
 async function sendNew(another, btn) {
@@ -1515,6 +1529,7 @@ function render() {
   else if (view === 'rxapp') renderRecv();
   else renderRxFlow();
   if (view !== 'rxflow') requestAnimationFrame(() => moveNavIndicator(document.querySelector('.nav-item.active')));
+  syncFilled();
 }
 
 document.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
@@ -1632,6 +1647,7 @@ document.querySelectorAll('#rx-flow form[data-next]').forEach(f => f.addEventLis
 }));
 document.querySelectorAll('[data-autofill]').forEach(b => b.onclick = () => {
   Object.entries(AUTOFILL).forEach(([id, v]) => { const i = document.getElementById(id); i.value = v; setFieldErr(i, ''); });
+  syncFilled();
   toast('Demo: filled with sample details');
 });
 const val = id => document.getElementById(id).value.trim();
