@@ -176,7 +176,7 @@
     .combo.open .input { border: 2px solid #623CEA; padding-left: 15px; box-shadow: 0 0 0 3px rgba(98,60,234,0.15); }
     .listbox { position: absolute; left: 0; right: 0; top: calc(100% + 8px); z-index: 10; list-style: none; padding: 8px; max-height: 268px; overflow-y: auto; background: #fff; border: 1px solid #EDEDED; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); opacity: 0; transform: translateY(-4px); pointer-events: none; transition: opacity 150ms ease, transform 150ms ease; }
     .combo.open .listbox { opacity: 1; transform: none; pointer-events: auto; }
-    .opt { display: flex; align-items: center; gap: 16px; padding: 12px; border-radius: 8px; cursor: pointer; }
+    .opt { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 8px; cursor: pointer; }
     .opt.active { background: #F3F0FF; }
     .opt[aria-disabled="true"] { cursor: default; }
     .opt[aria-disabled="true"] .avatar, .opt[aria-disabled="true"] .opt-text { opacity: 0.5; }
@@ -184,6 +184,7 @@
     .opt-name { font-size: 16px; line-height: 24px; letter-spacing: -0.32px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .opt-sub { font-size: 14px; line-height: 20px; color: #8C8D8F; }
     .opt-check { width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid #D4D4D6; display: flex; align-items: center; justify-content: center; color: transparent; flex-shrink: 0; transition: background 0.15s, border-color 0.15s; }
+    .opt[aria-disabled="true"] .opt-check { background: #F4F4F5; border-color: #E3E3E5; }
     .opt[aria-selected="true"] .opt-check { background: #623CEA; border-color: #623CEA; color: #fff; }
     .opt-empty { padding: 16px 12px; font-size: 14px; line-height: 20px; color: #8C8D8F; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -654,12 +655,8 @@ function busy(btn, ms) {
 }
 
 // ---------- Policy (stub) ----------
-document.addEventListener('click', async e => {
-  const b = e.target.closest('[data-create-policy]');
-  if (!b) return;
-  await busy(b, 700);
-  state.policy = true; save(); render();
-  toast('Credit policy created. It now applies to everyone in your company.');
+document.addEventListener('click', e => {
+  if (e.target.closest('[data-create-policy]')) toast('Feature coming soon');
 });
 document.querySelector('[data-view-policy]').onclick = () => toast('The policy builder is coming soon.');
 
@@ -740,9 +737,10 @@ function renderOptions() {
     const inv = inviteFor(v.id);
     const sel = selected.includes(v.id);
     return `<li class="opt${i === activeIdx ? ' active' : ''}" role="option" id="opt-${v.id}" data-id="${v.id}" aria-selected="${sel}"${inv ? ' aria-disabled="true"' : ''}>
+      <span class="opt-check">${CHECK}</span>
       ${avatar(v.pal, 'lg')}
       <span class="opt-text"><span class="opt-name" title="${esc(v.name)}">${esc(v.name)}</span><span class="opt-sub">${v.type}</span></span>
-      ${inv ? `<span class="tag">${STATUS[inv.status][0]}</span>` : `<span class="opt-check">${CHECK}</span>`}
+      ${inv ? `<span class="tag">${STATUS[inv.status][0]}</span>` : ''}
     </li>`;
   }).join('') : `<li class="opt-empty">No vendors match "${esc(comboInput.value.trim())}".<button class="btn-link" data-goto-new>Invite as a new business</button></li>`;
   if (activeIdx >= 0 && shown[activeIdx]) {
