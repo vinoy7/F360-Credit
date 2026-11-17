@@ -6,7 +6,7 @@
   <title>Fuse360 Credit</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Caveat:wght@500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; }
     [hidden] { display: none !important; }
@@ -30,11 +30,9 @@
     .nav-item.active .nav-label { color: #623CEA; font-weight: 500; }
     .nav-icon { width: 16px; height: 16px; flex-shrink: 0; color: #939596; overflow: visible; }
     .nav-item.active .nav-icon { color: #623CEA; }
-    .user-card { background: white; border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; gap: 8px; border: 1px solid #F4F4F5; }
+    .user-card { width: 100%; margin-bottom: 12px; background: white; border-radius: 8px; padding: 8px 12px 8px 8px; display: flex; align-items: center; gap: 12px; border: 1px solid #F4F4F5; box-shadow: 0 2px 4px rgba(0,0,0,0.04); cursor: pointer; text-align: left; }
+    .user-card:hover { border-color: #E3E3E5; }
 
-    .scroll-area { display: flex; flex-direction: column; gap: 40px; padding: 48px 72px 24px; flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: thin; scrollbar-color: transparent transparent; }
-    .scroll-area:hover { scrollbar-color: #D4D4D6 transparent; }
-    @media (max-width: 1300px) { .scroll-area { padding: 16px; gap: 24px; } }
 
     /* Tabs (F360) */
     .tab-group { background: #F4F4F5; border-radius: 8px; padding: 4px; display: flex; gap: 8px; position: relative; }
@@ -59,9 +57,6 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ---------- Page ---------- */
-    .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
-    .page-title { font-size: 28px; font-weight: 400; line-height: 36px; letter-spacing: -0.56px; }
-    .page-sub { margin-top: 8px; font-size: 16px; line-height: 24px; letter-spacing: -0.32px; color: #8C8D8F; max-width: 760px; }
     #dup-hint:empty { display: none; }
     .view { display: flex; flex-direction: column; gap: 40px; animation: fade-up 300ms cubic-bezier(0.23,1,0.32,1); }
     @keyframes fade-up { from { opacity: 0; transform: translateY(8px); } }
@@ -99,26 +94,35 @@
     .s-declined { background: #FFEFEF; color: #CC2828; }
 
     /* Policy banner */
-    .banner { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; background: #FFF8EB; border: 1px solid #FFE8CA; font-size: 14px; line-height: 20px; letter-spacing: -0.28px; }
-    .banner svg { color: #E07509; flex-shrink: 0; }
-    .banner .grow { flex: 1; }
 
     /* Tracker */
-    .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-    .search { position: relative; width: 280px; flex-shrink: 0; }
+    /* Page layout (per Fuse360 Orders page): header bar, tools row, edge-to-edge divider, table */
+    .page { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+    .page-bar { height: 64px; flex-shrink: 0; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #fff; box-shadow: 0 2.4px 6px rgba(0,0,0,0.048); position: relative; z-index: 2; }
+    .page-title { font-size: 24px; font-weight: 500; line-height: 36px; letter-spacing: -0.48px; }
+    .page-tools { flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 16px; border-bottom: 1px solid #E3E3E5; }
+    .page-tools .tab-btn { flex: none; min-width: 100px; }
+    .tools-r { display: flex; align-items: center; gap: 16px; min-width: 0; }
+    .vdiv { width: 1px; height: 25px; flex-shrink: 0; background: #E3E3E5; }
+    .page-body { flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 72px; display: flex; flex-direction: column; }
+    .page-body > .table { flex: 1 0 auto; }
+    .search { position: relative; width: 360px; min-width: 200px; flex-shrink: 1; }
     .search svg { position: absolute; left: 12px; top: 12px; color: #939596; pointer-events: none; }
     .search input { width: 100%; height: 40px; padding: 0 12px 0 36px; border: 1px solid #D4D4D6; border-radius: 8px; font-size: 14px; outline: none; }
     .search input:focus { border-color: #623CEA; box-shadow: 0 0 0 3px rgba(98,60,234,0.15); }
-    .table { border: 1px solid #E3E3E5; border-radius: 12px; overflow: hidden; }
+    .table { border: 1px solid #EDEDED; border-radius: 8px; overflow: hidden; }
     .acct { display: inline-flex; align-items: center; gap: 4px; font-size: 14px; line-height: 20px; color: #623CEA; font-weight: 500; }
     .acct-email { display: block; font-size: 14px; line-height: 20px; color: #6B6C6E; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .tr { display: grid; grid-template-columns: minmax(0,1fr) 200px 120px 140px 160px; gap: 16px; align-items: center; padding: 12px 16px; border-bottom: 1px solid #EDEDED; }
     .tr:last-child { border-bottom: none; }
-    .th { background: #F9FAFB; padding-top: 8px; padding-bottom: 8px; font-size: 12px; font-weight: 500; line-height: 16px; color: #8C8D8F; }
+    .tr:not(.th) { min-height: 68px; }
+    .th { background: #F4F4F5; min-height: 40px; padding-top: 0; padding-bottom: 0; font-size: 12px; font-weight: 400; line-height: 16px; color: #8C8D8F; }
+    .tr .pill { border-radius: 4px; padding: 4px 8px; font-size: 14px; line-height: 20px; }
+    .tr .pill::before { display: none; }
     .th :last-child, .td-act { text-align: right; justify-content: flex-end; }
     .td-vendor { display: flex; align-items: center; gap: 12px; min-width: 0; }
-    .v-name { font-size: 14px; font-weight: 500; line-height: 20px; letter-spacing: -0.28px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .v-sub { font-size: 12px; line-height: 16px; color: #8C8D8F; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .v-name { font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: -0.28px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .v-sub { font-size: 14px; line-height: 20px; color: #8C8D8F; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .td-date { font-size: 14px; line-height: 20px; color: #262626; }
     .td-act { display: flex; gap: 12px; align-items: center; }
     .muted { color: #C1C1C3; font-size: 14px; }
@@ -126,7 +130,7 @@
     @keyframes row-in { 0% { opacity: 0; transform: translateY(-6px); background: #F3F0FF; } 20% { opacity: 1; transform: none; background: #F3F0FF; } 100% { background: transparent; } }
     .empty-row { padding: 40px 16px; text-align: center; font-size: 14px; color: #8C8D8F; }
 
-    .avatar { width: 36px; height: 36px; border-radius: 100px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .avatar { width: 40px; height: 40px; border-radius: 100px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .avatar svg { width: 20px; height: 20px; }
     .avatar.lg { width: 48px; height: 48px; }
     .avatar.lg svg { width: 24px; height: 24px; }
@@ -224,8 +228,6 @@
     body:not([data-persona="tx"]) .tx-only, body:not([data-persona="rx"]) .rx-only { display: none !important; }
     body[data-view="rxflow"] .toasts { left: 50%; }
     [tabindex="-1"]:focus { outline: none; }
-    .wordmark { font-size: 30px; font-weight: 500; line-height: 34px; letter-spacing: -1.2px; color: #262626; }
-    .wordmark b { font-weight: inherit; color: #623CEA; }
     .i { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
     .i16 { width: 16px; height: 16px; } .i24 { width: 24px; height: 24px; } .i32 { width: 32px; height: 32px; }
 
@@ -236,12 +238,11 @@
     .demo-bar button:hover { background: #333336; }
     .seg { display: flex; gap: 2px; padding: 2px; margin-left: 4px; border-radius: 8px; background: #333336; }
     .demo-bar .seg button.on { background: #623CEA; }
-    .scroll-area { padding-bottom: 72px; }
     .demo-link { align-self: flex-start; border: 1px dashed #C0AEFF; background: #FAF8FF; color: #623CEA; border-radius: 8px; padding: 6px 12px; font-size: 14px; line-height: 20px; font-weight: 500; cursor: pointer; }
     .demo-link:hover { background: #F3F0FF; }
 
     /* Gmail-style mock (no Google branding) */
-    .gm { height: 100vh; background: #F6F8FC; font-family: Arial, Helvetica, sans-serif; color: #1F1F1F; display: flex; flex-direction: column; }
+    .gm { height: 100vh; background: #F6F8FC; color: #1F1F1F; display: flex; flex-direction: column; }
     .gm-top { height: 64px; display: flex; align-items: center; gap: 16px; padding: 0 16px 0 24px; flex-shrink: 0; color: #444746; }
     .gm-brand { display: flex; align-items: center; gap: 8px; width: 200px; font-size: 22px; }
     .gm-search { flex: 1; max-width: 720px; height: 48px; border-radius: 24px; background: #E9EEF6; display: flex; align-items: center; gap: 12px; padding: 0 16px; }
@@ -279,12 +280,10 @@
     .mailcard { font-family: 'DM Sans', sans-serif; max-width: 600px; border: 1px solid #E3E3E5; border-radius: 12px; padding: 40px; display: flex; flex-direction: column; gap: 24px; align-items: flex-start; color: #262626; animation: fade-up 300ms cubic-bezier(0.23,1,0.32,1); }
     .mailcard p { font-size: 16px; line-height: 24px; letter-spacing: -0.32px; color: #4A4B4D; }
     .mailcard .small { font-size: 14px; line-height: 20px; color: #8C8D8F; }
-    .mailcard .wordmark { font-size: 24px; line-height: 28px; letter-spacing: -0.96px; }
 
     /* KYB/KYC flow */
     .rx-screen { min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding-bottom: 96px; background: #F9FAFB; }
     .rx-hdr { width: 100%; height: 64px; background: #fff; border-bottom: 1px solid #E3E3E5; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-    .rx-hdr .wordmark { font-size: 24px; line-height: 28px; letter-spacing: -0.96px; }
     .rx-hdr-r { display: flex; align-items: center; gap: 24px; font-size: 14px; line-height: 20px; color: #8C8D8F; }
     .rx-hdr-r b { font-weight: 500; color: #262626; }
     .rx-col { width: 720px; max-width: calc(100% - 32px); padding-top: 48px; display: flex; flex-direction: column; gap: 32px; animation: fade-up 300ms cubic-bezier(0.23,1,0.32,1); }
@@ -324,8 +323,8 @@
     .invalid .hint-text { display: none; }
     .chk { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; line-height: 20px; cursor: pointer; }
     .chk input { width: 20px; height: 20px; accent-color: #623CEA; flex-shrink: 0; margin: 0; }
-    .sig { font-family: 'Caveat', cursive; font-size: 32px; line-height: 40px; min-height: 52px; padding: 4px 0; border-bottom: 1px dashed #D4D4D6; color: #262626; }
-    .sig:empty::before { content: 'Your signature appears here'; font-family: 'DM Sans', sans-serif; font-size: 14px; color: #C1C1C3; }
+    .sig { font-style: italic; font-size: 28px; line-height: 40px; min-height: 52px; padding: 4px 0; border-bottom: 1px dashed #D4D4D6; color: #262626; }
+    .sig:empty::before { content: 'Your signature appears here'; font-style: normal; font-size: 14px; color: #C1C1C3; }
     .rv { display: grid; grid-template-columns: 240px 1fr; gap: 12px 24px; font-size: 14px; line-height: 20px; margin: 0; }
     .rv dt { color: #8C8D8F; }
     .rv dd { margin: 0; }
@@ -372,16 +371,7 @@
     .section-h { font-size: 20px; line-height: 28px; letter-spacing: -0.4px; }
     .tab-btn.inert { cursor: default; }
     .tab-btn:not(.active):not(.inert):hover { color: #262626; }
-    .utabs { flex: 1; display: flex; gap: 24px; border-bottom: 1px solid #E3E3E5; align-self: stretch; align-items: flex-end; }
-    .utab { position: relative; border: none; background: none; padding: 8px 0 12px; font-size: 16px; line-height: 24px; font-weight: 500; letter-spacing: -0.32px; color: #8C8D8F; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
-    .utab:hover, .utab.on { color: #262626; }
-    .utab.on::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; border-radius: 2px; background: #623CEA; }
-    .tab-count.hot { background: #623CEA; color: #fff; }
-    .rc-cols { grid-template-columns: minmax(0,1fr) 180px 220px; }
-    .switch-t { position: relative; width: 40px; height: 24px; flex-shrink: 0; border: none; border-radius: 100px; background: #D4D4D6; cursor: pointer; transition: background 200ms ease; }
-    .switch-t::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.2); transition: transform 200ms cubic-bezier(0.23,1,0.32,1); }
-    .switch-t[aria-checked="true"] { background: #623CEA; }
-    .switch-t[aria-checked="true"]::after { transform: translateX(16px); }
+    .rc-cols { grid-template-columns: minmax(0,1fr) 160px 140px 240px; }
     .btn-primary.danger { background: #CC2828; }
     .btn-primary.danger:hover { background: #B32222; }
     .dialog.sm { width: 440px; }
@@ -427,12 +417,22 @@
 <aside id="sidebar">
   <!-- Logo -->
   <div style="padding: 0 0 12px; height: 64px; display: flex; align-items: center;">
-    <img id="logo-tx" src="assets/imgLogo.svg" alt="Fuse360" style="width:116px; height:34px; object-fit:contain;" /><span class="wordmark" id="logo-rx" hidden>fuse<b>pay</b></span>
+    <img id="logo-tx" src="assets/imgLogo.svg" alt="Fuse360" style="width:116px; height:34px; object-fit:contain;" /><img id="logo-rx" src="assets/logo-fusepay.svg" alt="Fusepay" width="116" height="26" hidden />
   </div>
 
   <!-- Separator -->
   <div style="height:1px; background:#EDEDED; margin-bottom:1px;"></div>
   <div style="height:1px; background:white; margin-bottom:8px;"></div>
+
+  <!-- Profile card (top, per design) -->
+  <button class="user-card" data-gm-noop aria-label="Switch business">
+    <span style="width:40px; height:40px; border-radius:100px; background:#FFEBF3; display:flex; align-items:center; justify-content:center; flex-shrink:0;"><img src="assets/imgProfileBuilding.svg" style="width:22px; height:22px;" alt="" /></span>
+    <span style="min-width:0; flex:1; display:flex; flex-direction:column; text-align:left;">
+      <span id="uc-biz" style="font-size:14px; font-weight:500; color:#262626; letter-spacing:-0.28px; line-height:20px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Galaxy Electronics Pvt. Ltd.</span>
+      <span id="uc-role" style="font-size:14px; color:#8C8D8F; letter-spacing:-0.28px; line-height:20px;">Owner</span>
+    </span>
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#939596" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="m5 7.5 5 5 5-5"/></svg>
+  </button>
 
   <!-- Nav items + lower group -->
   <div id="nav-wrapper" class="nav-section" style="flex:1; display:flex; flex-direction:column; justify-content:space-between;">
@@ -517,17 +517,6 @@
         </div>
       </div>
 
-      <!-- User card -->
-      <div class="user-card" style="margin-top:8px;">
-        <!-- Building avatar -->
-        <div style="width:40px; height:40px; border-radius:100px; background:#FFEBF3; display:flex; align-items:center; justify-content:center; flex-shrink:0; padding:9px; box-sizing:border-box;">
-          <img src="assets/imgProfileBuilding.svg" style="width:22px; height:22px;" alt="" />
-        </div>
-        <div style="min-width:0; flex:1; display:flex; flex-direction:column; justify-content:center;">
-          <div style="font-size:14px; font-weight:500; color:#262626; letter-spacing:-0.28px; line-height:20px;" id="uc-name">Hi, Rohan!</div>
-          <div style="font-size:14px; font-weight:400; color:#8C8D8F; letter-spacing:-0.28px; line-height:20px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" id="uc-biz">Galaxy Electronics Pvt. Ltd.</div>
-        </div>
-      </div>
     </div>
   </div>
 </aside>
@@ -535,18 +524,28 @@
 
 <main id="main">
   <div class="shell">
-    <div class="scroll-area" id="tx-page">
-
-      <header class="page-head">
-        <div>
-          <h1 class="page-title">Credit</h1>
-          <p class="page-sub">Offer credit to the retailers and hospitality businesses you supply, backed by a company-wide policy and verified business details.</p>
-        </div>
-        <button class="btn-primary" id="head-invite" data-invite hidden>Invite vendors</button>
+    <div class="page" id="tx-page">
+      <header class="page-bar">
+        <h1 class="page-title">Credit</h1>
+        <button class="btn-link" data-create-policy>Create policy</button>
       </header>
+      <div class="page-tools" id="tx-tools" hidden>
+        <div class="tab-group" id="status-tabs" role="tablist" aria-label="Filter by status">
+          <div class="tab-indicator" id="status-indicator"></div>
+        </div>
+        <div class="tools-r">
+          <label class="search">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7.25" cy="7.25" r="4.75"/><path d="m13.5 13.5-2.9-2.9"/></svg>
+            <input id="search" type="search" placeholder="Search vendors" aria-label="Search vendors" />
+          </label>
+          <span class="vdiv"></span>
+          <button class="btn-primary" data-invite>Invite vendors</button>
+        </div>
+      </div>
+      <div class="page-body">
 
       <!-- First run -->
-      <section class="view" id="first-run" hidden>
+      <section class="view" id="first-run" hidden style="padding:16px">
         <div class="cards">
           <article class="intro-card" id="policy-card">
             <div class="intro-top">
@@ -597,61 +596,35 @@
       </section>
 
       <!-- Tracker -->
-      <section class="view" id="tracker" hidden style="gap:24px;">
-        <div class="banner" id="policy-banner" hidden>
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="7.5"/><path d="M10 6.5v4M10 13.5h.01"/></svg>
-          <span class="grow">You haven't set a credit policy yet. Set one so everyone in your company follows the same credit rules.</span>
-          <button class="btn-link" data-create-policy>Create policy</button>
-        </div>
-
-        <div class="toolbar">
-          <div class="tab-group" id="status-tabs" role="tablist" aria-label="Filter by status">
-            <div class="tab-indicator" id="status-indicator"></div>
-          </div>
-          <label class="search">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7.25" cy="7.25" r="4.75"/><path d="m13.5 13.5-2.9-2.9"/></svg>
-            <input id="search" type="search" placeholder="Search vendors" aria-label="Search vendors" />
-          </label>
-        </div>
-
-        <div class="table" role="table" aria-label="Vendor KYB/KYC invites">
-          <div class="tr th" role="row"><span role="columnheader">Vendor</span><span role="columnheader">Fuse360 account</span><span role="columnheader">Invited</span><span role="columnheader">Status</span><span role="columnheader">Action</span></div>
-          <div id="rows" role="rowgroup"></div>
-        </div>
-      </section>
-
+      <div class="table" id="tracker" role="table" aria-label="Vendor KYB/KYC invites" hidden>
+        <div class="tr th" role="row"><span role="columnheader">Vendor</span><span role="columnheader">Fuse360 account</span><span role="columnheader">Invited</span><span role="columnheader">Status</span><span role="columnheader">Action</span></div>
+        <div id="rows" role="rowgroup"></div>
+      </div>
+      </div>
     </div>
     <!-- Receiver credit page (FusePay user, both personas) -->
-    <div class="scroll-area" id="rx-credit">
-      <header class="page-head">
-        <div>
-          <h1 class="page-title">Credit</h1>
-          <p class="page-sub">Control what the businesses that supply you can see, and respond to their requests.</p>
-        </div>
-      </header>
-      <section class="view" style="gap:24px">
-        <div class="tab-group" id="rc-tabs" style="align-self:flex-start" aria-label="Credit sections">
+    <div class="page" id="rx-credit">
+      <header class="page-bar"><h1 class="page-title">Credit</h1></header>
+      <div class="page-tools">
+        <div class="tab-group" id="rc-tabs" aria-label="Credit sections">
           <div class="tab-indicator" id="rc-indicator"></div>
           <button class="tab-btn active" aria-current="page">KYB/KYC</button>
           <span class="tab-btn inert">Orders</span>
           <span class="tab-btn inert">Catalog</span>
         </div>
-        <div class="toolbar" style="align-items:flex-end">
-          <div class="utabs" role="tablist" aria-label="KYB/KYC">
-            <button class="utab" role="tab" data-sub="active">Active</button>
-            <button class="utab" role="tab" data-sub="requests">Requests <span class="tab-count" id="req-count">0</span></button>
-          </div>
+        <div class="tools-r">
           <label class="search">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7.25" cy="7.25" r="4.75"/><path d="m13.5 13.5-2.9-2.9"/></svg>
             <input id="rc-search" type="search" placeholder="Search vendors" aria-label="Search vendors" />
           </label>
         </div>
+      </div>
+      <div class="page-body">
         <div class="table" role="table" aria-label="Vendors and KYB/KYC access">
           <div class="tr th rc-cols" role="row" id="rc-head"></div>
           <div id="rc-rows" role="rowgroup"></div>
         </div>
-        <p class="note-row"><svg class="i"><use href="#i-lock"/></svg>Only vendors you approve can see your KYB/KYC. You can stop sharing any time.</p>
-      </section>
+      </div>
     </div>
   </div>
 </main>
@@ -984,7 +957,9 @@ const STATUS = {
   sent: ['Invite sent', 's-sent'], progress: ['In progress', 's-progress'], shared: ['Shared', 's-shared'],
   expired: ['Expired', 's-expired'], declined: ['Declined', 's-declined'], removed: ['Access removed', 's-expired'],
 };
-const FILTERS = [['all', 'All'], ['sent', 'Invite sent'], ['progress', 'In progress'], ['shared', 'Shared'], ['expired', 'Expired'], ['declined', 'Declined'], ['removed', 'Access removed']];
+// Status tabs group the 6 statuses so the row fits beside search + Invite at 1250px; the row pill still shows the exact status
+const FILTERS = [['all', 'All', null], ['pending', 'Pending', ['sent', 'progress']], ['shared', 'Shared', ['shared']], ['closed', 'Closed', ['expired', 'declined', 'removed']]];
+const inFilter = (i, key) => { const f = FILTERS.find(x => x[0] === key); return !f[2] || f[2].includes(i.status); };
 
 const BUILDING = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 6h3M7 10h3M7 14h3M7 18h3M17 14h1M17 18h1M12.4 22c.56 0 .84 0 1.054-.109a1 1 0 0 0 .437-.437C14 21.24 14 20.96 14 20.4V10m-1.6 12h7c.56 0 .84 0 1.054-.109a1 1 0 0 0 .437-.437C21 21.24 21 20.96 21 20.4v-7.2c0-1.12 0-1.68-.218-2.108a2 2 0 0 0-.874-.874C19.48 10 18.92 10 17.8 10H14m-1.6 12H4.6c-.56 0-.84 0-1.054-.109a1 1 0 0 1-.437-.437C3 21.24 3 20.96 3 20.4V5.2c0-1.12 0-1.68.218-2.108a2 2 0 0 1 .874-.874C4.52 2 5.08 2 6.2 2h4.6c1.12 0 1.68 0 2.108.218a2 2 0 0 1 .874.874C14 3.52 14 4.08 14 5.2V10"/></svg>';
 const CHECK = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>';
@@ -1021,8 +996,7 @@ function renderTx() {
   const has = state.invites.length > 0;
   document.getElementById('first-run').hidden = has;
   document.getElementById('tracker').hidden = !has;
-  document.getElementById('head-invite').hidden = !has;
-  document.getElementById('policy-banner').hidden = state.policy;
+  document.getElementById('tx-tools').hidden = !has;
 
   // policy card
   document.getElementById('policy-pill').hidden = !state.policy;
@@ -1038,11 +1012,9 @@ function renderTx() {
 
 function renderTracker() {
   const tabs = document.getElementById('status-tabs');
-  const counts = { all: state.invites.length };
-  state.invites.forEach(i => counts[i.status] = (counts[i.status] || 0) + 1);
+  const counts = Object.fromEntries(FILTERS.map(([key]) => [key, state.invites.filter(i => inFilter(i, key)).length]));
   tabs.querySelectorAll('.tab-btn').forEach(b => b.remove());
-  if (!counts[filter]) filter = 'all';
-  FILTERS.filter(([key]) => key === 'all' || counts[key]).forEach(([key, label]) => {
+  FILTERS.forEach(([key, label]) => {
     const b = document.createElement('button');
     b.className = 'tab-btn' + (key === filter ? ' active' : '');
     b.setAttribute('role', 'tab');
@@ -1054,7 +1026,7 @@ function renderTracker() {
   requestAnimationFrame(() => moveIndicator('status-indicator', tabs.querySelector('.active')));
 
   const q = document.getElementById('search').value.trim().toLowerCase();
-  const list = state.invites.filter(i => (filter === 'all' || i.status === filter) && (!q || i.name.toLowerCase().includes(q)));
+  const list = state.invites.filter(i => inFilter(i, filter) && (!q || i.name.toLowerCase().includes(q)));
   document.getElementById('rows').innerHTML = list.length ? list.map(i => {
     const [label, cls] = STATUS[i.status];
     const pal = i.vendorId ? byId(i.vendorId).pal : palFor(i.name);
@@ -1480,11 +1452,7 @@ const SUPPLIERS = [
   ['iod', 'Indian Ocean Distributors', 'Anse Royale'],
   ['vichw', 'Victoria Hardware Traders', 'Victoria'],
 ].map(([id, name, area]) => ({ id, name, area }));
-const PERSONA = {
-  tx: ['Hi, Rohan!', 'Galaxy Electronics Pvt. Ltd.'],
-  rx: ['Hi, Vinoy!', RX_BIZ],
-  fx: ['Hi, Daniel!', 'Atlas Digital Systems'],
-};
+const PERSONA = { tx: GALAXY.name, rx: RX_BIZ, fx: 'Atlas Digital Systems' };
 const AUTOFILL = {
   'b-name': RX_BIZ, 'b-reg': 'C8429117', 'b-tin': '213004587', 'b-addr': 'Shop 4, Victoria Waterfront, Victoria, Mahé',
   'o-name': 'Marie Laporte', 'o-role': 'Owner', 'o-dob': '1986-04-12', 'o-nat': 'Seychellois', 'o-id': 'SC 0481 2297', 'o-addr': 'Mont Fleuri, Mahé',
@@ -1520,8 +1488,7 @@ function render() {
   document.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.persona === p));
   document.getElementById('logo-tx').hidden = p !== 'tx';
   document.getElementById('logo-rx').hidden = p === 'tx';
-  document.getElementById('uc-name').textContent = PERSONA[p][0];
-  document.getElementById('uc-biz').textContent = PERSONA[p][1];
+  document.getElementById('uc-biz').textContent = PERSONA[p];
   if (view === 'tx') renderTx();
   else if (view === 'rxapp') renderRecv();
   else renderRxFlow();
@@ -1529,7 +1496,7 @@ function render() {
 }
 
 document.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
-  state.mode = b.dataset.persona; recvSub = null;
+  state.mode = b.dataset.persona;
   if (state.mode !== 'tx') ensureInvite(state.mode);
   syncAll(); save(); render(); scrollTo(0, 0);
 });
@@ -1560,7 +1527,7 @@ document.addEventListener('click', e => {
 });
 document.getElementById('demo-inbox').onclick = () => goRx('inbox');
 
-const HDR = '<header class="rx-hdr"><span class="wordmark">fuse<b>pay</b></span><div class="rx-hdr-r"><p>Requested by <b>Galaxy Electronics</b></p><button class="btn-link" data-gm-noop>Need help?</button></div></header>';
+const HDR = '<header class="rx-hdr"><img src="assets/logo-fusepay.svg" alt="Fusepay" width="109" height="24" style="display:block" /><div class="rx-hdr-r"><p>Requested by <b>Galaxy Electronics</b></p><button class="btn-link" data-gm-noop>Need help?</button></div></header>';
 document.querySelectorAll('[data-rx-hdr]').forEach(d => d.outerHTML = HDR);
 
 function renderRxFlow() {
@@ -1613,7 +1580,7 @@ function renderMail() {
       <article class="gm-mail">
         <h1 class="gm-subject">${esc(m.subj)}<span class="gm-label">Inbox</span></h1>
         <div class="gm-hdr"><span class="av">F</span><div><b>Fusepay</b> <small>&lt;verify@fusepay.app&gt;</small><br><small>to me</small></div><time>${m.full}</time></div>
-        <div class="mailcard"><span class="wordmark">fuse<b>pay</b></span>${body}<p>Thanks,<br>Fusepay team</p></div>
+        <div class="mailcard"><img src="assets/logo-fusepay.svg" alt="Fusepay" width="109" height="24" style="display:block" />${body}<p>Thanks,<br>Fusepay team</p></div>
       </article>`;
   }
 }
@@ -1797,52 +1764,52 @@ document.getElementById('setup-form').addEventListener('submit', async e => {
 });
 
 // ---------- Receiver Credit page (shared by both personas) ----------
-let recvSub = null;
+// One list: pending requests on top, then not shared, then access granted at the bottom
+let recvFresh = null;
 function renderRecv() {
   const r = state.recv[state.mode];
-  const pending = r.request === 'pending';
-  if (!recvSub) recvSub = pending ? 'requests' : 'active';
-  document.querySelectorAll('.utab').forEach(t => { const on = t.dataset.sub === recvSub; t.classList.toggle('on', on); t.setAttribute('aria-selected', on); });
-  const cnt = document.getElementById('req-count');
-  cnt.textContent = 1;
-  cnt.hidden = !pending;
-  cnt.classList.add('hot');
   requestAnimationFrame(() => moveIndicator('rc-indicator', document.querySelector('#rc-tabs .active')));
+  const reqDate = (personaInvite(state.mode) || {}).date || today();
+  const rows = [GALAXY, ...SUPPLIERS].map(v => {
+    const since = r.shared[v.id];
+    const requested = v === GALAXY && r.request === 'pending';
+    const declined = v === GALAXY && r.request === 'declined' && !since;
+    return { v, since, requested, declined, rank: requested ? 0 : since ? 2 : 1 };
+  }).sort((a, b) => a.rank - b.rank);
 
   const q = document.getElementById('rc-search').value.trim().toLowerCase();
-  const match = v => !q || v.name.toLowerCase().includes(q);
-  const vendorCell = (v, sub) => `<div class="td-vendor" role="cell">${avatar(palFor(v.name))}<div style="min-width:0"><div class="v-name">${esc(v.name)}</div><div class="v-sub">${esc(sub)}</div></div></div>`;
-  const head = document.getElementById('rc-head'), rows = document.getElementById('rc-rows');
-  if (recvSub === 'requests') {
-    head.innerHTML = '<span role="columnheader">Vendor</span><span role="columnheader">Requested on</span><span role="columnheader">Action</span>';
-    const reqDate = (personaInvite(state.mode) || {}).date || today();
-    rows.innerHTML = pending && match(GALAXY)
-      ? `<div class="tr rc-cols" role="row">${vendorCell(GALAXY, `${GALAXY.area} · Wants to view your KYB/KYC to offer you credit`)}<span class="td-date" role="cell">${fmtDate(reqDate)}</span><div class="td-act" role="cell"><button class="btn-link" data-recv="decline">Decline</button><button class="btn-primary" data-recv="accept">Accept</button></div></div>`
-      : `<div class="empty-row">${pending ? `No requests match "${esc(q)}".` : 'No pending requests.'}</div>`;
-  } else {
-    head.innerHTML = '<span role="columnheader">Vendor</span><span role="columnheader">Shared since</span><span role="columnheader">KYB/KYC access</span>';
-    const list = [...(r.request === 'accepted' ? [GALAXY] : []), ...SUPPLIERS].filter(match);
-    rows.innerHTML = list.length ? list.map(v => {
-      const since = r.shared[v.id];
-      return `<div class="tr rc-cols${recvFresh === v.id ? ' fresh' : ''}" role="row">${vendorCell(v, v.area)}<span class="td-date" role="cell">${since ? fmtDate(since) : '<span class="muted">Not shared</span>'}</span><div class="td-act" role="cell"><button class="switch-t" role="switch" aria-checked="${!!since}" aria-label="Share KYB/KYC with ${esc(v.name)}" data-toggle="${v.id}"></button></div></div>`;
-    }).join('') : `<div class="empty-row">No vendors match "${esc(q)}".</div>`;
-  }
+  document.getElementById('rc-head').innerHTML = '<span role="columnheader">Vendor</span><span role="columnheader">Status</span><span role="columnheader">Since</span><span role="columnheader">Action</span>';
+  const list = rows.filter(x => !q || x.v.name.toLowerCase().includes(q));
+  document.getElementById('rc-rows').innerHTML = list.length ? list.map(({ v, since, requested, declined }) => {
+    const [label, cls] = requested ? ['Requested', 's-sent'] : since ? ['Access granted', 's-shared'] : declined ? ['Declined', 's-declined'] : ['Not shared', 's-expired'];
+    const sub = v.area;
+    const date = requested ? fmtDate(reqDate) : since ? fmtDate(since) : '<span class="muted">—</span>';
+    const act = since
+      ? `<button class="btn-link" style="color:#CC2828" data-access="${v.id}">Revoke access</button>`
+      : requested
+        ? `<button class="btn-link" style="color:#CC2828" data-decline>Decline</button><button class="btn-link" data-access="${v.id}">Accept</button>`
+        : `<button class="btn-link" data-access="${v.id}">Grant access</button>`;
+    return `<div class="tr rc-cols${recvFresh === v.id ? ' fresh' : ''}" role="row">
+      <div class="td-vendor" role="cell">${avatar(palFor(v.name))}<div style="min-width:0"><div class="v-name">${esc(v.name)}</div><div class="v-sub">${esc(sub)}</div></div></div>
+      <span role="cell"><span class="pill ${cls}">${label}</span></span>
+      <span class="td-date" role="cell">${date}</span>
+      <div class="td-act" role="cell">${act}</div>
+    </div>`;
+  }).join('') : `<div class="empty-row">No vendors match "${esc(q)}".</div>`;
   recvFresh = null;
 }
-let recvFresh = null;
 document.getElementById('rc-search').addEventListener('input', renderRecv);
-document.querySelectorAll('.utab').forEach(t => t.onclick = () => { recvSub = t.dataset.sub; renderRecv(); });
 
 // Confirmation modal for every share / stop-sharing
 const shareDlg = document.getElementById('share-dlg');
 let pendingAction = null;
 function confirmShare(v, on, action) {
-  document.getElementById('share-title').textContent = on ? `Share KYB/KYC with ${v.name}?` : `Stop sharing with ${v.name}?`;
+  document.getElementById('share-title').textContent = on ? `Grant access to ${v.name}?` : `Revoke access for ${v.name}?`;
   document.getElementById('share-desc').textContent = on
-    ? "They'll see your verified business registration, tax ID, address, owners and directors, and bank account. You can stop sharing any time from Active."
-    : "They'll lose access to your KYB/KYC right away. You can share again later.";
+    ? "They'll see your verified business registration, tax ID, address, owners and directors, and bank account. You can revoke access any time."
+    : "They'll lose access to your KYB/KYC right away. You can grant access again later.";
   const go = document.getElementById('share-go');
-  go.textContent = on ? 'Share details' : 'Stop sharing';
+  go.textContent = on ? 'Grant access' : 'Revoke access';
   go.classList.toggle('danger', !on);
   pendingAction = action;
   openDialog(shareDlg);
@@ -1857,23 +1824,20 @@ const allVendors = () => [GALAXY, ...SUPPLIERS];
 function commitRecv(msg, undo) { syncAll(); save(); renderRecv(); toast(msg, undo && 'Undo', undo); }
 document.getElementById('rc-rows').addEventListener('click', e => {
   const r = state.recv[state.mode];
-  const act = e.target.closest('[data-recv]')?.dataset.recv;
-  if (act === 'accept') confirmShare(GALAXY, true, () => {
-    r.request = 'accepted'; r.shared.galaxy = today(); recvSub = 'active'; recvFresh = 'galaxy';
-    commitRecv(`KYB/KYC shared with ${GALAXY.name}`);
-  });
-  if (act === 'decline') {
+  if (e.target.closest('[data-decline]')) {
     r.request = 'declined';
-    commitRecv('Request declined', () => { r.request = 'pending'; recvSub = 'requests'; commitRecv('Request restored'); });
+    commitRecv('Request declined', () => { r.request = 'pending'; commitRecv('Request restored'); });
+    return;
   }
-  const t = e.target.closest('[data-toggle]');
-  if (t) {
-    const v = allVendors().find(x => x.id === t.dataset.toggle), on = !r.shared[v.id];
-    confirmShare(v, on, () => {
-      r.shared[v.id] = on ? today() : null;
-      commitRecv(on ? `KYB/KYC shared with ${v.name}` : `Stopped sharing with ${v.name}`);
-    });
-  }
+  const b = e.target.closest('[data-access]');
+  if (!b) return;
+  const v = allVendors().find(x => x.id === b.dataset.access), on = !r.shared[v.id];
+  confirmShare(v, on, () => {
+    if (v === GALAXY) r.request = 'accepted';
+    r.shared[v.id] = on ? today() : null;
+    recvFresh = v.id;
+    commitRecv(on ? `Access granted to ${v.name}` : `Access revoked for ${v.name}`);
+  });
 });
 
 if (state.mode !== 'tx') ensureInvite(state.mode);
