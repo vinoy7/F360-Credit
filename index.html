@@ -10,6 +10,7 @@
   <style>
     * { box-sizing: border-box; }
     [hidden] { display: none !important; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
     body { font-family: 'DM Sans', sans-serif; background: #F9FAFB; margin: 0; color: #262626; -webkit-font-smoothing: antialiased; }
     button, input, select { font: inherit; color: inherit; }
     :focus-visible { outline: 2px solid #623CEA; outline-offset: 2px; }
@@ -21,6 +22,7 @@
     .shell { background: white; border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 0 6px rgba(0,0,0,0.04); overflow: hidden; height: calc(100vh - 32px); display: flex; flex-direction: column; width: 100%; max-width: 1300px; }
     .nav-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border-radius: 8px; cursor: pointer; transition: background 0.15s; }
     .nav-item:hover { background: #F4F4F5; }
+    .nav-item:focus-visible { outline: 2px solid #623CEA; outline-offset: -2px; }
     .nav-section { position: relative; }
     .nav-indicator { position: absolute; left: 0; right: 0; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: top 250ms cubic-bezier(0.23,1,0.32,1), height 250ms cubic-bezier(0.23,1,0.32,1); z-index: 0; pointer-events: none; }
     .nav-section .nav-item { position: relative; z-index: 1; }
@@ -37,7 +39,7 @@
     /* Tabs (F360) */
     .tab-group { background: #F4F4F5; border-radius: 8px; padding: 4px; display: flex; gap: 8px; position: relative; }
     .tab-indicator { position: absolute; top: 4px; bottom: 4px; left: 4px; background: white; border-radius: 6px; box-shadow: 0 1px 3px rgba(16,24,40,0.1), 0 1px 2px rgba(16,24,40,0.06); transition: transform 250ms cubic-bezier(0.23,1,0.32,1), width 250ms cubic-bezier(0.23,1,0.32,1); }
-    .tab-btn { flex: 1; position: relative; z-index: 1; padding: 6px 12px; border-radius: 6px; font-size: 14px; font-weight: 500; line-height: 20px; color: #8C8D8F; cursor: pointer; border: none; background: transparent; white-space: nowrap; letter-spacing: -0.28px; transition: color 0.15s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+    .tab-btn { flex: 1; position: relative; z-index: 1; padding: 6px 12px; border-radius: 6px; font-size: 14px; font-weight: 500; line-height: 20px; color: #6B6C6E; cursor: pointer; border: none; background: transparent; white-space: nowrap; letter-spacing: -0.28px; transition: color 0.15s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
     .tab-btn.active { color: #262626; }
 
     /* Buttons (F360) */
@@ -50,6 +52,8 @@
     .btn-outline:disabled { color: #D7CCFF; border-color: #D7CCFF; background: #fff; cursor: default; }
     .btn-link { padding: 2px 4px; margin: -2px -4px; border: none; border-radius: 6px; background: transparent; color: #623CEA; font-size: 14px; font-weight: 500; line-height: 20px; letter-spacing: -0.28px; cursor: pointer; }
     .btn-link:hover { background: #F3F0FF; }
+    .btn-link.btn-neutral { color: #6B6C6E; }
+    .btn-link.btn-neutral:hover { background: #F4F4F5; color: #262626; }
     .busy { pointer-events: none; }
     .spinner { width: 16px; height: 16px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: spin 0.7s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -59,35 +63,35 @@
     .view { display: flex; flex-direction: column; gap: 40px; animation: fade-up 300ms cubic-bezier(0.23,1,0.32,1); }
     @keyframes fade-up { from { opacity: 0; transform: translateY(8px); } }
 
-    /* Intro cards */
-    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .intro-card { border: 1px solid #E3E3E5; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 24px; }
-    .intro-top { display: flex; flex-direction: column; gap: 16px; flex: 1; }
     .icon-tile { width: 48px; height: 48px; border-radius: 12px; background: #F3F0FF; color: #623CEA; display: flex; align-items: center; justify-content: center; }
-    .icon-tile.done { background: #E7F6EE; color: #0E8F53; }
-    .card-h { font-size: 20px; font-weight: 500; line-height: 28px; letter-spacing: -0.4px; display: flex; align-items: center; gap: 12px; }
-    .card-p { font-size: 16px; line-height: 24px; letter-spacing: -0.32px; color: #8C8D8F; }
-    .ticks { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-    .ticks li { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; line-height: 20px; letter-spacing: -0.28px; }
-    .ticks svg { flex-shrink: 0; margin-top: 2px; color: #623CEA; }
-    .intro-card .actions { display: flex; gap: 12px; align-items: center; }
-
-    /* How it works */
-    .how { display: flex; flex-direction: column; gap: 16px; }
-    .how-h { font-size: 20px; line-height: 28px; letter-spacing: -0.4px; }
-    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; list-style: none; }
-    .steps li { display: flex; flex-direction: column; gap: 8px; position: relative; }
-    .steps li:not(:last-child)::after { content: ''; position: absolute; top: 16px; left: 44px; right: -12px; height: 1px; background: #E3E3E5; }
-    .step-n { width: 32px; height: 32px; border-radius: 100px; background: #F4F4F5; font-size: 14px; font-weight: 500; display: flex; align-items: center; justify-content: center; }
-    .step-t { font-size: 16px; font-weight: 500; line-height: 24px; letter-spacing: -0.32px; }
-    .step-d { font-size: 14px; line-height: 20px; letter-spacing: -0.28px; color: #8C8D8F; }
+    .icon-tile.done { background: #E7F6EE; color: #0A7343; }
+    /* Empty state: one primary job (invite), policy as a quieter side panel, preview of what appears next */
+    .start { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(280px, 1fr); gap: 40px; align-items: start; padding: 32px 24px; }
+    .start-main { display: flex; flex-direction: column; gap: 24px; max-width: 640px; }
+    .start-h { font-size: 28px; line-height: 36px; font-weight: 500; letter-spacing: -0.56px; }
+    .start-p { font-size: 16px; line-height: 24px; letter-spacing: -0.32px; color: #6B6C6E; max-width: 60ch; margin-top: 8px; }
+    .start-steps { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; counter-reset: s; }
+    .start-steps li { display: grid; grid-template-columns: 28px 1fr; gap: 12px; align-items: baseline; font-size: 16px; line-height: 24px; letter-spacing: -0.32px; counter-increment: s; }
+    .start-steps li::before { content: counter(s); font-size: 14px; font-weight: 500; color: #623CEA; text-align: right; font-variant-numeric: tabular-nums; }
+    .start-steps span { color: #6B6C6E; }
+    .start-preview { margin-top: 8px; }
+    .start-preview .cap { font-size: 14px; line-height: 20px; color: #6B6C6E; margin-bottom: 8px; }
+    .start-preview .table { -webkit-mask-image: linear-gradient(#000 55%, transparent); mask-image: linear-gradient(#000 55%, transparent); pointer-events: none; }
+    .start-preview .tr { grid-template-columns: minmax(0,1fr) 140px; }
+    .policy-panel { border: 1px solid #E3E3E5; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 16px; background: #FCFCFD; }
+    .policy-panel h2 { font-size: 18px; line-height: 28px; font-weight: 500; letter-spacing: -0.36px; display: flex; align-items: center; gap: 8px; }
+    .policy-panel p { font-size: 14px; line-height: 20px; color: #6B6C6E; }
+    .policy-panel ul { list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 14px; line-height: 20px; }
+    .policy-panel li { display: flex; gap: 8px; }
+    .policy-panel li .i { color: #623CEA; margin-top: 2px; }
+    .policy-panel .btn-primary { align-self: flex-start; }
 
     /* Pills */
     .pill { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: 100px; font-size: 12px; font-weight: 500; line-height: 16px; white-space: nowrap; }
     .pill::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
     .s-sent { background: #F3F0FF; color: #623CEA; }
-    .s-progress { background: #FFF4E5; color: #B65C00; }
-    .s-shared { background: #E7F6EE; color: #0E8F53; }
+    .s-progress { background: #FFF4E5; color: #9A4D00; }
+    .s-shared { background: #E7F6EE; color: #0A7343; }
     .s-expired { background: #F4F4F5; color: #6B6C6E; }
     .s-declined { background: #FFEFEF; color: #CC2828; }
 
@@ -106,27 +110,28 @@
     .page-body { flex: 1; min-height: 0; overflow-y: auto; padding: 16px 16px 72px; display: flex; flex-direction: column; }
     .page-body > .table { flex: 1 0 auto; }
     .search { position: relative; width: 360px; min-width: 200px; flex-shrink: 1; }
-    .search svg { position: absolute; left: 12px; top: 12px; color: #939596; pointer-events: none; }
-    .search input { width: 100%; height: 40px; padding: 0 12px 0 36px; border: 1px solid #D4D4D6; border-radius: 8px; font-size: 14px; outline: none; }
-    .search input:focus { border-color: #623CEA; box-shadow: 0 0 0 3px rgba(98,60,234,0.15); }
+    .search svg { position: absolute; left: 12px; top: 12px; color: #6B6C6E; pointer-events: none; }
+    .search input { width: 100%; height: 40px; padding: 0 12px 0 36px; border: 1px solid #8E8F91; border-radius: 8px; font-size: 14px; outline: none; }
+    .search input:focus { border-color: #623CEA; box-shadow: 0 0 0 3px rgba(98,60,234,0.35); }
     .table { border: 1px solid #EDEDED; border-radius: 8px; overflow: hidden; }
-    .acct { display: inline-flex; align-items: center; gap: 4px; font-size: 14px; line-height: 20px; color: #623CEA; font-weight: 500; }
+    .acct { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; line-height: 20px; color: #262626; }
+    .acct svg { color: #0A7343; }
     .acct-email { display: block; font-size: 14px; line-height: 20px; color: #6B6C6E; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .tr { display: grid; grid-template-columns: minmax(0,1fr) 220px 140px 160px 160px; gap: 16px; align-items: center; padding: 12px 16px; border-bottom: 1px solid #EDEDED; }
     .tr:not(.th) { min-height: 68px; }
-    .th { background: #F4F4F5; min-height: 40px; padding-top: 0; padding-bottom: 0; font-size: 12px; font-weight: 400; line-height: 16px; color: #8C8D8F; }
+    .th { background: #F4F4F5; min-height: 40px; padding-top: 0; padding-bottom: 0; font-size: 12px; font-weight: 400; line-height: 16px; color: #6B6C6E; }
     .tr .pill { border-radius: 4px; padding: 4px 8px; font-size: 14px; line-height: 20px; }
     .tr .pill::before { display: none; }
     .th :last-child, .td-act { text-align: right; justify-content: flex-end; }
     .td-vendor { display: flex; align-items: center; gap: 12px; min-width: 0; }
     .v-name { font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: -0.28px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .v-sub { font-size: 14px; line-height: 20px; color: #8C8D8F; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .v-sub { font-size: 14px; line-height: 20px; color: #6B6C6E; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .td-date { font-size: 14px; line-height: 20px; color: #262626; }
     .td-act { display: flex; gap: 12px; align-items: center; }
-    .muted { color: #C1C1C3; font-size: 14px; }
+    .muted { color: #6B6C6E; font-size: 14px; }
     .tr.fresh { animation: row-in 1600ms cubic-bezier(0.23,1,0.32,1); }
     @keyframes row-in { 0% { opacity: 0; transform: translateY(-6px); background: #F3F0FF; } 20% { opacity: 1; transform: none; background: #F3F0FF; } 100% { background: transparent; } }
-    .empty-row { padding: 40px 16px; text-align: center; font-size: 14px; color: #8C8D8F; }
+    .empty-row { padding: 40px 16px; text-align: center; font-size: 14px; color: #6B6C6E; }
 
     .avatar { width: 40px; height: 40px; border-radius: 100px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .avatar svg { width: 20px; height: 20px; }
@@ -141,28 +146,28 @@
     .overlay.open .dialog { transform: none; }
     .dlg-head { padding: 24px 24px 0; display: flex; flex-direction: column; gap: 4px; }
     .dlg-title { font-size: 20px; font-weight: 500; line-height: 28px; letter-spacing: -0.4px; padding-right: 40px; }
-    .dlg-desc { font-size: 14px; line-height: 20px; letter-spacing: -0.28px; color: #8C8D8F; }
-    .dlg-close { position: absolute; top: 20px; right: 20px; width: 32px; height: 32px; border: none; border-radius: 8px; background: transparent; color: #939596; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .dlg-desc { font-size: 14px; line-height: 20px; letter-spacing: -0.28px; color: #6B6C6E; }
+    .dlg-close { position: absolute; top: 20px; right: 20px; width: 32px; height: 32px; border: none; border-radius: 8px; background: transparent; color: #6B6C6E; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .dlg-close:hover { background: #F3F0FF; }
     .dlg-body { padding: 24px; display: flex; flex-direction: column; gap: 20px; }
     .panel { min-height: 352px; display: flex; flex-direction: column; gap: 20px; }
     .dlg-foot { padding: 16px 24px; border-top: 1px solid #EDEDED; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
-    .dlg-foot .left { margin-right: auto; font-size: 14px; color: #8C8D8F; }
+    .dlg-foot .left { margin-right: auto; font-size: 14px; color: #6B6C6E; }
 
     /* Fields */
     .field { display: flex; flex-direction: column; gap: 4px; }
     .label { font-size: 14px; font-weight: 500; line-height: 20px; letter-spacing: -0.28px; color: #262626; transition: color 0.15s; }
-    .field.filled .label { color: #8C8D8F; }
+    .field.filled .label { color: #6B6C6E; }
     .label .req { color: #CC2828; }
-    .input { height: 48px; width: 100%; padding: 0 16px; border: 1px solid #D4D4D6; border-radius: 8px; font-size: 16px; letter-spacing: -0.32px; background: #fff; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
-    .input::placeholder { color: #B5B6B8; }
-    .input:focus { border-color: #623CEA; box-shadow: 0 0 0 3px rgba(98,60,234,0.15); }
+    .input { height: 48px; width: 100%; padding: 0 16px; border: 1px solid #8E8F91; border-radius: 8px; font-size: 16px; letter-spacing: -0.32px; background: #fff; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
+    .input::placeholder { color: #757678; }
+    .input:focus { border-color: #623CEA; box-shadow: 0 0 0 3px rgba(98,60,234,0.35); }
     .invalid .input, .invalid .phone { border-color: #CC2828; }
     .invalid .input:focus { box-shadow: 0 0 0 3px rgba(204,40,40,0.12); }
     .err { font-size: 12px; line-height: 16px; color: #CC2828; display: none; }
     .invalid .err { display: block; }
-    .phone { display: flex; border: 1px solid #D4D4D6; border-radius: 8px; transition: border-color 0.15s, box-shadow 0.15s; }
-    .phone:focus-within { border-color: #623CEA; box-shadow: 0 0 0 3px rgba(98,60,234,0.15); }
+    .phone { display: flex; border: 1px solid #8E8F91; border-radius: 8px; transition: border-color 0.15s, box-shadow 0.15s; }
+    .phone:focus-within { border-color: #623CEA; box-shadow: 0 0 0 3px rgba(98,60,234,0.35); }
     .invalid .phone:focus-within { border-color: #CC2828; box-shadow: 0 0 0 3px rgba(204,40,40,0.12); }
     .phone select { height: 46px; padding: 0 8px 0 16px; border: none; border-right: 1px solid #E3E3E5; border-radius: 8px 0 0 8px; background: #F9FAFB; font-size: 16px; outline: none; cursor: pointer; }
     .phone .input { border: none; box-shadow: none !important; height: 46px; }
@@ -172,9 +177,9 @@
     /* Combobox (matches vendor dropdown reference) */
     .combo { position: relative; }
     .combo .input { padding-right: 48px; }
-    .combo-chev { position: absolute; right: 16px; top: 14px; color: #939596; pointer-events: none; transition: transform 200ms ease; }
+    .combo-chev { position: absolute; right: 16px; top: 14px; color: #6B6C6E; pointer-events: none; transition: transform 200ms ease; }
     .combo.open .combo-chev { transform: rotate(180deg); }
-    .combo.open .input { border: 2px solid #623CEA; padding-left: 15px; box-shadow: 0 0 0 3px rgba(98,60,234,0.15); }
+    .combo.open .input { border: 2px solid #623CEA; padding-left: 15px; box-shadow: 0 0 0 3px rgba(98,60,234,0.35); }
     .listbox { position: absolute; left: 0; right: 0; top: calc(100% + 8px); z-index: 10; list-style: none; padding: 8px; max-height: 268px; overflow-y: auto; background: #fff; border: 1px solid #EDEDED; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); opacity: 0; transform: translateY(-4px); pointer-events: none; transition: opacity 150ms ease, transform 150ms ease; }
     .combo.open .listbox { opacity: 1; transform: none; pointer-events: auto; }
     .opt { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 8px; cursor: pointer; }
@@ -183,20 +188,20 @@
     .opt[aria-disabled="true"] .avatar, .opt[aria-disabled="true"] .opt-text { opacity: 0.5; }
     .opt-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
     .opt-name { font-size: 16px; line-height: 24px; letter-spacing: -0.32px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .opt-sub { font-size: 14px; line-height: 20px; color: #8C8D8F; }
-    .opt-check { width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid #D4D4D6; display: flex; align-items: center; justify-content: center; color: transparent; flex-shrink: 0; transition: background 0.15s, border-color 0.15s; }
+    .opt-sub { font-size: 14px; line-height: 20px; color: #6B6C6E; }
+    .opt-check { width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid #8E8F91; display: flex; align-items: center; justify-content: center; color: transparent; flex-shrink: 0; transition: background 0.15s, border-color 0.15s; }
     .opt[aria-disabled="true"] .opt-check { background: #F4F4F5; border-color: #E3E3E5; }
     .opt[aria-selected="true"] .opt-check { background: #623CEA; border-color: #623CEA; color: #fff; }
-    .opt-empty { padding: 16px 12px; font-size: 14px; line-height: 20px; color: #8C8D8F; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+    .opt-empty { padding: 16px 12px; font-size: 14px; line-height: 20px; color: #6B6C6E; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; }
     .chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 4px 4px 12px; border-radius: 100px; background: #F3F0FF; color: #4A2BB8; font-size: 14px; line-height: 20px; letter-spacing: -0.28px; max-width: 100%; }
     .chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .chip.pop { animation: pop 250ms cubic-bezier(0.23,1,0.32,1); }
     @keyframes pop { from { transform: scale(0.8); opacity: 0; } }
-    .chip button { width: 20px; height: 20px; border: none; border-radius: 100px; background: transparent; color: #623CEA; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .chip button { width: 24px; height: 24px; border: none; border-radius: 100px; background: transparent; color: #623CEA; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .chip button:hover { background: #E4DCFF; }
     .tag { font-size: 12px; line-height: 16px; padding: 2px 8px; border-radius: 100px; background: #F4F4F5; color: #6B6C6E; white-space: nowrap; }
-    .panel-note { font-size: 14px; line-height: 20px; color: #8C8D8F; margin-top: auto; }
+    .panel-note { font-size: 14px; line-height: 20px; color: #6B6C6E; margin-top: auto; }
 
     /* KYB stub */
     .kyb-head { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 24px 16px; border: 1px solid #E3E3E5; border-radius: 12px; text-align: center; }
@@ -213,7 +218,7 @@
     .overlay.drawer .dlg-body { flex: 1; overflow-y: auto; gap: 24px; }
     .drawer-head { flex-shrink: 0; padding: 20px 64px 20px 24px; border-bottom: 1px solid #E3E3E5; } /* divider runs the full drawer width */
     .overlay.drawer .dlg-close { top: 18px; }
-    .kyb-grid dt { font-size: 14px; line-height: 20px; color: #8C8D8F; }
+    .kyb-grid dt { font-size: 14px; line-height: 20px; color: #6B6C6E; }
     .kyb-grid dd { margin: 4px 0 0; font-size: 16px; line-height: 24px; color: #262626; display: flex; gap: 8px; align-items: center; }
     .verified { display: inline-flex; flex-shrink: 0; }
 
@@ -227,7 +232,7 @@
     .toast-msg { flex: 1; min-width: 0; }
     .toast-act { border: none; background: none; padding: 2px 4px; border-radius: 6px; color: #623CEA; font-size: 14px; font-weight: 500; cursor: pointer; }
     .toast-act:hover { background: #F3F0FF; }
-    .toast-x { width: 28px; height: 28px; border: none; border-radius: 6px; background: none; color: #939596; display: grid; place-items: center; cursor: pointer; flex-shrink: 0; }
+    .toast-x { width: 28px; height: 28px; border: none; border-radius: 6px; background: none; color: #6B6C6E; display: grid; place-items: center; cursor: pointer; flex-shrink: 0; }
     .toast-x:hover { background: #F4F4F5; }
     @keyframes toast-in { from { opacity: 0; transform: translateY(-12px); } }
 
@@ -258,7 +263,7 @@
     .gm-brand { display: flex; align-items: center; gap: 8px; width: 200px; font-size: 22px; }
     .gm-search { flex: 1; max-width: 720px; height: 48px; border-radius: 24px; background: #E9EEF6; display: flex; align-items: center; gap: 12px; padding: 0 16px; }
     .gm-search input { border: none; background: none; outline: none; flex: 1; font-size: 16px; }
-    .gm-ava { margin-left: auto; width: 32px; height: 32px; border-radius: 50%; background: #0E8F53; color: #fff; display: grid; place-items: center; font-size: 14px; }
+    .gm-ava { margin-left: auto; width: 32px; height: 32px; border-radius: 50%; background: #0A7343; color: #fff; display: grid; place-items: center; font-size: 14px; }
     .gm-body { flex: 1; display: flex; min-height: 0; padding: 0 16px 16px 0; }
     .gm-rail { width: 256px; padding: 8px 16px 0 8px; flex-shrink: 0; display: flex; flex-direction: column; gap: 2px; }
     .gm-compose { align-self: flex-start; height: 56px; padding: 0 24px 0 16px; margin-bottom: 16px; border: none; border-radius: 16px; background: #C2E7FF; color: #001D35; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 12px; cursor: pointer; }
@@ -290,12 +295,12 @@
     .gm-hdr time { margin-left: auto; font-size: 12px; color: #5F6368; }
     .mailcard { font-family: 'DM Sans', sans-serif; max-width: 600px; border: 1px solid #E3E3E5; border-radius: 12px; padding: 40px; display: flex; flex-direction: column; gap: 24px; align-items: flex-start; color: #262626; animation: fade-up 300ms cubic-bezier(0.23,1,0.32,1); }
     .mailcard p { font-size: 16px; line-height: 24px; letter-spacing: -0.32px; color: #4A4B4D; }
-    .mailcard .small { font-size: 14px; line-height: 20px; color: #8C8D8F; }
+    .mailcard .small { font-size: 14px; line-height: 20px; color: #6B6C6E; }
 
     /* KYB/KYC flow */
     .rx-screen { min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding-bottom: 96px; background: #F9FAFB; }
     .rx-hdr { width: 100%; height: 64px; background: #fff; border-bottom: 1px solid #E3E3E5; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-    .rx-hdr-r { display: flex; align-items: center; gap: 24px; font-size: 14px; line-height: 20px; color: #8C8D8F; }
+    .rx-hdr-r { display: flex; align-items: center; gap: 24px; font-size: 14px; line-height: 20px; color: #6B6C6E; }
     .rx-hdr-r b { font-weight: 500; color: #262626; }
     .rx-col { width: 720px; max-width: calc(100% - 32px); padding-top: 48px; display: flex; flex-direction: column; gap: 32px; animation: fade-up 300ms cubic-bezier(0.23,1,0.32,1); }
     .rx-col.wide { width: 800px; }
@@ -307,12 +312,12 @@
     .rx-card h2 { font-size: 20px; line-height: 28px; font-weight: 500; letter-spacing: -0.4px; }
     .between { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
     .docgrp { display: flex; flex-direction: column; gap: 12px; }
-    .docgrp h3, .upgrp h3 { font-size: 14px; line-height: 20px; font-weight: 500; color: #6B6C6E; }
+    .docgrp h3, .upgrp h2 { font-size: 14px; line-height: 20px; font-weight: 500; color: #6B6C6E; }
     .doc { display: flex; gap: 12px; font-size: 14px; line-height: 20px; align-items: flex-start; }
     .doc .i { color: #623CEA; }
     .note-row { display: flex; gap: 8px; align-items: center; font-size: 14px; line-height: 20px; color: #6B6C6E; }
-    .note-row .i { color: #8C8D8F; }
-    .terms { font-size: 12px; line-height: 16px; color: #8C8D8F; }
+    .note-row .i { color: #6B6C6E; }
+    .terms { font-size: 12px; line-height: 16px; color: #6B6C6E; }
     .end { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
     .methods { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; border: 0; padding: 0; margin: 0; }
     .mopt { padding: 24px; border-radius: 12px; background: #fff; box-shadow: inset 0 0 0 1px #E3E3E5; display: flex; flex-direction: column; gap: 16px; cursor: pointer; position: relative; transition: box-shadow 0.15s, background 0.15s; }
@@ -320,24 +325,24 @@
     .mopt input { position: absolute; opacity: 0; width: 1px; height: 1px; }
     .mopt:has(input:checked) { background: #FAF8FF; box-shadow: inset 0 0 0 2px #623CEA; }
     .mopt:has(input:focus-visible) { outline: 2px solid #623CEA; outline-offset: 2px; }
-    .radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #C1C1C3; display: grid; place-items: center; }
+    .radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #8E8F91; display: grid; place-items: center; }
     .mopt:has(input:checked) .radio { border-color: #623CEA; }
     .mopt:has(input:checked) .radio::after { content: ''; width: 10px; height: 10px; border-radius: 50%; background: #623CEA; }
     .mopt-t { display: flex; align-items: center; gap: 8px; font-size: 20px; line-height: 28px; font-weight: 500; }
     .mopt-d { font-size: 14px; line-height: 20px; color: #6B6C6E; margin-top: 4px; }
     .meta { display: flex; flex-direction: column; gap: 12px; font-size: 14px; line-height: 20px; }
     .meta p { display: flex; gap: 8px; align-items: center; }
-    .meta .i { color: #8C8D8F; }
+    .meta .i { color: #6B6C6E; }
     .two { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
     select.input { appearance: none; padding-right: 48px; cursor: pointer; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' stroke='%23939596' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 7.5 5 5 5-5'/%3E%3C/svg%3E") no-repeat right 16px center; }
-    .hint-text { font-size: 12px; line-height: 16px; color: #8C8D8F; }
+    .hint-text { font-size: 12px; line-height: 16px; color: #6B6C6E; }
     .invalid .hint-text { display: none; }
     .chk { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; line-height: 20px; cursor: pointer; }
     .chk input { width: 20px; height: 20px; accent-color: #623CEA; flex-shrink: 0; margin: 0; }
     .sig { font-style: italic; font-size: 28px; line-height: 40px; min-height: 52px; padding: 4px 0; border-bottom: 1px dashed #D4D4D6; color: #262626; }
-    .sig:empty::before { content: 'Your signature appears here'; font-style: normal; font-size: 14px; color: #C1C1C3; }
+    .sig:empty::before { content: 'Your signature appears here'; font-style: normal; font-size: 14px; color: #757678; }
     .rv { display: grid; grid-template-columns: 240px 1fr; gap: 12px 24px; font-size: 14px; line-height: 20px; margin: 0; }
-    .rv dt { color: #8C8D8F; }
+    .rv dt { color: #6B6C6E; }
     .rv dd { margin: 0; }
     .todo { list-style: none; display: flex; flex-direction: column; gap: 16px; }
     .todo li { display: flex; gap: 12px; align-items: center; }
@@ -345,16 +350,16 @@
     .info { background: #F3F0FF; border-radius: 12px; padding: 16px 20px; display: flex; gap: 12px; font-size: 14px; line-height: 20px; }
     .info .i { color: #623CEA; }
     .count { font-size: 14px; line-height: 20px; font-weight: 500; color: #6B6C6E; }
-    .count.ok { color: #0E8F53; }
+    .count.ok { color: #0A7343; }
     .upgrp { display: flex; flex-direction: column; gap: 8px; }
     .up { background: #fff; border-radius: 12px; padding: 16px 20px; box-shadow: inset 0 0 0 1px #E3E3E5; display: flex; flex-direction: column; gap: 8px; transition: box-shadow 0.15s, background 0.15s; }
     .up.drag { background: #FAF8FF; box-shadow: inset 0 0 0 2px #623CEA; }
     .up-top { display: flex; align-items: center; gap: 16px; }
     .up-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
     .up-name { font-size: 16px; line-height: 24px; font-weight: 500; }
-    .up-note { font-size: 14px; line-height: 20px; color: #8C8D8F; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .up .ic { color: #8C8D8F; }
-    .up[data-s="done"] .ic { color: #0E8F53; }
+    .up-note { font-size: 14px; line-height: 20px; color: #6B6C6E; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .up .ic { color: #6B6C6E; }
+    .up[data-s="done"] .ic { color: #0A7343; }
     .up[data-s="error"] .ic { color: #CC2828; }
     .up[data-s="uploading"] .ic { color: #623CEA; }
     .up[data-s="error"] { box-shadow: inset 0 0 0 2px #CC2828; }
@@ -364,17 +369,17 @@
     @keyframes fillbar { from { transform: scaleX(0); } }
     #rx-flow input[type="file"] { display: none; }
     .rx-col.done { width: 560px; padding-top: 120px; align-items: center; text-align: center; gap: 24px; }
-    .tile-ok { width: 56px; height: 56px; border-radius: 16px; background: #E7F6EE; color: #0E8F53; display: grid; place-items: center; animation: pop 300ms cubic-bezier(0.23,1,0.32,1); }
+    .tile-ok { width: 56px; height: 56px; border-radius: 16px; background: #E7F6EE; color: #0A7343; display: grid; place-items: center; animation: pop 300ms cubic-bezier(0.23,1,0.32,1); }
     .sum { width: 100%; text-align: left; background: #fff; border: 1px solid #E3E3E5; border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; line-height: 20px; }
     .locked { position: relative; }
     .locked .input { background: #F9FAFB; color: #6B6C6E; padding-right: 112px; }
-    .locked .ok-tag { position: absolute; right: 16px; top: 14px; display: flex; gap: 4px; align-items: center; font-size: 12px; line-height: 20px; font-weight: 500; color: #0E8F53; }
+    .locked .ok-tag { position: absolute; right: 16px; top: 14px; display: flex; gap: 4px; align-items: center; font-size: 12px; line-height: 20px; font-weight: 500; color: #0A7343; }
     .pw { position: relative; }
     .pw .input { padding-right: 80px; }
     .pw .btn-link { position: absolute; right: 16px; top: 14px; margin: 0; }
-    .rules { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 12px; line-height: 16px; color: #8C8D8F; }
+    .rules { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 12px; line-height: 16px; color: #6B6C6E; }
     .rules li { display: flex; gap: 4px; align-items: center; transition: color 0.15s; }
-    .rules li.ok { color: #0E8F53; }
+    .rules li.ok { color: #0A7343; }
     .code-row { display: flex; gap: 12px; }
     .code-row .phone { flex: 1; }
 
@@ -415,6 +420,8 @@
   <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"/></symbol>
   <symbol id="i-send" viewBox="0 0 24 24"><path d="M10 14l11 -11"/><path d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5"/></symbol>
   <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M5 12l6 6"/><path d="M5 12l6 -6"/></symbol>
+  <symbol id="i-avatar" viewBox="0 0 24 24"><path d="M7 6h3M7 10h3M7 14h3M7 18h3M17 14h1M17 18h1M12.4 22c.56 0 .84 0 1.054-.109a1 1 0 0 0 .437-.437C14 21.24 14 20.96 14 20.4V10m-1.6 12h7c.56 0 .84 0 1.054-.109a1 1 0 0 0 .437-.437C21 21.24 21 20.96 21 20.4v-7.2c0-1.12 0-1.68-.218-2.108a2 2 0 0 0-.874-.874C19.48 10 18.92 10 17.8 10H14m-1.6 12H4.6c-.56 0-.84 0-1.054-.109a1 1 0 0 1-.437-.437C3 21.24 3 20.96 3 20.4V5.2c0-1.12 0-1.68.218-2.108a2 2 0 0 1 .874-.874C4.52 2 5.08 2 6.2 2h4.6c1.12 0 1.68 0 2.108.218a2 2 0 0 1 .874.874C14 3.52 14 4.08 14 5.2V10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-circle" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/></symbol>
   <symbol id="i-square" viewBox="0 0 24 24"><path d="M4 6a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"/></symbol>
 </svg>
 
@@ -428,7 +435,7 @@
 <aside id="sidebar">
   <!-- Logo -->
   <div style="padding: 0 0 12px; height: 64px; display: flex; align-items: center;">
-    <img id="logo-tx" src="assets/imgLogo.svg" alt="Fuse360" style="width:116px; height:34px; object-fit:contain;" /><img id="logo-rx" src="assets/logo-fusepay.svg" alt="Fusepay" width="116" height="26" hidden />
+    <img id="logo-tx" src="assets/imgLogo.svg" alt="Fuse360" style="width:116px; height:34px; object-fit:contain;" /><img id="logo-rx" src="assets/logo-fusepay.svg" alt="FusePay" width="116" height="26" hidden />
   </div>
 
   <!-- Separator -->
@@ -440,7 +447,7 @@
     <span style="width:40px; height:40px; border-radius:100px; background:#FFEBF3; display:flex; align-items:center; justify-content:center; flex-shrink:0;"><img src="assets/imgProfileBuilding.svg" style="width:22px; height:22px;" alt="" /></span>
     <span style="min-width:0; flex:1; display:flex; flex-direction:column; text-align:left;">
       <span id="uc-biz" style="font-size:14px; font-weight:500; color:#262626; letter-spacing:-0.28px; line-height:20px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Galaxy Electronics Pvt. Ltd.</span>
-      <span id="uc-role" style="font-size:14px; color:#8C8D8F; letter-spacing:-0.28px; line-height:20px;">Owner</span>
+      <span id="uc-role" style="font-size:14px; color:#6B6C6E; letter-spacing:-0.28px; line-height:20px;">Owner</span>
     </span>
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#939596" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="m5 7.5 5 5 5-5"/></svg>
   </button>
@@ -556,52 +563,39 @@
       <div class="page-body">
 
       <!-- First run -->
-      <section class="view" id="first-run" hidden style="padding:16px">
-        <div class="cards">
-          <article class="intro-card" id="policy-card">
-            <div class="intro-top">
-              <div class="icon-tile" id="policy-tile">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.75 4.75 5.5v5.6c0 4.5 3 8.4 7.25 10.15 4.25-1.75 7.25-5.65 7.25-10.15V5.5L12 2.75Z"/><path d="m9 12 2 2 4-4"/></svg>
+      <section class="view" id="first-run" hidden>
+        <div class="start">
+          <div class="start-main">
+            <div>
+              <h2 class="start-h">Invite the businesses you supply</h2>
+              <p class="start-p">They verify their business and owners with FusePay, then choose whether to share those details with you. Once they share, you can offer them credit.</p>
+            </div>
+            <ol class="start-steps">
+              <li><p>Invite vendors <span>from your list, or any business by email and SMS</span></p></li>
+              <li><p>They complete KYB/KYC <span>and FusePay verifies it</span></p></li>
+              <li><p>You review their details <span>and offer credit within your policy</span></p></li>
+            </ol>
+            <button class="btn-primary" data-invite style="align-self:flex-start">Invite vendors</button>
+            <div class="start-preview" aria-hidden="true">
+              <p class="cap">Your invites will appear here</p>
+              <div class="table">
+                <div class="tr th"><span>Vendor</span><span>Status</span></div>
+                <div class="tr"><div class="td-vendor"><span class="avatar" style="background:#E3F1F2;color:#6FA9AE"><svg viewBox="0 0 24 24"><use href="#i-avatar"/></svg></span><div><div class="v-name">Ocean Breeze Café</div><div class="v-sub">Victoria</div></div></div><span><span class="pill s-sent">Invite sent</span></span></div>
+                <div class="tr"><div class="td-vendor"><span class="avatar" style="background:#FEF6CC;color:#C9A53A"><svg viewBox="0 0 24 24"><use href="#i-avatar"/></svg></span><div><div class="v-name">Beau Vallon Bistro</div><div class="v-sub">Beau Vallon</div></div></div><span><span class="pill s-progress">In progress</span></span></div>
+                <div class="tr"><div class="td-vendor"><span class="avatar" style="background:#E7F4EA;color:#6FAF7F"><svg viewBox="0 0 24 24"><use href="#i-avatar"/></svg></span><div><div class="v-name">Coral Reef Resort</div><div class="v-sub">Praslin</div></div></div><span><span class="pill s-shared">Shared</span></span></div>
               </div>
-              <h2 class="card-h">Set up your credit policy <span class="pill s-shared" id="policy-pill" hidden>Active</span></h2>
-              <p class="card-p" id="policy-text">Your policy is the rulebook for credit. Everyone in your company works within it, whether they add a vendor, create an order or record a payment.</p>
-              <ul class="ticks">
-                <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>Credit limits for each vendor</li>
-                <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>Payment terms and grace periods</li>
-                <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>Who can approve what, at every user level</li>
-              </ul>
             </div>
-            <div class="actions">
-              <button class="btn-primary" data-create-policy>Create policy</button>
-            </div>
-          </article>
-
-          <article class="intro-card">
-            <div class="intro-top">
-              <div class="icon-tile">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9Z"/><path d="m3.5 7 7.4 5.2a2 2 0 0 0 2.2 0L20.5 7"/></svg>
-              </div>
-              <h2 class="card-h">Invite vendors for KYB/KYC</h2>
-              <p class="card-p">Ask the businesses you supply to share their verified details with you. Invite vendors already on Fuse360, or send an invite to any business by email and SMS.</p>
-              <ul class="ticks">
-                <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>Business registration and tax details (KYB)</li>
-                <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>Owner and director identity checks (KYC)</li>
-                <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>Shared with you only after the vendor agrees</li>
-              </ul>
-            </div>
-            <div class="actions">
-              <button class="btn-primary" data-invite>Invite vendors</button>
-            </div>
-          </article>
-        </div>
-
-        <div class="how">
-          <h3 class="how-h">How it works</h3>
-          <ol class="steps">
-            <li><span class="step-n">1</span><span class="step-t">Invite your vendors</span><span class="step-d">Pick vendors from your list, or add a business that's new to Fuse360.</span></li>
-            <li><span class="step-n">2</span><span class="step-t">They complete KYB/KYC</span><span class="step-d">Vendors verify their business and identity on Fuse360 and agree to share.</span></li>
-            <li><span class="step-n">3</span><span class="step-t">Review and offer credit</span><span class="step-d">See their verified details here and offer credit within your policy.</span></li>
-          </ol>
+          </div>
+          <aside class="policy-panel" id="policy-card" aria-labelledby="policy-h">
+            <h2 id="policy-h">Set up your credit policy <span class="pill s-shared" id="policy-pill" hidden>Active</span></h2>
+            <p id="policy-text">Your policy is the rulebook for credit. Everyone in your company works within it, whether they add a vendor, create an order or record a payment.</p>
+            <ul>
+              <li><svg class="i i16"><use href="#i-check"/></svg>Credit limits for each vendor</li>
+              <li><svg class="i i16"><use href="#i-check"/></svg>Payment terms and grace periods</li>
+              <li><svg class="i i16"><use href="#i-check"/></svg>Who can approve what, at every user level</li>
+            </ul>
+            <button class="btn-primary" data-create-policy>Create policy</button>
+          </aside>
         </div>
       </section>
 
@@ -616,11 +610,11 @@
     <div class="page" id="rx-credit">
       <header class="page-bar"><h1 class="page-title">Credit</h1></header>
       <div class="page-tools">
-        <div class="tab-group" id="rc-tabs" aria-label="Credit sections">
+        <div class="tab-group" id="rc-tabs" role="tablist" aria-label="Credit sections">
           <div class="tab-indicator" id="rc-indicator"></div>
-          <button class="tab-btn active" aria-current="page">KYB/KYC</button>
-          <span class="tab-btn inert">Orders</span>
-          <span class="tab-btn inert">Catalog</span>
+          <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="rc-table">KYB/KYC</button>
+          <span class="tab-btn inert" role="tab" aria-selected="false" aria-disabled="true">Orders</span>
+          <span class="tab-btn inert" role="tab" aria-selected="false" aria-disabled="true">Catalog</span>
         </div>
         <div class="tools-r">
           <label class="search">
@@ -630,7 +624,7 @@
         </div>
       </div>
       <div class="page-body">
-        <div class="table" role="table" aria-label="Vendors and KYB/KYC access">
+        <div class="table" id="rc-table" role="table" aria-label="Vendors and KYB/KYC access">
           <div class="tr th rc-cols" role="row" id="rc-head"></div>
           <div id="rc-rows" role="rowgroup"></div>
         </div>
@@ -651,7 +645,7 @@
       <div class="tab-group" id="invite-tabs" role="tablist">
         <div class="tab-indicator" id="invite-indicator"></div>
         <button class="tab-btn active" role="tab" data-tab="fuse" aria-selected="true" aria-controls="panel-fuse">Fuse360 vendors</button>
-        <button class="tab-btn" role="tab" data-tab="new" aria-selected="false" aria-controls="panel-new">New business</button>
+        <button class="tab-btn" role="tab" data-tab="new" aria-selected="false" aria-controls="panel-new" tabindex="-1">New business</button>
       </div>
 
       <!-- Fuse360 vendors -->
@@ -730,7 +724,7 @@
       <svg class="i i24"><use href="#i-menu"/></svg>
       <div class="gm-brand"><svg class="i i32" style="color:#623CEA"><use href="#i-mail"/></svg>Mail</div>
       <label class="gm-search"><svg class="i"><use href="#i-search"/></svg><input placeholder="Search mail" aria-label="Search mail" /></label>
-      <span class="gm-ava" title="vinoy.248@gmail.com" aria-label="Signed in as vinoy.248@gmail.com">V</span>
+      <span class="gm-ava" role="img" title="vinoy.248@gmail.com" aria-label="Signed in as vinoy.248@gmail.com">V</span>
     </header>
     <div class="gm-body">
       <nav class="gm-rail" aria-label="Mailboxes">
@@ -764,7 +758,7 @@
         </div>
       </div>
       <p class="note-row"><svg class="i"><use href="#i-clock"/></svg>On the next step, choose to fill this in online or on paper.</p>
-      <div class="end"><button class="btn-primary" data-rx="choice">Continue</button><p class="terms">By continuing, you agree to Fusepay's terms of service and privacy policy.</p></div>
+      <div class="end"><button class="btn-primary" data-rx="choice">Continue</button><p class="terms">By continuing, you agree to FusePay's terms of service and privacy policy.</p></div>
     </div>
   </section>
 
@@ -785,8 +779,9 @@
           <div class="meta"><p><svg class="i"><use href="#i-printer"/></svg>Print, sign and stamp</p><p><svg class="i"><use href="#i-upload"/></svg>Upload scans or photos later</p><p><svg class="i"><use href="#i-calendar"/></svg>Reviewed in 3-5 business days</p></div>
         </label>
       </fieldset>
+      <p class="err" id="choice-err" role="alert" style="display:block" hidden>Choose online or manual to continue.</p>
       <p class="note-row"><svg class="i"><use href="#i-lock"/></svg>Your documents are encrypted and shared with Galaxy Electronics only after you approve.</p>
-      <div class="between"><button type="button" class="btn-outline" data-rx="welcome">Back</button><button class="btn-primary" id="choice-go" disabled>Continue</button></div>
+      <div class="between"><button type="button" class="btn-outline" data-rx="welcome">Back</button><button class="btn-primary" id="choice-go">Continue</button></div>
     </form>
   </section>
 
@@ -794,13 +789,13 @@
   <section class="rx-screen rx-s" data-s="online">
     <div data-rx-hdr></div>
     <form class="rx-col" data-next="online-owner" novalidate>
-      <div class="rx-head"><p class="kicker">Step 3 of 3</p><h1 class="rx-h1">Business details</h1><p class="rx-sub">Online form, part 1 of 4. Your progress saves automatically.</p></div>
+      <div class="rx-head"><p class="kicker">Step 3 of 3 · Part 1 of 4</p><h1 class="rx-h1">Business details</h1><p class="rx-sub">Your progress saves automatically.</p></div>
       <button type="button" class="demo-link" data-autofill>Demo: autofill</button>
       <div class="rx-card">
-        <div class="field"><label class="label" for="b-name">Registered Business Name</label><input class="input" id="b-name" required autocomplete="organization" data-err="Enter your registered business name" aria-describedby="b-name-err" /><span class="err" id="b-name-err"></span></div>
-        <div class="field"><label class="label" for="b-reg">Business Registration Number</label><input class="input" id="b-reg" required data-err="Enter your business registration number" aria-describedby="b-reg-h b-reg-err" /><span class="hint-text" id="b-reg-h">As shown on your registration certificate</span><span class="err" id="b-reg-err"></span></div>
-        <div class="field"><label class="label" for="b-tin">Tax Identification Number (TIN)</label><input class="input" id="b-tin" required data-err="Enter your tax identification number" aria-describedby="b-tin-err" /><span class="err" id="b-tin-err"></span></div>
-        <div class="field"><label class="label" for="b-addr">Registered Address</label><input class="input" id="b-addr" required autocomplete="street-address" data-err="Enter your registered address" aria-describedby="b-addr-err" /><span class="err" id="b-addr-err"></span></div>
+        <div class="field"><label class="label" for="b-name">Registered Business Name <span class="req" aria-hidden="true">*</span></label><input class="input" id="b-name" required autocomplete="organization" data-err="Enter your registered business name" aria-describedby="b-name-err" /><span class="err" id="b-name-err"></span></div>
+        <div class="field"><label class="label" for="b-reg">Business Registration Number <span class="req" aria-hidden="true">*</span></label><input class="input" id="b-reg" required data-err="Enter your business registration number" aria-describedby="b-reg-h b-reg-err" /><span class="hint-text" id="b-reg-h">As shown on your registration certificate</span><span class="err" id="b-reg-err"></span></div>
+        <div class="field"><label class="label" for="b-tin">Tax Identification Number (TIN) <span class="req" aria-hidden="true">*</span></label><input class="input" id="b-tin" required data-err="Enter your tax identification number" aria-describedby="b-tin-err" /><span class="err" id="b-tin-err"></span></div>
+        <div class="field"><label class="label" for="b-addr">Registered Address <span class="req" aria-hidden="true">*</span></label><input class="input" id="b-addr" required autocomplete="street-address" data-err="Enter your registered address" aria-describedby="b-addr-err" /><span class="err" id="b-addr-err"></span></div>
       </div>
       <div class="between"><button type="button" class="btn-link" data-rx="download">Switch to paper forms</button><button class="btn-primary">Save and continue</button></div>
     </form>
@@ -810,19 +805,19 @@
   <section class="rx-screen rx-s" data-s="online-owner">
     <div data-rx-hdr></div>
     <form class="rx-col" data-next="online-docs" novalidate>
-      <div class="rx-head"><p class="kicker">Step 3 of 3</p><h1 class="rx-h1">Owner details</h1><p class="rx-sub">Online form, part 2 of 4. Tell us about the main owner or director.</p></div>
+      <div class="rx-head"><p class="kicker">Step 3 of 3 · Part 2 of 4</p><h1 class="rx-h1">Owner details</h1><p class="rx-sub">Tell us about the main owner or director.</p></div>
       <button type="button" class="demo-link" data-autofill>Demo: autofill</button>
       <div class="rx-card">
-        <div class="field"><label class="label" for="o-name">Full Name</label><input class="input" id="o-name" required autocomplete="name" data-err="Enter the owner's full name" aria-describedby="o-name-err" /><span class="err" id="o-name-err"></span></div>
+        <div class="field"><label class="label" for="o-name">Full Name <span class="req" aria-hidden="true">*</span></label><input class="input" id="o-name" required autocomplete="name" data-err="Enter the owner's full name" aria-describedby="o-name-err" /><span class="err" id="o-name-err"></span></div>
         <div class="two">
-          <div class="field"><label class="label" for="o-role">Role</label><select class="input" id="o-role" required data-err="Select a role" aria-describedby="o-role-err"><option value="">Select a role</option><option>Owner</option><option>Director</option><option>Partner</option></select><span class="err" id="o-role-err"></span></div>
-          <div class="field"><label class="label" for="o-dob">Date Of Birth</label><input class="input" id="o-dob" type="date" required autocomplete="bday" data-err="Enter a date of birth" aria-describedby="o-dob-err" /><span class="err" id="o-dob-err"></span></div>
+          <div class="field"><label class="label" for="o-role">Role <span class="req" aria-hidden="true">*</span></label><select class="input" id="o-role" required data-err="Select a role" aria-describedby="o-role-err"><option value="">Select a role</option><option>Owner</option><option>Director</option><option>Partner</option></select><span class="err" id="o-role-err"></span></div>
+          <div class="field"><label class="label" for="o-dob">Date of Birth <span class="req" aria-hidden="true">*</span></label><input class="input" id="o-dob" type="date" required autocomplete="bday" data-err="Enter a date of birth" aria-describedby="o-dob-err" /><span class="err" id="o-dob-err"></span></div>
         </div>
         <div class="two">
-          <div class="field"><label class="label" for="o-nat">Nationality</label><input class="input" id="o-nat" required data-err="Enter a nationality" aria-describedby="o-nat-err" /><span class="err" id="o-nat-err"></span></div>
-          <div class="field"><label class="label" for="o-id">National ID Or Passport Number</label><input class="input" id="o-id" required data-err="Enter an ID or passport number" aria-describedby="o-id-err" /><span class="err" id="o-id-err"></span></div>
+          <div class="field"><label class="label" for="o-nat">Nationality <span class="req" aria-hidden="true">*</span></label><input class="input" id="o-nat" required data-err="Enter a nationality" aria-describedby="o-nat-err" /><span class="err" id="o-nat-err"></span></div>
+          <div class="field"><label class="label" for="o-id">National ID or Passport Number <span class="req" aria-hidden="true">*</span></label><input class="input" id="o-id" required data-err="Enter an ID or passport number" aria-describedby="o-id-err" /><span class="err" id="o-id-err"></span></div>
         </div>
-        <div class="field"><label class="label" for="o-addr">Residential Address</label><input class="input" id="o-addr" required autocomplete="street-address" data-err="Enter a residential address" aria-describedby="o-addr-err" /><span class="err" id="o-addr-err"></span></div>
+        <div class="field"><label class="label" for="o-addr">Residential Address <span class="req" aria-hidden="true">*</span></label><input class="input" id="o-addr" required autocomplete="street-address" data-err="Enter a residential address" aria-describedby="o-addr-err" /><span class="err" id="o-addr-err"></span></div>
       </div>
       <div class="between"><button type="button" class="btn-outline" data-rx="online">Back</button><button class="btn-primary">Save and continue</button></div>
     </form>
@@ -832,7 +827,7 @@
   <section class="rx-screen rx-s" data-s="online-docs">
     <div data-rx-hdr></div>
     <div class="rx-col">
-      <div class="rx-head"><p class="kicker">Step 3 of 3</p><h1 class="rx-h1">Upload documents</h1><p class="rx-sub">Online form, part 3 of 4. PDF, JPG or PNG, up to 10 MB each. You can also drag files onto a row.</p></div>
+      <div class="rx-head"><p class="kicker">Step 3 of 3 · Part 3 of 4</p><h1 class="rx-h1">Upload documents</h1><p class="rx-sub">PDF, JPG or PNG, up to 10 MB each. You can also drag files onto a row.</p></div>
       <div class="between"><p class="count" id="count-o" aria-live="polite"></p><button type="button" class="demo-link" data-sample="online-docs">Demo: add sample files</button></div>
       <div id="slots-o" style="display:contents"></div>
       <div class="between"><button class="btn-outline" data-rx="online-owner">Back</button><button class="btn-primary" id="next-o" disabled data-rx="online-review">Save and continue</button></div>
@@ -843,12 +838,12 @@
   <section class="rx-screen rx-s" data-s="online-review">
     <div data-rx-hdr></div>
     <div class="rx-col">
-      <div class="rx-head"><p class="kicker">Step 3 of 3</p><h1 class="rx-h1">Review and sign</h1><p class="rx-sub">Online form, part 4 of 4. Check your details, then sign to submit.</p></div>
+      <div class="rx-head"><p class="kicker">Step 3 of 3 · Part 4 of 4</p><h1 class="rx-h1">Review and sign</h1><p class="rx-sub">Check your details, then sign to submit.</p></div>
       <div class="rx-card"><div class="between"><h2>Business details</h2><button class="btn-link" data-rx="online">Edit</button></div><dl class="rv" data-from="online"></dl></div>
       <div class="rx-card"><div class="between"><h2>Owner details</h2><button class="btn-link" data-rx="online-owner">Edit</button></div><dl class="rv" data-from="online-owner"></dl></div>
       <div class="rx-card"><div class="between"><h2>Documents</h2><button class="btn-link" data-rx="online-docs">Edit</button></div><p style="font-size:14px;line-height:20px" id="doc-sum"></p></div>
       <div class="rx-card"><h2>Sign electronically</h2>
-        <div class="field"><label class="label" for="sign">Type Your Full Name To Sign</label><input class="input" id="sign" autocomplete="name" /></div>
+        <div class="field"><label class="label" for="sign">Type Your Full Name to Sign</label><input class="input" id="sign" autocomplete="name" /></div>
         <div class="sig" id="sig-preview" aria-hidden="true"></div>
         <label class="chk"><input type="checkbox" id="agree" />I confirm the information is correct, I am authorised to sign for this business, and I agree to FusePay verifying these details.</label>
       </div>
@@ -863,7 +858,7 @@
       <div class="rx-head"><p class="kicker">Step 3 of 3</p><h1 class="rx-h1">Download your paper forms</h1><p class="rx-sub">Fill in, sign and stamp the forms, then come back to upload them with your documents.</p></div>
       <div class="rx-card" style="flex-direction:row;align-items:center;gap:16px">
         <span class="icon-tile"><svg class="i i24"><use href="#i-download"/></svg></span>
-        <div style="flex:1"><p style="font-weight:500">KYB/KYC application form</p><p style="font-size:14px;color:#8C8D8F">PDF, 4 pages</p></div>
+        <div style="flex:1"><p style="font-weight:500">KYB/KYC application form</p><p style="font-size:14px;color:#6B6C6E">PDF, 4 pages</p></div>
         <button class="btn-outline" data-pdf>Download PDF</button>
       </div>
       <div style="display:flex;flex-direction:column;gap:16px"><h2 class="section-h">What to do next</h2>
@@ -892,7 +887,7 @@
       <span class="tile-ok"><svg class="i i32"><use href="#i-check"/></svg></span>
       <h1 class="rx-h1">Documents submitted</h1>
       <p class="rx-sub" id="sub-text"></p>
-      <div class="sum"><p style="font-weight:500" id="sub-count"></p><p style="color:#8C8D8F" id="sub-ref"></p></div>
+      <div class="sum"><p style="font-weight:500" id="sub-count"></p><p style="color:#6B6C6E" id="sub-ref"></p></div>
       <p class="note-row" style="gap:4px">Need to change something? <button class="btn-link" data-gm-noop>Chat with support</button></p>
       <button class="demo-link" style="align-self:center" data-rx-approve>Demo: skip to FusePay approval</button>
     </div>
@@ -902,13 +897,13 @@
   <section class="rx-screen rx-s" data-s="setup">
     <div data-rx-hdr></div>
     <form class="rx-col" id="setup-form" novalidate>
-      <div class="rx-head"><p class="kicker">Account setup</p><h1 class="rx-h1">Set up your Fusepay account</h1><p class="rx-sub">Your business is verified. Create your login to see requests from the businesses that supply you.</p></div>
+      <div class="rx-head"><p class="kicker">Account setup</p><h1 class="rx-h1">Set up your FusePay account</h1><p class="rx-sub">Your business is verified. Create your login to see requests from the businesses that supply you.</p></div>
       <div class="rx-card">
         <div class="field"><label class="label" for="su-biz">Business Name</label><div class="locked"><input class="input" id="su-biz" value="Ocean Breeze Café" readonly /><span class="ok-tag"><svg class="i i16"><use href="#i-check"/></svg>Verified</span></div></div>
         <div class="field"><label class="label" for="su-email">Business Email</label><div class="locked"><input class="input" id="su-email" value="vinoy.248@gmail.com" readonly /><span class="ok-tag"><svg class="i i16"><use href="#i-check"/></svg>Verified</span></div></div>
         <div class="field"><label class="label" for="su-pw">Create Password</label>
           <div class="pw"><input class="input" id="su-pw" type="password" autocomplete="new-password" aria-describedby="su-rules su-pw-err" /><button type="button" class="btn-link" id="su-pw-toggle" aria-label="Show password">Show</button></div>
-          <ul class="rules" id="su-rules"><li data-rule="len"><svg class="i i16"><use href="#i-check"/></svg>At least 8 characters</li><li data-rule="num"><svg class="i i16"><use href="#i-check"/></svg>One number</li><li data-rule="up"><svg class="i i16"><use href="#i-check"/></svg>One uppercase letter</li></ul>
+          <ul class="rules" id="su-rules"><li data-rule="len"><svg class="i i16"><use href="#i-circle"/></svg>At least 8 characters<span class="sr-only"> (not met)</span></li><li data-rule="num"><svg class="i i16"><use href="#i-circle"/></svg>One number<span class="sr-only"> (not met)</span></li><li data-rule="up"><svg class="i i16"><use href="#i-circle"/></svg>One uppercase letter<span class="sr-only"> (not met)</span></li></ul>
           <span class="err" id="su-pw-err"></span>
         </div>
         <div class="field"><label class="label" for="su-phone">Mobile Number</label>
@@ -940,7 +935,7 @@
   </div>
 </div>
 
-<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="toasts" id="toasts"></div>
 
 <script>
 // ---------- Data ----------
@@ -1010,7 +1005,6 @@ function renderTx() {
 
   // policy card
   document.getElementById('policy-pill').hidden = !state.policy;
-  document.getElementById('policy-tile').classList.toggle('done', state.policy);
   document.getElementById('policy-text').textContent = state.policy
     ? 'Your policy is live. Everyone in your company now works within it, whether they add a vendor, create an order or record a payment.'
     : 'Your policy is the rulebook for credit. Everyone in your company works within it, whether they add a vendor, create an order or record a payment.';
@@ -1026,6 +1020,8 @@ function renderTracker() {
     b.className = 'tab-btn' + (key === filter ? ' active' : '');
     b.setAttribute('role', 'tab');
     b.setAttribute('aria-selected', key === filter);
+    b.setAttribute('aria-controls', 'tracker');
+    b.tabIndex = key === filter ? 0 : -1;
     b.dataset.filter = key;
     b.textContent = label;
     tabs.appendChild(b);
@@ -1043,7 +1039,7 @@ function renderTracker() {
       : `<span class="acct-email" title="Invite sent to ${esc(i.email)}">${esc(i.email)}</span>`;
     const act = i.status === 'shared' ? `<button class="btn-link" data-act="kyb" data-id="${i.id}">View KYB</button>`
       : i.status === 'sent' ? `<button class="btn-link" data-act="resend" data-id="${i.id}">Resend</button><button class="btn-link" data-act="cancel" data-id="${i.id}" style="color:#CC2828">Cancel</button>`
-      : i.status === 'progress' ? '<span class="muted">—</span>'
+      : i.status === 'progress' ? '<span class="muted">Waiting on vendor</span>'
       : `<button class="btn-link" data-act="resend" data-id="${i.id}">Resend</button>`;
     return `<div class="tr${fresh.has(i.id) ? ' fresh' : ''}" role="row">
       <div class="td-vendor" role="cell">${avatar(pal)}<div style="min-width:0"><div class="v-name" title="${esc(i.name)}">${esc(i.name)}</div>${sub ? `<div class="v-sub">${sub}</div>` : ''}</div></div>
@@ -1052,7 +1048,7 @@ function renderTracker() {
       <span role="cell"><span class="pill ${cls}">${label}</span></span>
       <div class="td-act" role="cell">${act}</div>
     </div>`;
-  }).join('') : `<div class="empty-row">No vendors match${q ? ` "${esc(q)}"` : ''} in this view.</div>`;
+  }).join('') : `<div class="empty-row" role="row"><span role="cell">No vendors match${q ? ` "${esc(q)}"` : ''} in this view.</span></div>`;
   fresh = new Set();
 }
 
@@ -1082,8 +1078,13 @@ const TOAST_ICON = {
 };
 // ponytail: kind inferred from wording so existing calls need no changes; pass kind explicitly to override
 const toastKind = msg => /^Demo|coming soon|not part/i.test(msg) ? 'info' : /declined|revoked|cancelled|removed/i.test(msg) ? 'warning' : 'success';
+let toastUndo = null; // Ctrl/Cmd+Z runs the newest toast action, so Undo works without reaching the toast
 function toast(msg, actionLabel, onAction, kind = toastKind(msg)) {
+  // Same message already showing: restart it instead of stacking a duplicate
+  const dup = [...document.querySelectorAll('.toast:not(.out)')].find(x => x.dataset.msg === msg);
+  if (dup) dup.remove();
   const t = document.createElement('div');
+  t.dataset.msg = msg;
   t.className = 'toast';
   t.setAttribute('role', kind === 'error' ? 'alert' : 'status');
   t.innerHTML = `<span class="toast-ic t-${kind}">${TOAST_ICON[kind]}</span><span class="toast-msg">${esc(msg)}</span>`;
@@ -1101,9 +1102,32 @@ function toast(msg, actionLabel, onAction, kind = toastKind(msg)) {
   x.onclick = () => dismiss();
   t.appendChild(x);
   document.getElementById('toasts').prepend(t); // newest always lands at the 24px top slot; older ones move down
-  const timer = setTimeout(dismiss, 4000);
-  function dismiss() { clearTimeout(timer); t.classList.add('out'); setTimeout(() => t.remove(), 200); }
+  // Toasts with an action stay longer, and every toast pauses while hovered or focused (WCAG 2.2.1)
+  const life = actionLabel ? 10000 : 5000;
+  let timer = setTimeout(dismiss, life);
+  const pause = () => clearTimeout(timer), resume = () => { clearTimeout(timer); timer = setTimeout(dismiss, life); };
+  t.addEventListener('mouseenter', pause); t.addEventListener('mouseleave', resume);
+  t.addEventListener('focusin', pause); t.addEventListener('focusout', resume);
+  if (actionLabel) { t.querySelector('.toast-act').setAttribute('aria-keyshortcuts', 'Control+Z Meta+Z'); toastUndo = () => { onAction(); dismiss(); }; }
+  function dismiss() { clearTimeout(timer); if (toastUndo && actionLabel) toastUndo = null; t.classList.add('out'); setTimeout(() => t.remove(), 200); }
 }
+
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z' && toastUndo && !e.target.matches('input, textarea')) { e.preventDefault(); toastUndo(); }
+});
+
+// Arrow keys move between tabs in any tablist (roving tabindex); disabled tabs are skipped
+document.addEventListener('keydown', e => {
+  const tab = e.target.closest?.('[role="tab"]');
+  if (!tab || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+  const list = tab.closest('[role="tablist"]'), live = () => [...list.querySelectorAll('[role="tab"]:not([aria-disabled="true"])')];
+  const tabs = live();
+  let i = tabs.indexOf(tab);
+  i = e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : (i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+  e.preventDefault();
+  tabs[i].click();
+  live()[i].focus(); // some tab rows re-render on click, so re-query before focusing
+});
 
 // ---------- Busy button helper ----------
 function busy(btn, ms) {
@@ -1142,7 +1166,7 @@ document.addEventListener('keydown', e => {
     closeDialog(d);
   }
   if (e.key === 'Tab') { // keep focus inside the dialog
-    const f = [...d.querySelectorAll('button:not([disabled]), input, select')].filter(x => x.offsetParent);
+    const f = [...d.querySelectorAll('button:not([disabled]), input:not([disabled]), select, a[href], [tabindex="0"]')].filter(x => x.offsetParent);
     if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
     else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
   }
@@ -1172,6 +1196,7 @@ function switchTab(tab, focus = true) {
     const on = b.dataset.tab === tab;
     b.classList.toggle('active', on);
     b.setAttribute('aria-selected', on);
+    b.tabIndex = on ? 0 : -1;
   });
   document.getElementById('panel-fuse').hidden = tab !== 'fuse';
   document.getElementById('foot-fuse').hidden = tab !== 'fuse';
@@ -1238,7 +1263,9 @@ comboInput.addEventListener('keydown', e => {
     e.preventDefault();
     if (!comboEl.classList.contains('open')) openList();
     const dir = e.key === 'ArrowDown' ? 1 : -1;
-    activeIdx = Math.max(0, Math.min(shown.length - 1, activeIdx + dir));
+    let i = activeIdx;
+    do { i += dir; } while (i >= 0 && i < shown.length && inviteFor(shown[i].id));
+    if (i >= 0 && i < shown.length) activeIdx = i;
     renderOptions();
   } else if (e.key === 'Enter') {
     e.preventDefault();
@@ -1407,7 +1434,7 @@ function openKyb(inv) {
     ['Business (KYB)', [
       ['Legal Name', esc(k ? k.name : inv.name)], ['Location', loc],
       ['Registration No.', esc(k ? k.reg : '8429117') + ok], ['Tax ID (TIN)', esc(k ? k.tin : '213 004 587') + ok],
-      ['Registered Address', k ? esc(k.addr) : `${loc}, Seychelles`, 'full'], ['Contact', esc(inv.email || '—'), 'full'],
+      ['Registered Address', k ? esc(k.addr) : `${loc}, Seychelles`, 'full'], ['Contact', esc(inv.email || 'Not provided'), 'full'],
     ]],
     ['Owners and Directors (KYC)', [['Director', esc(k ? k.owner : 'Jean-Paul Hoareau') + ok, 'full']]],
     ['Bank Account', [['Account', 'MCB Seychelles •••• 4821' + ok, 'full']]],
@@ -1454,12 +1481,19 @@ function moveNavIndicator(item) {
   ind.style.top = top + 'px';
   ind.style.height = item.offsetHeight + 'px';
 }
-document.querySelectorAll('.nav-item').forEach(item => item.addEventListener('click', () => {
-  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-  item.classList.add('active');
-  moveNavIndicator(item);
-}));
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.tabIndex = 0;
+  item.setAttribute('role', 'link');
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(i => { i.classList.remove('active'); i.removeAttribute('aria-current'); });
+    item.classList.add('active');
+    item.setAttribute('aria-current', 'page');
+    moveNavIndicator(item);
+  });
+  item.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); item.click(); } });
+});
 document.querySelector('[data-nav="Credit"]').classList.add('active');
+document.querySelector('[data-nav="Credit"]').setAttribute('aria-current', 'page');
 // Fonts and images load after the first render and shift the nav items; re-sync the highlight once they settle
 const resyncNav = () => { const a = document.querySelector('.nav-item.active'); if (a && a.offsetHeight) moveNavIndicator(a); };
 document.fonts.ready.then(resyncNav);
@@ -1530,6 +1564,12 @@ function render() {
   else renderRxFlow();
   if (view !== 'rxflow') requestAnimationFrame(() => moveNavIndicator(document.querySelector('.nav-item.active')));
   syncFilled();
+  const h1 = view === 'rxflow' ? document.querySelector('#rx-flow .rx-s:not([hidden]) h1') : null;
+  document.title = view === 'tx' ? 'Credit · Fuse360'
+    : view === 'rxapp' ? 'Credit · FusePay'
+    : state.rx.screen === 'inbox' ? 'Inbox · Mail'
+    : state.rx.screen.startsWith('mail-') ? `${h1 ? h1.textContent.replace('Inbox', '').trim() : 'Mail'} · Mail`
+    : `${h1 ? h1.textContent : 'Verification'} · FusePay`;
 }
 
 document.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
@@ -1564,7 +1604,7 @@ document.addEventListener('click', e => {
 });
 document.getElementById('demo-inbox').onclick = () => goRx('inbox');
 
-const HDR = '<header class="rx-hdr"><img src="assets/logo-fusepay.svg" alt="Fusepay" width="109" height="24" style="display:block" /><div class="rx-hdr-r"><p>Requested by <b>Galaxy Electronics</b></p><button class="btn-link" data-gm-noop>Need help?</button></div></header>';
+const HDR = '<header class="rx-hdr"><img src="assets/logo-fusepay.svg" alt="FusePay" width="109" height="24" style="display:block" /><div class="rx-hdr-r"><p>Requested by <b>Galaxy Electronics</b></p><button class="btn-link" data-gm-noop>Need help?</button></div></header>';
 document.querySelectorAll('[data-rx-hdr]').forEach(d => d.outerHTML = HDR);
 
 function renderRxFlow() {
@@ -1585,8 +1625,8 @@ const timeOf = iso => new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric
 function mails() {
   const inv = personaInvite('rx');
   const list = [];
-  if (state.rx.approved) list.push({ id: 'verified', subj: 'Your business is verified. Set up your Fusepay account', snip: 'Galaxy Electronics is waiting to view your verified details.', when: timeOf(state.rx.approvedAt), full: timeOf(state.rx.approvedAt), unread: !state.rx.read.verified });
-  list.push({ id: 'invite', subj: 'Galaxy Electronics invited you to Fusepay', snip: 'Verify your business so Galaxy Electronics can offer you credit.', when: '10:42 AM', full: `${fmtDate(inv ? inv.date : today())}, 10:42 AM`, unread: !state.rx.read.invite });
+  if (state.rx.approved) list.push({ id: 'verified', subj: 'Your business is verified. Set up your FusePay account', snip: 'Galaxy Electronics is waiting to view your verified details.', when: timeOf(state.rx.approvedAt), full: timeOf(state.rx.approvedAt), unread: !state.rx.read.verified });
+  list.push({ id: 'invite', subj: 'Galaxy Electronics invited you to FusePay', snip: 'Verify your business so Galaxy Electronics can offer you credit.', when: '10:42 AM', full: `${fmtDate(inv ? inv.date : today())}, 10:42 AM`, unread: !state.rx.read.invite });
   return list;
 }
 function renderMail() {
@@ -1597,14 +1637,14 @@ function renderMail() {
   if (s === 'inbox') {
     const row = (from, subj, snip, when, attrs, cls) => `<div class="gm-row ${cls}" ${attrs} tabindex="0"><span class="gm-ic"><svg class="i"><use href="#i-square"/></svg></span><span class="gm-ic"><svg class="i"><use href="#i-star"/></svg></span><span class="gm-from">${from}</span><span class="gm-subj">${esc(subj)} <span>- ${esc(snip)}</span></span><span class="gm-date">${when}</span></div>`;
     main.innerHTML = `<div class="gm-tools"><span class="gm-ic" style="color:#444746"><svg class="i"><use href="#i-square"/></svg></span><span class="count-r">1–${list.length + FILLER.length} of ${list.length + FILLER.length}</span></div>`
-      + list.map(m => row('Fusepay', m.subj, m.snip, m.when, `data-mail="${m.id}" role="button"`, (m.unread ? 'unread' : '') + (m.id === 'verified' && justApproved ? ' new' : ''))).join('')
+      + list.map(m => row('FusePay', m.subj, m.snip, m.when, `data-mail="${m.id}" role="button"`, (m.unread ? 'unread' : '') + (m.id === 'verified' && justApproved ? ' new' : ''))).join('')
       + FILLER.map(f => row(f[0], f[1], f[2], f[3], 'data-gm-noop role="button"', '')).join('');
     justApproved = false;
   } else {
     const m = list.find(x => 'mail-' + x.id === s);
     const body = m.id === 'invite'
       ? `<p style="color:#262626;font-weight:500">Hi ${RX_BIZ},</p>
-         <p><b style="font-weight:600;color:#262626">${GALAXY.name}</b> has invited you to Fusepay so they can offer your business credit. First, we need to verify your business (KYB) and its owners (KYC). This is a legal requirement for payment services in Seychelles.</p>
+         <p><b style="font-weight:600;color:#262626">${GALAXY.name}</b> has invited you to FusePay so they can offer your business credit. First, we need to verify your business (KYB) and its owners (KYC). This is a legal requirement for payment services in Seychelles.</p>
          <p>You can complete it online in about 10 minutes, or download paper forms if you prefer.</p>
          <button class="btn-primary" data-rx-start>Start verification</button>
          <p class="small">This link stays valid for 14 days. Not expecting this? Check with Galaxy Electronics before you continue.</p>`
@@ -1616,18 +1656,18 @@ function renderMail() {
     main.innerHTML = `<div class="gm-tools"><button class="gm-iconbtn" data-rx="inbox" aria-label="Back to inbox"><svg class="i"><use href="#i-arrow-left"/></svg></button></div>
       <article class="gm-mail">
         <h1 class="gm-subject">${esc(m.subj)}<span class="gm-label">Inbox</span></h1>
-        <div class="gm-hdr"><span class="av">F</span><div><b>Fusepay</b> <small>&lt;verify@fusepay.app&gt;</small><br><small>to me</small></div><time>${m.full}</time></div>
-        <div class="mailcard"><img src="assets/logo-fusepay.svg" alt="Fusepay" width="109" height="24" style="display:block" />${body}<p>Thanks,<br>Fusepay team</p></div>
+        <div class="gm-hdr"><span class="av">F</span><div><b>FusePay</b> <small>&lt;verify@fusepay.app&gt;</small><br><small>to me</small></div><time>${m.full}</time></div>
+        <div class="mailcard"><img src="assets/logo-fusepay.svg" alt="FusePay" width="109" height="24" style="display:block" />${body}<p>Thanks,<br>FusePay team</p></div>
       </article>`;
   }
 }
 document.getElementById('gm-main').addEventListener('click', e => { const r = e.target.closest('[data-mail]'); if (r) goRx('mail-' + r.dataset.mail); });
-document.getElementById('gm-main').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('.gm-row')) e.target.click(); });
+document.getElementById('gm-main').addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.gm-row')) { e.preventDefault(); e.target.click(); } });
 
 // ---------- KYB: choice ----------
 const choiceForm = document.getElementById('choice-form');
-choiceForm.addEventListener('change', () => document.getElementById('choice-go').disabled = !choiceForm.method.value);
-choiceForm.addEventListener('submit', e => { e.preventDefault(); state.rx.method = choiceForm.method.value; goRx(state.rx.method === 'online' ? 'online' : 'download'); });
+choiceForm.addEventListener('change', () => document.getElementById('choice-err').hidden = true);
+choiceForm.addEventListener('submit', e => { e.preventDefault(); if (!choiceForm.method.value) { document.getElementById('choice-err').hidden = false; return choiceForm.querySelector('input[name=method]').focus(); } state.rx.method = choiceForm.method.value; goRx(state.rx.method === 'online' ? 'online' : 'download'); });
 
 // ---------- KYB: online forms ----------
 function setFieldErr(i, msg) {
@@ -1697,7 +1737,7 @@ function makeSlots(wrapId, groups, countId, btnId) {
   for (const [g, docs] of groups) {
     const el = document.createElement('div');
     el.className = 'upgrp';
-    el.innerHTML = `<h3>${g}</h3>`;
+    el.innerHTML = `<h2>${g}</h2>`;
     for (const [name, hint] of docs) {
       const r = document.createElement('div');
       r.className = 'up'; r.dataset.s = 'empty'; r.dataset.name = name; r.dataset.hint = hint || 'PDF, JPG or PNG, up to 10 MB'; r.update = update;
@@ -1716,7 +1756,7 @@ function setSlot(r, file) {
   r.querySelector('.up-note').textContent = s === 'done' ? `${file.name} · ${fmtSize(file.size)}` : s === 'uploading' ? `Uploading ${file.name}…` : r.dataset.hint;
   r.querySelector('.upbar')?.remove();
   if (s === 'uploading') r.querySelector('.up-txt').insertAdjacentHTML('beforeend', '<span class="upbar" role="progressbar" aria-label="Uploading"><i></i></span>');
-  r.querySelector('.up-act').innerHTML = s === 'done' ? '<button class="btn-link" data-remove-file>Remove</button>' : s === 'uploading' ? '' : `<label class="btn-outline" for="${r.querySelector('input').id}" tabindex="0">Upload</label>`;
+  r.querySelector('.up-act').innerHTML = s === 'done' ? '<button class="btn-link" data-remove-file>Remove</button>' : s === 'uploading' ? '' : `<label class="btn-outline" role="button" for="${r.querySelector('input').id}" tabindex="0">Upload</label>`;
   r.querySelector('.up-err').hidden = s !== 'error';
   r.update();
 }
@@ -1762,7 +1802,7 @@ function fillSubmitted() {
   const online = state.rx.method === 'online';
   document.getElementById('sub-text').textContent = state.rx.approved
     ? 'FusePay has verified your documents. Check your inbox for the link to set up your account.'
-    : `FusePay will review your documents in ${online ? '1-2' : '3-5'} business days and email ${RX_EMAIL} when it's done. Once approved, you'll get a link to set up your Fusepay account.`;
+    : `FusePay will review your documents in ${online ? '1-2' : '3-5'} business days and email ${RX_EMAIL} when it's done. Once approved, you'll get a link to set up your FusePay account.`;
   document.getElementById('sub-count').textContent = `${state.rx.docs} documents received`;
   document.getElementById('sub-ref').textContent = `Reference: KYB-${today().replace(/-/g, '')}-4821`;
   document.querySelector('[data-rx-approve]').hidden = state.rx.approved;
@@ -1772,7 +1812,12 @@ function fillSubmitted() {
 const pw = document.getElementById('su-pw'), code = document.getElementById('su-code');
 const RULES_PW = { len: v => v.length >= 8, num: v => /\d/.test(v), up: v => /[A-Z]/.test(v) };
 pw.addEventListener('input', () => {
-  Object.entries(RULES_PW).forEach(([k, fn]) => document.querySelector(`#su-rules [data-rule="${k}"]`).classList.toggle('ok', fn(pw.value)));
+  Object.entries(RULES_PW).forEach(([k, fn]) => {
+    const li = document.querySelector(`#su-rules [data-rule="${k}"]`), ok = fn(pw.value);
+    li.classList.toggle('ok', ok);
+    li.querySelector('use').setAttribute('href', ok ? '#i-check' : '#i-circle');
+    li.querySelector('.sr-only').textContent = ok ? ' (met)' : ' (not met)';
+  });
   if (pw.closest('.field').classList.contains('invalid') && Object.values(RULES_PW).every(fn => fn(pw.value))) setFieldErr(pw, '');
 });
 document.getElementById('su-pw-toggle').onclick = e => {
@@ -1798,7 +1843,9 @@ document.getElementById('setup-form').addEventListener('submit', async e => {
   await busy(document.getElementById('su-go'), 700);
   state.rx.onboarded = true;
   goRx('app');
-  toast(`Welcome to Fusepay, ${RX_BIZ}`);
+  recvFresh = 'galaxy';
+  render();
+  toast(`Welcome to FusePay. Galaxy Electronics is waiting for you to accept their request.`, null, null, 'info');
 });
 
 // ---------- Receiver Credit page (shared by both personas) ----------
@@ -1820,15 +1867,15 @@ function renderRecv() {
   document.getElementById('rc-rows').innerHTML = list.length ? list.map(({ v, pending, since }) => {
     const [label, cls] = pending ? ['Requested', 's-sent'] : ['Access granted', 's-shared'];
     const act = pending
-      ? `<button class="btn-link" style="color:#CC2828" data-decline="${v.id}">Decline</button><button class="btn-link" data-accept="${v.id}">Accept</button>`
-      : `<button class="btn-link" style="color:#CC2828" data-revoke="${v.id}">Revoke access</button>`;
+      ? `<button class="btn-link" data-accept="${v.id}" aria-label="Accept request from ${esc(v.name)}">Accept</button><button class="btn-link btn-neutral" data-decline="${v.id}" aria-label="Decline request from ${esc(v.name)}">Decline</button>`
+      : `<button class="btn-link" style="color:#CC2828" data-revoke="${v.id}" aria-label="Revoke access for ${esc(v.name)}">Revoke access</button>`;
     return `<div class="tr rc-cols${recvFresh === v.id ? ' fresh' : ''}" role="row">
       <div class="td-vendor" role="cell">${avatar(palFor(v.name))}<div style="min-width:0"><div class="v-name">${esc(v.name)}</div><div class="v-sub">${esc(v.area)}</div></div></div>
       <span role="cell"><span class="pill ${cls}">${label}</span></span>
       <span class="td-date" role="cell">${fmtDate(pending ? reqDate(v) : since)}</span>
       <div class="td-act" role="cell">${act}</div>
     </div>`;
-  }).join('') : `<div class="empty-row">${q ? `No vendors match "${esc(q)}".` : "No requests yet. When a business that supplies you asks to see your KYB/KYC, it shows up here."}</div>`;
+  }).join('') : `<div class="empty-row" role="row"><span role="cell">${q ? `No vendors match "${esc(q)}".` : "No requests yet. When a business that supplies you asks to see your KYB/KYC, it shows up here."}</span></div>`;
   recvFresh = null;
 }
 document.getElementById('rc-search').addEventListener('input', renderRecv);
@@ -1846,7 +1893,8 @@ function confirmShare(v, on, action) {
   go.classList.toggle('danger', !on);
   pendingAction = action;
   openDialog(shareDlg);
-  requestAnimationFrame(() => go.focus());
+  // Destructive confirmations start on Cancel, so Enter never revokes by accident
+  requestAnimationFrame(() => (on ? go : shareDlg.querySelector('.dlg-foot [data-close]')).focus());
 }
 document.getElementById('share-go').onclick = async e => {
   await busy(e.currentTarget, 500);
