@@ -532,7 +532,7 @@
     <div class="page" id="tx-page">
       <header class="page-bar">
         <h1 class="page-title">Credit</h1>
-        <button class="btn-link" data-create-policy>Create policy</button>
+        <button class="btn-link" id="head-policy" data-create-policy hidden>Create policy</button>
       </header>
       <div class="page-tools" id="tx-tools" hidden>
         <div class="tab-group" id="status-tabs" role="tablist" aria-label="Filter by status">
@@ -564,6 +564,9 @@
                 <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>Payment terms and grace periods</li>
                 <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>Who can approve what, at every user level</li>
               </ul>
+            </div>
+            <div class="actions">
+              <button class="btn-primary" data-create-policy>Create policy</button>
             </div>
           </article>
 
@@ -999,6 +1002,7 @@ function renderTx() {
   document.getElementById('first-run').hidden = has;
   document.getElementById('tracker').hidden = !has;
   document.getElementById('tx-tools').hidden = !has;
+  document.getElementById('head-policy').hidden = !has; // empty state uses the card's solid button instead
 
   // policy card
   document.getElementById('policy-pill').hidden = !state.policy;
