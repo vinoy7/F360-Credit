@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fuse360 Credit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body { font-family: 'DM Sans', sans-serif; background: #F9FAFB; margin: 0; color: #262626; -webkit-font-smoothing: antialiased; }
+    button, input, select { font: inherit; color: inherit; }
+    :focus-visible { outline: 2px solid #623CEA; outline-offset: 2px; }
+    h1, h2, h3, p, ul { margin: 0; padding: 0; }
+
+    /* ---------- Shell (copied from F360 dashboard) ---------- */
+    #sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 266px; background: #F9FAFB; padding: 16px; display: flex; flex-direction: column; z-index: 100; }
+    #main { margin-left: 266px; height: 100vh; padding: 16px; display: flex; justify-content: center; overflow: hidden; }
+    .shell { background: white; border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 0 6px rgba(0,0,0,0.04); overflow: hidden; height: calc(100vh - 32px); display: flex; flex-direction: column; width: 100%; max-width: 1300px; }
+    .nav-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border-radius: 8px; cursor: pointer; transition: background 0.15s; }
+    .nav-item:hover { background: #F4F4F5; }
+    .nav-section { position: relative; }
+    .nav-indicator { position: absolute; left: 0; right: 0; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: top 250ms cubic-bezier(0.23,1,0.32,1), height 250ms cubic-bezier(0.23,1,0.32,1); z-index: 0; pointer-events: none; }
+    .nav-section .nav-item { position: relative; z-index: 1; }
+    .nav-section .nav-item.active { background: transparent; }
+    .nav-item-content { display: flex; align-items: center; gap: 8px; }
+    .nav-label { font-size: 14px; color: #262626; letter-spacing: -0.28px; }
+    .nav-item.active .nav-label { color: #623CEA; font-weight: 500; }
+    .nav-icon { width: 16px; height: 16px; flex-shrink: 0; color: #939596; overflow: visible; }
+    .nav-item.active .nav-icon { color: #623CEA; }
+    .user-card { background: white; border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; gap: 8px; border: 1px solid #F4F4F5; }
+
+    .scroll-area { display: flex; flex-direction: column; gap: 40px; padding: 48px 72px 24px; flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: thin; scrollbar-color: transparent transparent; }
+    .scroll-area:hover { scrollbar-color: #D4D4D6 transparent; }
+    @media (max-width: 1300px) { .scroll-area { padding: 16px; gap: 24px; } }
+
+    /* Tabs (F360) */
+    .tab-group { background: #F4F4F5; border-radius: 8px; padding: 4px; display: flex; gap: 8px; position: relative; }
+    .tab-indicator { position: absolute; top: 4px; bottom: 4px; left: 4px; background: white; border-radius: 6px; box-shadow: 0 1px 3px rgba(16,24,40,0.1), 0 1px 2px rgba(16,24,40,0.06); transition: transform 250ms cubic-bezier(0.23,1,0.32,1), width 250ms cubic-bezier(0.23,1,0.32,1); }
+    .tab-btn { flex: 1; position: relative; z-index: 1; padding: 6px 12px; border-radius: 6px; font-size: 14px; font-weight: 500; line-height: 20px; color: #8C8D8F; cursor: pointer; border: none; background: transparent; white-space: nowrap; letter-spacing: -0.28px; transition: color 0.15s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+    .tab-btn:not(.active):hover { color: #262626; }
+    .tab-btn.active { color: #262626; }
+    .tab-count { font-size: 12px; line-height: 16px; padding: 0 6px; border-radius: 100px; background: #EDEDED; color: #8C8D8F; }
+    .tab-btn.active .tab-count { background: #F3F0FF; color: #623CEA; }
+
+    /* Buttons (F360) */
+    .btn-primary, .btn-outline { min-width: 100px; border-radius: 8px; font-size: 14px; font-weight: 500; line-height: 20px; letter-spacing: -0.28px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.15s; }
+    .btn-primary { padding: 10px 16px; background: #623CEA; color: #fff; border: none; }
+    .btn-primary:hover { background: #5430D6; }
+    .btn-primary:disabled { background: #D7CCFF; cursor: default; }
+    .btn-outline { padding: 9px 15px; background: #fff; color: #623CEA; border: 1px solid #623CEA; }
+    .btn-outline:hover { background: #F3F0FF; }
+    .btn-outline:disabled { color: #D7CCFF; border-color: #D7CCFF; background: #fff; cursor: default; }
+    .btn-link { padding: 2px 4px; margin: -2px -4px; border: none; border-radius: 6px; background: transparent; color: #623CEA; font-size: 14px; font-weight: 500; line-height: 20px; letter-spacing: -0.28px; cursor: pointer; }
+    .btn-link:hover { background: #F3F0FF; }
+    .busy { pointer-events: none; }
+    .spinner { width: 16px; height: 16px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ---------- Page ---------- */
+    .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+    .page-title { font-size: 28px; font-weight: 400; line-height: 36px; letter-spacing: -0.56px; }
+    .page-sub { margin-top: 8px; font-size: 16px; line-height: 24px; letter-spacing: -0.32px; color: #8C8D8F; max-width: 760px; }
+    #dup-hint:empty { display: none; }
+    .view { display: flex; flex-direction: column; gap: 40px; animation: fade-up 300ms cubic-bezier(0.23,1,0.32,1); }
+    @keyframes fade-up { from { opacity: 0; transform: translateY(8px); } }
+
+    /* Intro cards */
+    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .intro-card { border: 1px solid #E3E3E5; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 24px; }
+    .intro-top { display: flex; flex-direction: column; gap: 16px; flex: 1; }
+    .icon-tile { width: 48px; height: 48px; border-radius: 12px; background: #F3F0FF; color: #623CEA; display: flex; align-items: center; justify-content: center; }
+    .icon-tile.done { background: #E7F6EE; color: #0E8F53; }
+    .card-h { font-size: 20px; font-weight: 500; line-height: 28px; letter-spacing: -0.4px; display: flex; align-items: center; gap: 12px; }
+    .card-p { font-size: 16px; line-height: 24px; letter-spacing: -0.32px; color: #8C8D8F; }
+    .ticks { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .ticks li { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; line-height: 20px; letter-spacing: -0.28px; }
+    .ticks svg { flex-shrink: 0; margin-top: 2px; color: #623CEA; }
+    .intro-card .actions { display: flex; gap: 12px; align-items: center; }
+
+    /* How it works */
+    .how { display: flex; flex-direction: column; gap: 16px; }
+    .how-h { font-size: 20px; line-height: 28px; letter-spacing: -0.4px; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; list-style: none; }
+    .steps li { display: flex; flex-direction: column; gap: 8px; position: relative; }
+    .steps li:not(:last-child)::after { content: ''; position: absolute; top: 16px; left: 44px; right: -12px; height: 1px; background: #E3E3E5; }
+    .step-n { width: 32px; height: 32px; border-radius: 100px; background: #F4F4F5; font-size: 14px; font-weight: 500; display: flex; align-items: center; justify-content: center; }
+    .step-t { font-size: 16px; font-weight: 500; line-height: 24px; letter-spacing: -0.32px; }
+    .step-d { font-size: 14px; line-height: 20px; letter-spacing: -0.28px; color: #8C8D8F; }
+
+    /* Pills */
+    .pill { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: 100px; font-size: 12px; font-weight: 500; line-height: 16px; white-space: nowrap; }
+    .pill::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .s-sent { background: #F3F0FF; color: #623CEA; }
+    .s-progress { background: #FFF4E5; color: #B65C00; }
+    .s-shared { background: #E7F6EE; color: #0E8F53; }
+    .s-expired { background: #F4F4F5; color: #6B6C6E; }
+    .s-declined { background: #FFEFEF; color: #CC2828; }
+
+    /* Policy banner */
+    .banner { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; background: #FFF8EB; border: 1px solid #FFE8CA; font-size: 14px; line-height: 20px; letter-spacing: -0.28px; }
+    .banner svg { color: #E07509; flex-shrink: 0; }
+    .banner .grow { flex: 1; }
+
+    /* Tracker */
+    .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .search { position: relative; width: 280px; flex-shrink: 0; }
+    .search svg { position: absolute; left: 12px; top: 12px; color: #939596; pointer-events: none; }
+    .search input { width: 100%; height: 40px; padding: 0 12px 0 36px; border: 1px solid #D4D4D6; border-radius: 8px; font-size: 14px; outline: none; }
+    .search input:focus { border-color: #623CEA; box-shadow: 0 0 0 3px rgba(98,60,234,0.15); }
+    .table { border: 1px solid #E3E3E5; border-radius: 12px; overflow: hidden; }
+    .tr { display: grid; grid-template-columns: minmax(0,1fr) 140px 140px 200px; gap: 16px; align-items: center; padding: 12px 16px; border-bottom: 1px solid #EDEDED; }
+    .tr:last-child { border-bottom: none; }
+    .th { background: #F9FAFB; padding-top: 8px; padding-bottom: 8px; font-size: 12px; font-weight: 500; line-height: 16px; color: #8C8D8F; }
+    .th :last-child, .td-act { text-align: right; justify-content: flex-end; }
+    .td-vendor { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .v-name { font-size: 14px; font-weight: 500; line-height: 20px; letter-spacing: -0.28px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .v-sub { font-size: 12px; line-height: 16px; color: #8C8D8F; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .td-date { font-size: 14px; line-height: 20px; color: #262626; }
+    .td-act { display: flex; gap: 12px; align-items: center; }
+    .muted { color: #C1C1C3; font-size: 14px; }
+    .tr.fresh { animation: row-in 1600ms cubic-bezier(0.23,1,0.32,1); }
+    @keyframes row-in { 0% { opacity: 0; transform: translateY(-6px); background: #F3F0FF; } 20% { opacity: 1; transform: none; background: #F3F0FF; } 100% { background: transparent; } }
+    .empty-row { padding: 40px 16px; text-align: center; font-size: 14px; color: #8C8D8F; }
+
+    .avatar { width: 36px; height: 36px; border-radius: 100px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .avatar svg { width: 20px; height: 20px; }
+    .avatar.lg { width: 48px; height: 48px; }
+    .avatar.lg svg { width: 24px; height: 24px; }
+
+    .demo-bar { margin-top: auto; display: flex; gap: 16px; justify-content: center; font-size: 12px; line-height: 16px; color: #8C8D8F; }
+    .demo-bar button { border: none; background: none; padding: 0; font-size: 12px; color: #8C8D8F; text-decoration: underline; cursor: pointer; }
+    .demo-bar button:hover { color: #623CEA; }
+
+    /* ---------- Dialog ---------- */
+    .overlay { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 24px; background: rgba(26,26,26,0.3); backdrop-filter: blur(12.5px); -webkit-backdrop-filter: blur(12.5px); opacity: 0; transition: opacity 200ms ease; }
+    .overlay.open { opacity: 1; }
+    .dialog { position: relative; width: 560px; max-width: 100%; background: #fff; border-radius: 12px; box-shadow: 0 16px 48px rgba(0,0,0,0.12); transform: scale(0.96) translateY(8px); transition: transform 250ms cubic-bezier(0.23,1,0.32,1); }
+    .overlay.open .dialog { transform: none; }
+    .dlg-head { padding: 24px 24px 0; display: flex; flex-direction: column; gap: 4px; }
+    .dlg-title { font-size: 20px; font-weight: 500; line-height: 28px; letter-spacing: -0.4px; padding-right: 40px; }
+    .dlg-desc { font-size: 14px; line-height: 20px; letter-spacing: -0.28px; color: #8C8D8F; }
+    .dlg-close { position: absolute; top: 20px; right: 20px; width: 32px; height: 32px; border: none; border-radius: 8px; background: transparent; color: #939596; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .dlg-close:hover { background: #F3F0FF; }
+    .dlg-body { padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+    .panel { min-height: 352px; display: flex; flex-direction: column; gap: 20px; }
+    .dlg-foot { padding: 16px 24px; border-top: 1px solid #EDEDED; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
+    .dlg-foot .left { margin-right: auto; font-size: 14px; color: #8C8D8F; }
+
+    /* Fields */
+    .field { display: flex; flex-direction: column; gap: 8px; }
+    .label { font-size: 14px; font-weight: 500; line-height: 20px; letter-spacing: -0.28px; color: #6B6C6E; }
+    .label .req { color: #CC2828; }
+    .input { height: 48px; width: 100%; padding: 0 16px; border: 1px solid #D4D4D6; border-radius: 8px; font-size: 16px; letter-spacing: -0.32px; background: #fff; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
+    .input::placeholder { color: #B5B6B8; }
+    .input:focus { border-color: #623CEA; box-shadow: 0 0 0 3px rgba(98,60,234,0.15); }
+    .invalid .input, .invalid .phone { border-color: #CC2828; }
+    .invalid .input:focus { box-shadow: 0 0 0 3px rgba(204,40,40,0.12); }
+    .err { font-size: 12px; line-height: 16px; color: #CC2828; display: none; }
+    .invalid .err { display: block; }
+    .phone { display: flex; border: 1px solid #D4D4D6; border-radius: 8px; transition: border-color 0.15s, box-shadow 0.15s; }
+    .phone:focus-within { border-color: #623CEA; box-shadow: 0 0 0 3px rgba(98,60,234,0.15); }
+    .invalid .phone:focus-within { border-color: #CC2828; box-shadow: 0 0 0 3px rgba(204,40,40,0.12); }
+    .phone select { height: 46px; padding: 0 8px 0 16px; border: none; border-right: 1px solid #E3E3E5; border-radius: 8px 0 0 8px; background: #F9FAFB; font-size: 16px; outline: none; cursor: pointer; }
+    .phone .input { border: none; box-shadow: none !important; height: 46px; }
+    .hint { display: flex; gap: 8px; padding: 12px; border-radius: 8px; background: #F3F0FF; font-size: 14px; line-height: 20px; letter-spacing: -0.28px; animation: fade-up 200ms ease; }
+    .hint svg { flex-shrink: 0; color: #623CEA; margin-top: 2px; }
+
+    /* Combobox (matches vendor dropdown reference) */
+    .combo { position: relative; }
+    .combo .input { padding-right: 48px; }
+    .combo-chev { position: absolute; right: 16px; top: 14px; color: #939596; pointer-events: none; transition: transform 200ms ease; }
+    .combo.open .combo-chev { transform: rotate(180deg); }
+    .combo.open .input { border: 2px solid #623CEA; padding-left: 15px; box-shadow: 0 0 0 3px rgba(98,60,234,0.15); }
+    .listbox { position: absolute; left: 0; right: 0; top: calc(100% + 8px); z-index: 10; list-style: none; padding: 8px; max-height: 268px; overflow-y: auto; background: #fff; border: 1px solid #EDEDED; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); opacity: 0; transform: translateY(-4px); pointer-events: none; transition: opacity 150ms ease, transform 150ms ease; }
+    .combo.open .listbox { opacity: 1; transform: none; pointer-events: auto; }
+    .opt { display: flex; align-items: center; gap: 16px; padding: 12px; border-radius: 8px; cursor: pointer; }
+    .opt.active { background: #F3F0FF; }
+    .opt[aria-disabled="true"] { cursor: default; }
+    .opt[aria-disabled="true"] .avatar, .opt[aria-disabled="true"] .opt-text { opacity: 0.5; }
+    .opt-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+    .opt-name { font-size: 16px; line-height: 24px; letter-spacing: -0.32px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .opt-sub { font-size: 14px; line-height: 20px; color: #8C8D8F; }
+    .opt-check { width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid #D4D4D6; display: flex; align-items: center; justify-content: center; color: transparent; flex-shrink: 0; transition: background 0.15s, border-color 0.15s; }
+    .opt[aria-selected="true"] .opt-check { background: #623CEA; border-color: #623CEA; color: #fff; }
+    .opt-empty { padding: 16px 12px; font-size: 14px; line-height: 20px; color: #8C8D8F; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 4px 4px 12px; border-radius: 100px; background: #F3F0FF; color: #4A2BB8; font-size: 14px; line-height: 20px; letter-spacing: -0.28px; max-width: 100%; }
+    .chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .chip.pop { animation: pop 250ms cubic-bezier(0.23,1,0.32,1); }
+    @keyframes pop { from { transform: scale(0.8); opacity: 0; } }
+    .chip button { width: 20px; height: 20px; border: none; border-radius: 100px; background: transparent; color: #623CEA; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .chip button:hover { background: #E4DCFF; }
+    .tag { font-size: 12px; line-height: 16px; padding: 2px 8px; border-radius: 100px; background: #F4F4F5; color: #6B6C6E; white-space: nowrap; }
+    .panel-note { font-size: 14px; line-height: 20px; color: #8C8D8F; margin-top: auto; }
+
+    /* KYB stub */
+    .kyb-head { display: flex; align-items: center; gap: 16px; }
+    .kyb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; }
+    .kyb-grid dt { font-size: 12px; line-height: 16px; color: #8C8D8F; }
+    .kyb-grid dd { margin: 4px 0 0; font-size: 14px; line-height: 20px; display: flex; gap: 8px; align-items: center; }
+    .verified { color: #0E8F53; font-size: 12px; font-weight: 500; }
+
+    /* Toast */
+    .toasts { position: fixed; bottom: 24px; left: calc(50% + 133px); transform: translateX(-50%); z-index: 2000; display: flex; flex-direction: column; gap: 8px; align-items: center; }
+    .toast { display: flex; align-items: center; gap: 16px; padding: 12px 16px; border-radius: 8px; background: #1E1E1F; color: #fff; font-size: 14px; line-height: 20px; letter-spacing: -0.28px; box-shadow: 0 8px 24px rgba(0,0,0,0.16); animation: toast-in 250ms cubic-bezier(0.23,1,0.32,1); }
+    .toast.out { opacity: 0; transform: translateY(8px); transition: opacity 200ms, transform 200ms; }
+    .toast button { border: none; background: none; color: #C0AEFF; font-weight: 500; cursor: pointer; padding: 0; }
+    @keyframes toast-in { from { opacity: 0; transform: translateY(12px); } }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="narrow-overlay" style="display:none; position:fixed; inset:0; background:#F9FAFB; z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:white; border-radius:12px; padding:48px 24px; width:432px; max-width:calc(100vw - 32px); display:flex; flex-direction:column; align-items:center; gap:32px; box-shadow:0 0 6px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.02);">
+    <img src="assets/img_narrow_screen.svg" alt="" style="width:50px; height:50px;" />
+    <p style="font-size:16px; line-height:24px; letter-spacing:-0.32px; text-align:center;">Fuse360 works best on larger screens.<br>You need a screen with resolution width of<br><span style="font-weight:600;">1250px</span> or higher<br><br>If you're using a small screen, our app<br>might not work properly.</p>
+  </div>
+</div>
+
+<aside id="sidebar">
+  <!-- Logo -->
+  <div style="padding: 0 0 12px; height: 64px; display: flex; align-items: center;">
+    <img src="assets/imgLogo.svg" alt="Fusepay" style="width:116px; height:34px; object-fit:contain;" />
+  </div>
+
+  <!-- Separator -->
+  <div style="height:1px; background:#EDEDED; margin-bottom:1px;"></div>
+  <div style="height:1px; background:white; margin-bottom:8px;"></div>
+
+  <!-- Nav items + lower group -->
+  <div id="nav-wrapper" class="nav-section" style="flex:1; display:flex; flex-direction:column; justify-content:space-between;">
+    <div id="nav-indicator" class="nav-indicator"></div>
+    <!-- Top nav -->
+    <nav id="top-nav" style="display:flex; flex-direction:column; gap:4px;">
+      <div class="nav-item" data-nav="Dashboard">
+        <div class="nav-item-content">
+          <svg viewBox="0 0 13.2501 13.2501" fill="none" xmlns="http://www.w3.org/2000/svg" class="nav-icon"><g><path d="M0.625049 2.75838C0.625049 2.01172 0.625049 1.63838 0.770383 1.35305C0.898212 1.10218 1.10218 0.898212 1.35305 0.770383C1.63838 0.625049 2.01172 0.625049 2.75838 0.625049H3.15838C3.90505 0.625049 4.27838 0.625049 4.56372 0.770383C4.81459 0.898212 5.01855 1.10218 5.14638 1.35305C5.29172 1.63838 5.29172 2.01172 5.29172 2.75838V4.49172C5.29172 5.23838 5.29172 5.61172 5.14638 5.89705C5.01855 6.14792 4.81459 6.35189 4.56372 6.47972C4.27838 6.62505 3.90505 6.62505 3.15838 6.62505H2.75838C2.01172 6.62505 1.63838 6.62505 1.35305 6.47972C1.10218 6.35189 0.898212 6.14792 0.770383 5.89705C0.625049 5.61172 0.625049 5.23838 0.625049 4.49172V2.75838Z" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M0.625049 10.9584C0.625049 10.6484 0.62505 10.4937 0.650383 10.3651C0.701786 10.1063 0.828802 9.86858 1.01535 9.68202C1.20191 9.49547 1.43961 9.36845 1.69838 9.31705C1.82705 9.29172 1.98172 9.29172 2.29172 9.29172H3.62505C3.93505 9.29172 4.08972 9.29172 4.21838 9.31705C4.47715 9.36845 4.71486 9.49547 4.90141 9.68202C5.08796 9.86858 5.21498 10.1063 5.26638 10.3651C5.29172 10.4937 5.29172 10.6484 5.29172 10.9584C5.29172 11.2684 5.29172 11.423 5.26638 11.5517C5.21498 11.8105 5.08796 12.0482 4.90141 12.2347C4.71486 12.4213 4.47715 12.5483 4.21838 12.5997C4.08972 12.625 3.93505 12.625 3.62505 12.625H2.29172C1.98172 12.625 1.82705 12.625 1.69838 12.5997C1.43961 12.5483 1.20191 12.4213 1.01535 12.2347C0.828802 12.0482 0.701786 11.8105 0.650383 11.5517C0.62505 11.423 0.625049 11.2684 0.625049 10.9584Z" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.95838 2.29172C7.95838 1.98172 7.95838 1.82705 7.98372 1.69838C8.03512 1.43961 8.16213 1.20191 8.34869 1.01535C8.53524 0.828802 8.77295 0.701786 9.03172 0.650383C9.16038 0.62505 9.31505 0.625049 9.62505 0.625049H10.9584C11.2684 0.625049 11.423 0.62505 11.5517 0.650383C11.8105 0.701786 12.0482 0.828802 12.2347 1.01535C12.4213 1.20191 12.5483 1.43961 12.5997 1.69838C12.625 1.82705 12.625 1.98172 12.625 2.29172C12.625 2.60172 12.625 2.75638 12.5997 2.88505C12.5483 3.14382 12.4213 3.38152 12.2347 3.56808C12.0482 3.75463 11.8105 3.88165 11.5517 3.93305C11.423 3.95838 11.2684 3.95838 10.9584 3.95838H9.62505C9.31505 3.95838 9.16038 3.95838 9.03172 3.93305C8.77295 3.88165 8.53524 3.75463 8.34869 3.56808C8.16213 3.38152 8.03512 3.14382 7.98372 2.88505C7.95838 2.75638 7.95838 2.60172 7.95838 2.29172Z" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.95838 8.75838C7.95838 8.01172 7.95838 7.63838 8.10372 7.35305C8.23155 7.10218 8.43551 6.89821 8.68638 6.77038C8.97172 6.62505 9.34505 6.62505 10.0917 6.62505H10.4917C11.2384 6.62505 11.6117 6.62505 11.897 6.77038C12.1479 6.89821 12.3519 7.10218 12.4797 7.35305C12.625 7.63838 12.625 8.01172 12.625 8.75838V10.4917C12.625 11.2384 12.625 11.6117 12.4797 11.897C12.3519 12.1479 12.1479 12.3519 11.897 12.4797C11.6117 12.625 11.2384 12.625 10.4917 12.625H10.0917C9.34505 12.625 8.97172 12.625 8.68638 12.4797C8.43551 12.3519 8.23155 12.1479 8.10372 11.897C7.95838 11.6117 7.95838 11.2384 7.95838 10.4917V8.75838Z" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
+          <span class="nav-label">Dashboard</span>
+        </div>
+      </div>
+      <div class="nav-item" data-nav="Warehouse">
+        <div class="nav-item-content">
+          <svg viewBox="0 0 12.9169 14.2132" fill="none" xmlns="http://www.w3.org/2000/svg" class="nav-icon"><path d="M3.21764 8.40293V13.5882H9.69925V8.40293M3.21764 8.40293C3.21764 7.18076 3.21764 6.56967 3.59733 6.18998C3.97701 5.81029 4.5881 5.81029 5.81029 5.81029H7.10661C8.32878 5.81029 8.93987 5.81029 9.31956 6.18998C9.69925 6.56967 9.69925 7.18076 9.69925 8.40293M3.21764 8.40293H9.69925M3.21764 10.9956H9.69925M10.4308 2.71988L8.48635 1.53064C7.49914 0.926881 7.00556 0.625 6.45845 0.625C5.91134 0.625 5.41776 0.926881 4.43055 1.53064L2.48607 2.71988C1.57671 3.27604 1.12203 3.55412 0.873513 3.99758C0.625001 4.44105 0.625001 4.97433 0.625001 6.0409V9.69614C0.625001 11.5309 0.625001 12.4482 1.19453 13.0182C1.76405 13.5882 2.68069 13.5882 4.51397 13.5882H8.40293C10.2362 13.5882 11.1528 13.5882 11.7224 13.0182C12.2919 12.4482 12.2919 11.5309 12.2919 9.69614V6.0409C12.2919 4.97433 12.2919 4.44105 12.0434 3.99758C11.7949 3.55412 11.3402 3.27604 10.4308 2.71988Z" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="nav-label">Warehouse</span>
+        </div>
+      </div>
+      <div class="nav-item" data-nav="Vendors">
+        <div class="nav-item-content">
+          <svg viewBox="0 0 13.2498 13.2499" fill="none" xmlns="http://www.w3.org/2000/svg" class="nav-icon"><path d="M10.1029 0.626592L10.1046 1.25159C10.1184 1.25155 10.1322 1.25106 10.146 1.25011L10.1029 0.626592ZM3.1137 0.644935L3.07991 1.26902C3.09171 1.26966 3.10352 1.26996 3.11534 1.26993L3.1137 0.644935ZM0.887675 5.78161L1.44347 5.49574L1.44346 5.49573L0.887675 5.78161ZM2.34478 6.62881L2.28479 7.25092C2.29977 7.25237 2.3148 7.25327 2.32985 7.25363L2.34478 6.62881ZM4.21846 4.70851L4.81558 4.52392C4.72429 4.22858 4.43079 4.04435 4.12512 4.09052C3.81946 4.13668 3.59346 4.39937 3.59346 4.70851H4.21846ZM7.41432 6.49993L7.23919 5.89997L7.23918 5.89997L7.41432 6.49993ZM9.04871 4.70851L9.67041 4.64441C9.63894 4.33917 9.39054 4.10193 9.08419 4.08451C8.77783 4.0671 8.50414 4.27465 8.43828 4.57435L9.04871 4.70851ZM10.2653 6.5094L10.514 5.936L10.514 5.93599L10.2653 6.5094ZM12.2041 3.85083L12.706 3.47843L12.706 3.47842L12.2041 3.85083ZM11.4878 2.03731L12.1095 1.97268L12.1095 1.97257L11.4878 2.03731ZM11.1841 1.0676L11.631 0.63068L11.631 0.630635L11.1841 1.0676ZM1.22333 5.98506H0.598332V8.8307H1.22333H1.84833V5.98506H1.22333ZM1.22333 8.8307H0.598332C0.598332 9.70819 0.597135 10.426 0.669276 10.9914C0.743303 11.5716 0.904117 12.0851 1.29732 12.4995L1.75067 12.0692L2.20402 11.639C2.06989 11.4977 1.96703 11.2862 1.90922 10.8332C1.84953 10.3654 1.84833 9.74177 1.84833 8.8307H1.22333ZM1.75067 12.0692L1.29732 12.4995C1.69491 12.9184 2.19521 13.0941 2.76098 13.1743C3.30526 13.2514 3.99407 13.2499 4.82422 13.2499V12.6249V11.9999C3.95689 11.9999 3.3726 11.9984 2.93631 11.9366C2.5215 11.8778 2.33377 11.7757 2.20402 11.639L1.75067 12.0692ZM4.82422 12.6249V13.2499H8.42509V12.6249V11.9999H4.82422V12.6249ZM8.42509 12.6249V13.2499C9.25523 13.2499 9.94404 13.2514 10.4883 13.1743C11.0541 13.0941 11.5544 12.9184 11.952 12.4995L11.4986 12.0692L11.0453 11.639C10.9155 11.7757 10.7278 11.8778 10.313 11.9366C9.8767 11.9984 9.29241 11.9999 8.42509 11.9999V12.6249ZM11.4986 12.0692L11.952 12.4995C12.3452 12.0851 12.506 11.5716 12.58 10.9914C12.6522 10.426 12.651 9.70819 12.651 8.8307H12.026H11.401C11.401 9.74177 11.3998 10.3654 11.3401 10.8332C11.2823 11.2862 11.1794 11.4976 11.0453 11.639L11.4986 12.0692ZM12.026 8.8307H12.651V5.98506H12.026H11.401V8.8307H12.026ZM10.1029 0.626592L10.1013 0.00159383L3.11206 0.0199372L3.1137 0.644935L3.11534 1.26993L10.1046 1.25159L10.1029 0.626592ZM3.1137 0.644935L3.14748 0.0208488C2.42514 -0.0182539 1.8979 0.265689 1.57221 0.68816C1.27331 1.07589 1.17808 1.53354 1.17808 1.84679H1.80308H2.42808C2.42808 1.74688 2.46657 1.57537 2.56219 1.45135C2.63102 1.36206 2.7591 1.25165 3.07991 1.26902L3.1137 0.644935ZM1.80308 1.84679H1.17808C1.17808 2.09228 1.1695 2.51605 0.589995 3.43375L1.11845 3.76745L1.64691 4.10116C2.34609 2.99393 2.42808 2.34033 2.42808 1.84679H1.80308ZM1.11845 3.76745L0.589995 3.43375C0.266766 3.94561 0.0409654 4.38718 0.00504929 4.84218C-0.0329201 5.32319 0.149846 5.71357 0.331888 6.06748L0.887675 5.78161L1.44346 5.49573C1.26498 5.14873 1.24346 5.03826 1.25117 4.94054C1.26094 4.81681 1.33079 4.60176 1.64691 4.10116L1.11845 3.76745ZM0.887675 5.78161L0.331883 6.06747C0.56512 6.52094 0.958879 6.8028 1.30718 6.9715C1.65759 7.14123 2.02004 7.22539 2.28479 7.25092L2.34478 6.62881L2.40477 6.00669C2.2727 5.99396 2.0562 5.94539 1.85207 5.84652C1.64583 5.74662 1.50945 5.62402 1.44347 5.49574L0.887675 5.78161ZM2.34478 6.62881L2.32985 7.25363C3.17654 7.27386 3.82203 6.8904 4.23967 6.37556C4.6428 5.87861 4.84346 5.25127 4.84346 4.70851H4.21846H3.59346C3.59346 4.97074 3.48751 5.31861 3.26891 5.58808C3.06481 5.83968 2.77346 6.01387 2.35971 6.00399L2.34478 6.62881ZM4.21846 4.70851L3.62134 4.89309C3.99132 6.08997 4.73356 6.74635 5.54197 7.0375C6.31479 7.31583 7.09644 7.24382 7.58947 7.09989L7.41432 6.49993L7.23918 5.89997C6.93989 5.98734 6.43625 6.03098 5.96553 5.86145C5.53041 5.70474 5.07087 5.34977 4.81558 4.52392L4.21846 4.70851ZM7.41432 6.49993L7.58946 7.09989C8.12682 6.94303 8.59099 6.59728 8.93752 6.20485C9.28378 5.81274 9.55214 5.32955 9.65914 4.84266L9.04871 4.70851L8.43828 4.57435C8.3848 4.81769 8.2329 5.11434 8.00056 5.37745C7.76849 5.64025 7.4957 5.82509 7.23919 5.89997L7.41432 6.49993ZM9.04871 4.70851L8.427 4.77261C8.47837 5.27079 8.5883 5.7417 8.85197 6.15118C9.12293 6.57199 9.51504 6.86529 10.0167 7.08282L10.2653 6.5094L10.514 5.93599C10.1765 5.78968 10.0071 5.63627 9.90294 5.47446C9.79146 5.30132 9.71261 5.0537 9.67041 4.64441L9.04871 4.70851ZM10.2653 6.5094L10.0167 7.08281C11.2827 7.63184 12.3129 6.76295 12.6954 6.38633L12.2569 5.94098L11.8184 5.49563C11.4509 5.85754 10.9862 6.14078 10.514 5.936L10.2653 6.5094ZM12.2569 5.94098L12.6954 6.38633C13.3026 5.78846 13.5517 4.61818 12.706 3.47843L12.2041 3.85083L11.7022 4.22323C12.1936 4.88558 11.9613 5.35497 11.8184 5.49563L12.2569 5.94098ZM12.2041 3.85083L12.706 3.47842C12.3163 2.95315 12.1618 2.47576 12.1095 1.97268L11.4878 2.03731L10.8662 2.10194C10.94 2.81231 11.1698 3.50572 11.7022 4.22323L12.2041 3.85083ZM11.4878 2.03731L12.1095 1.97257C12.0928 1.81203 12.0718 1.58011 12.0168 1.35962C11.9602 1.13249 11.8551 0.859945 11.631 0.63068L11.1841 1.0676L10.7372 1.50451C10.7481 1.51564 10.7766 1.55217 10.8039 1.66192C10.8329 1.7783 10.8463 1.91104 10.8662 2.10204L11.4878 2.03731ZM11.1841 1.0676L11.631 0.630635C11.1413 0.129889 10.46 -0.0245535 10.0599 0.00307637L10.1029 0.626592L10.146 1.25011C10.1693 1.24849 10.2687 1.25325 10.4011 1.29931C10.5273 1.3432 10.6468 1.4121 10.7372 1.50456L11.1841 1.0676Z" fill="currentColor"/></svg>
+          <span class="nav-label">Vendors</span>
+        </div>
+      </div>
+      <div class="nav-item" data-nav="Orders">
+        <div class="nav-item-content">
+          <svg viewBox="0 0 11.9167 14.5833" fill="none" xmlns="http://www.w3.org/2000/svg" class="nav-icon"><path d="M7.29167 0.663353V1.42501C7.29167 2.54511 7.29167 3.10516 7.50965 3.53299C7.7014 3.90931 8.00736 4.21527 8.38369 4.40702C8.81151 4.62501 9.37156 4.62501 10.4917 4.62501L11.2533 4.62501M11.2533 4.62501C11.244 4.5612 11.2324 4.50043 11.218 4.44039C11.1527 4.16829 11.0449 3.90817 10.8987 3.66958C10.7338 3.40047 10.5032 3.16987 10.042 2.70866L9.20801 1.87468C8.74681 1.41348 8.5162 1.18288 8.24709 1.01797C8.0085 0.871756 7.74838 0.764011 7.47629 0.698687C7.41625 0.684273 7.35547 0.672679 7.29167 0.663353C7.02931 0.625006 6.71567 0.625006 6.19102 0.625006H4.89167C3.39819 0.625006 2.65146 0.625006 2.08103 0.915656C1.57926 1.17132 1.17131 1.57927 0.91565 2.08103C0.625 2.65146 0.625 3.3982 0.625 4.89167V9.69167C0.625 11.1851 0.625 11.9319 0.91565 12.5023C1.17131 13.0041 1.57926 13.412 2.08103 13.6677C2.65146 13.9583 3.39819 13.9583 4.89167 13.9583H7.025C8.51847 13.9583 9.26521 13.9583 9.83564 13.6677C10.3374 13.412 10.7454 13.0041 11.001 12.5023C11.2917 11.9319 11.2917 11.1851 11.2917 9.69167V5.72565C11.2917 5.201 11.2917 4.88736 11.2533 4.62501ZM3.29167 7.95834H8.625M3.29167 10.625H6.625" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="nav-label">Orders</span>
+        </div>
+      </div>
+      <div class="nav-item" data-nav="Delivery">
+        <div class="nav-item-content">
+          <svg viewBox="0 0 14.5833 11.25" fill="none" xmlns="http://www.w3.org/2000/svg" class="nav-icon"><path d="M2.625 9.29167C2.2181 9.29055 1.72909 9.33796 1.35301 9.14634C1.10213 9.01851 0.898157 8.81454 0.770326 8.56366C0.625001 8.27844 0.625001 7.90507 0.625001 7.15833V2.75833C0.625001 2.0116 0.625001 1.63823 0.770326 1.35301C0.898157 1.10213 1.10213 0.898157 1.35301 0.770326C1.63823 0.625001 2.0116 0.625001 2.75833 0.625001H7.15833C7.90507 0.625001 8.27844 0.625001 8.56365 0.770326C8.81454 0.898157 9.01851 1.10213 9.14634 1.35301C9.28275 1.62073 9.29112 1.9661 9.29163 2.625C9.29167 2.66808 9.29167 2.71251 9.29167 2.75833V9.29167M9.29167 9.29167C9.29167 10.028 9.88862 10.625 10.625 10.625C11.3614 10.625 11.9583 10.028 11.9583 9.29167M9.29167 9.29167C9.29167 8.55529 9.88862 7.95833 10.625 7.95833C11.3614 7.95833 11.9583 8.55529 11.9583 9.29167M9.29167 9.29167H5.29167M11.9583 9.29167C12.3653 9.29064 12.8543 9.33796 13.2303 9.14634C13.4812 9.01851 13.6852 8.81454 13.813 8.56366C13.9583 8.27844 13.9583 7.90507 13.9583 7.15833V5.95833L13.1614 3.96603C12.9677 3.48184 12.8709 3.23974 12.7091 3.06166C12.5661 2.9043 12.3876 2.78343 12.1884 2.70911C11.9629 2.625 11.7022 2.625 11.1807 2.625H9.29163M5.29167 9.29167C5.29167 10.028 4.69471 10.625 3.95833 10.625C3.22195 10.625 2.625 10.028 2.625 9.29167M5.29167 9.29167C5.29167 8.55529 4.69471 7.95833 3.95833 7.95833C3.22195 7.95833 2.625 8.55529 2.625 9.29167" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="nav-label">Delivery</span>
+        </div>
+      </div>
+      <div class="nav-item" data-nav="Payments">
+        <div class="nav-item-content">
+          <svg viewBox="0 0 9.25008 13.25" fill="none" xmlns="http://www.w3.org/2000/svg" class="nav-icon"><path d="M8.62504 10.0337C7.93537 10.9666 7.12776 11.8062 6.22237 12.5317C6.14759 12.592 6.05444 12.6249 5.95837 12.625V2.625M0.62504 3.21633C1.31472 2.28343 2.12233 1.44378 3.02771 0.718333C3.10249 0.658035 3.19564 0.625104 3.29171 0.625V10.625" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="nav-label">Payments</span>
+        </div>
+      </div>
+      <div class="nav-item" data-nav="Reports">
+        <div class="nav-item-content">
+          <svg viewBox="0 0 11.9167 14.5833" fill="none" xmlns="http://www.w3.org/2000/svg" class="nav-icon"><path d="M11.2917 6.625C11.2917 6.09457 11.081 5.58586 10.7059 5.21079C10.3308 4.83571 9.8221 4.625 9.29167 4.625H8.89167C8.64367 4.625 8.52033 4.625 8.41633 4.60833C8.13834 4.56424 7.88143 4.4333 7.6824 4.23427C7.48337 4.03524 7.35243 3.77833 7.30833 3.50033C7.29167 3.39633 7.29167 3.273 7.29167 3.025V2.625C7.29167 2.09457 7.08095 1.58586 6.70588 1.21079C6.33081 0.835714 5.8221 0.625 5.29167 0.625M6.29167 7.95833H8.625M6.29167 10.625H8.625M3.29167 10.625H4.29167M3.29167 7.95833H4.29167M11.2917 5.95833V11.2917C11.2917 11.9989 11.0107 12.6772 10.5106 13.1773C10.0105 13.6774 9.33224 13.9583 8.625 13.9583H3.29167C2.58442 13.9583 1.90615 13.6774 1.40605 13.1773C0.905951 12.6772 0.625 11.9989 0.625 11.2917V3.29167C0.625 2.58442 0.905951 1.90615 1.40605 1.40605C1.90615 0.905952 2.58442 0.625 3.29167 0.625H5.95833C7.37282 0.625 8.72938 1.1869 9.72957 2.1871C10.7298 3.18729 11.2917 4.54385 11.2917 5.95833Z" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="nav-label">Reports</span>
+        </div>
+      </div>
+      <div class="nav-item" data-nav="Credit">
+        <div class="nav-item-content">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="nav-icon"><rect x="1.125" y="3.125" width="13.75" height="9.75" rx="2.4" stroke="currentColor" stroke-width="1.25"/><path d="M1.125 6.5h13.75M4 10h2.5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/></svg>
+          <span class="nav-label">Credit</span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Bottom nav -->
+    <div id="bottom-nav" style="display:flex; flex-direction:column; gap:4px;">
+      <div class="nav-item" data-nav="Help">
+        <div class="nav-item-content">
+          <svg viewBox="0 0 13.25 13.25" fill="none" xmlns="http://www.w3.org/2000/svg" class="nav-icon"><path d="M4.81266 5.10402C4.81266 4.10308 5.62408 3.29167 6.62502 3.29167C7.62595 3.29167 8.43737 4.10308 8.43737 5.10402C8.43737 5.74152 8.10822 6.30215 7.61059 6.62522C7.12792 6.93857 6.62502 7.38288 6.62502 7.95833M6.62502 9.95833H6.62568M12.625 6.625C12.625 9.93871 9.93871 12.625 6.625 12.625C3.31129 12.625 0.625 9.93871 0.625 6.625C0.625 3.31129 3.31129 0.625 6.625 0.625C9.93871 0.625 12.625 3.31129 12.625 6.625Z" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="nav-label">Help</span>
+        </div>
+      </div>
+      <div class="nav-item" data-nav="Settings">
+        <div class="nav-item-content">
+          <svg viewBox="0 0 13.25 13.25" fill="none" xmlns="http://www.w3.org/2000/svg" class="nav-icon"><g><path d="M5.55713 1.47778C5.81504 0.340741 7.43496 0.340742 7.69288 1.47778L7.72707 1.62852C7.89419 2.3653 8.73961 2.71548 9.37877 2.31268L9.50954 2.23026C10.4959 1.60863 11.6414 2.75409 11.0197 3.74047L10.9373 3.87124C10.5345 4.51039 10.8847 5.35581 11.6215 5.52293L11.7722 5.55713C12.9093 5.81504 12.9093 7.43496 11.7722 7.69288L11.6215 7.72707C10.8847 7.89419 10.5345 8.73961 10.9373 9.37877L11.0197 9.50954C11.6414 10.4959 10.4959 11.6414 9.50954 11.0197L9.37877 10.9373C8.73961 10.5345 7.89419 10.8847 7.72707 11.6215L7.69288 11.7722C7.43496 12.9093 5.81504 12.9093 5.55713 11.7722L5.52293 11.6215C5.35581 10.8847 4.51039 10.5345 3.87124 10.9373L3.74047 11.0197C2.75409 11.6414 1.60863 10.4959 2.23026 9.50954L2.31268 9.37877C2.71548 8.73961 2.3653 7.89419 1.62852 7.72707L1.47778 7.69288C0.340741 7.43496 0.340742 5.81504 1.47778 5.55713L1.62852 5.52293C2.3653 5.35581 2.71548 4.51039 2.31268 3.87124L2.23026 3.74046C1.60863 2.75409 2.75409 1.60863 3.74046 2.23026L3.87124 2.31268C4.51039 2.71548 5.35581 2.3653 5.52293 1.62852L5.55713 1.47778Z" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.95223 6.62501C5.95223 6.25682 6.25683 5.95834 6.62502 5.95834C6.99321 5.95834 7.29781 6.25682 7.29781 6.62501C7.29781 6.9932 6.99321 7.29167 6.62502 7.29167C6.25683 7.29167 5.95223 6.9932 5.95223 6.62501Z" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
+          <span class="nav-label">Settings</span>
+        </div>
+      </div>
+
+      <!-- Separator -->
+      <div style="margin-top:16px; margin-bottom:8px;">
+        <div style="height:1px; background:#EDEDED;"></div>
+        <div style="height:1px; background:white;"></div>
+      </div>
+
+      <div class="nav-item" data-nav="LogOut">
+        <div class="nav-item-content">
+          <svg viewBox="0 0 13.25 13.25" fill="none" xmlns="http://www.w3.org/2000/svg" class="nav-icon"><path d="M10.7506 4.625C11.4086 5.1185 12.0029 5.691 12.5201 6.32929C12.59 6.41561 12.625 6.52031 12.625 6.625M10.7506 8.625C11.4086 8.1315 12.0029 7.559 12.5201 6.92071C12.59 6.83439 12.625 6.72969 12.625 6.625M12.625 6.625H3.95833M7.29167 1.64352C6.58399 1.01014 5.64947 0.625 4.625 0.625C2.41586 0.625 0.625 2.41586 0.625 4.625V8.625C0.625 10.8341 2.41586 12.625 4.625 12.625C5.64947 12.625 6.58399 12.2399 7.29167 11.6065" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="nav-label">Log Out</span>
+        </div>
+      </div>
+
+      <!-- User card -->
+      <div class="user-card" style="margin-top:8px;">
+        <!-- Building avatar -->
+        <div style="width:40px; height:40px; border-radius:100px; background:#FFEBF3; display:flex; align-items:center; justify-content:center; flex-shrink:0; padding:9px; box-sizing:border-box;">
+          <img src="assets/imgProfileBuilding.svg" style="width:22px; height:22px;" alt="" />
+        </div>
+        <div style="min-width:0; flex:1; display:flex; flex-direction:column; justify-content:center;">
+          <div style="font-size:14px; font-weight:500; color:#262626; letter-spacing:-0.28px; line-height:20px;">Hi, Rohan!</div>
+          <div style="font-size:14px; font-weight:400; color:#8C8D8F; letter-spacing:-0.28px; line-height:20px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Galaxy Electronics Pvt. Ltd.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+
+<main id="main">
+  <div class="shell">
+    <div class="scroll-area">
+
+      <header class="page-head">
+        <div>
+          <h1 class="page-title">Credit</h1>
+          <p class="page-sub">Offer credit to the retailers and hospitality businesses you supply, backed by a company-wide policy and verified business details.</p>
+        </div>
+        <button class="btn-primary" id="head-invite" data-invite hidden>Invite vendors</button>
+      </header>
+
+      <!-- First run -->
+      <section class="view" id="first-run" hidden>
+        <div class="cards">
+          <article class="intro-card" id="policy-card">
+            <div class="intro-top">
+              <div class="icon-tile" id="policy-tile">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.75 4.75 5.5v5.6c0 4.5 3 8.4 7.25 10.15 4.25-1.75 7.25-5.65 7.25-10.15V5.5L12 2.75Z"/><path d="m9 12 2 2 4-4"/></svg>
+              </div>
+              <h2 class="card-h">Set up your credit policy <span class="pill s-shared" id="policy-pill" hidden>Active</span></h2>
+              <p class="card-p" id="policy-text">Your policy is the rulebook for credit. Everyone in your company works within it, whether they add a vendor, create an order or record a payment.</p>
+              <ul class="ticks">
+                <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>Credit limits for each vendor</li>
+                <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>Payment terms and grace periods</li>
+                <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>Who can approve what, at every user level</li>
+              </ul>
+            </div>
+            <div class="actions">
+              <button class="btn-primary" data-create-policy>Create policy</button>
+              <button class="btn-outline" data-view-policy hidden>View policy</button>
+            </div>
+          </article>
+
+          <article class="intro-card">
+            <div class="intro-top">
+              <div class="icon-tile">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9Z"/><path d="m3.5 7 7.4 5.2a2 2 0 0 0 2.2 0L20.5 7"/></svg>
+              </div>
+              <h2 class="card-h">Invite vendors for KYB/KYC</h2>
+              <p class="card-p">Ask the businesses you supply to share their verified details with you. Invite vendors already on Fuse360, or send an invite to any business by email and SMS.</p>
+              <ul class="ticks">
+                <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>Business registration and tax details (KYB)</li>
+                <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>Owner and director identity checks (KYC)</li>
+                <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>Shared with you only after the vendor agrees</li>
+              </ul>
+            </div>
+            <div class="actions">
+              <button class="btn-primary" data-invite>Invite vendors</button>
+            </div>
+          </article>
+        </div>
+
+        <div class="how">
+          <h3 class="how-h">How it works</h3>
+          <ol class="steps">
+            <li><span class="step-n">1</span><span class="step-t">Invite your vendors</span><span class="step-d">Pick vendors from your list, or add a business that's new to Fuse360.</span></li>
+            <li><span class="step-n">2</span><span class="step-t">They complete KYB/KYC</span><span class="step-d">Vendors verify their business and identity on Fuse360 and agree to share.</span></li>
+            <li><span class="step-n">3</span><span class="step-t">Review and offer credit</span><span class="step-d">See their verified details here and offer credit within your policy.</span></li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- Tracker -->
+      <section class="view" id="tracker" hidden style="gap:24px;">
+        <div class="banner" id="policy-banner" hidden>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="7.5"/><path d="M10 6.5v4M10 13.5h.01"/></svg>
+          <span class="grow">You haven't set a credit policy yet. Set one so everyone in your company follows the same credit rules.</span>
+          <button class="btn-link" data-create-policy>Create policy</button>
+        </div>
+
+        <div class="toolbar">
+          <div class="tab-group" id="status-tabs" role="tablist" aria-label="Filter by status">
+            <div class="tab-indicator" id="status-indicator"></div>
+          </div>
+          <label class="search">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="7.25" cy="7.25" r="4.75"/><path d="m13.5 13.5-2.9-2.9"/></svg>
+            <input id="search" type="search" placeholder="Search vendors" aria-label="Search vendors" />
+          </label>
+        </div>
+
+        <div class="table" role="table" aria-label="Vendor KYB/KYC invites">
+          <div class="tr th" role="row"><span role="columnheader">Vendor</span><span role="columnheader">Invited</span><span role="columnheader">Status</span><span role="columnheader">Action</span></div>
+          <div id="rows" role="rowgroup"></div>
+        </div>
+      </section>
+
+      <div class="demo-bar">
+        <span>Demo:</span>
+        <button id="demo-load">Load sample data</button>
+        <button id="demo-reset">Reset demo</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Invite dialog -->
+<div class="overlay" id="invite-dlg" hidden>
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="invite-title" aria-describedby="invite-desc">
+    <button class="dlg-close" data-close aria-label="Close"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M6 18 18 6M6 6l12 12"/></svg></button>
+    <div class="dlg-head">
+      <h2 class="dlg-title" id="invite-title">Invite vendors</h2>
+      <p class="dlg-desc" id="invite-desc">We'll ask them to share their KYB/KYC details with you. You'll see them here once they agree.</p>
+    </div>
+    <div class="dlg-body">
+      <div class="tab-group" id="invite-tabs" role="tablist">
+        <div class="tab-indicator" id="invite-indicator"></div>
+        <button class="tab-btn active" role="tab" data-tab="fuse" aria-selected="true" aria-controls="panel-fuse">Fuse360 vendors</button>
+        <button class="tab-btn" role="tab" data-tab="new" aria-selected="false" aria-controls="panel-new">New business</button>
+      </div>
+
+      <!-- Fuse360 vendors -->
+      <div class="panel" id="panel-fuse" role="tabpanel">
+        <div class="field">
+          <label class="label" for="combo-input">Vendors <span class="req">*</span></label>
+          <div class="combo" id="combo">
+            <input class="input" id="combo-input" role="combobox" aria-expanded="false" aria-controls="combo-list" aria-autocomplete="list" autocomplete="off" placeholder="Search your vendors" />
+            <svg class="combo-chev" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 7.5 5 5 5-5"/></svg>
+            <ul class="listbox" id="combo-list" role="listbox" aria-multiselectable="true" aria-label="Vendors"></ul>
+          </div>
+        </div>
+        <div class="chips" id="chips" aria-live="polite"></div>
+        <p class="panel-note">Can't find them? <button class="btn-link" data-goto-new>Invite as a new business</button></p>
+      </div>
+
+      <!-- New business -->
+      <form class="panel" id="panel-new" role="tabpanel" novalidate hidden>
+        <div class="field" data-field="name">
+          <label class="label" for="nb-name">Business name <span class="req">*</span></label>
+          <input class="input" id="nb-name" name="name" autocomplete="organization" placeholder="e.g. Ocean Breeze Café" aria-describedby="err-name" />
+          <span class="err" id="err-name"></span>
+        </div>
+        <div class="field" data-field="email">
+          <label class="label" for="nb-email">Business email <span class="req">*</span></label>
+          <input class="input" id="nb-email" name="email" type="email" autocomplete="email" placeholder="name@business.com" aria-describedby="err-email" />
+          <span class="err" id="err-email"></span>
+          <div id="dup-hint"></div>
+        </div>
+        <div class="field" data-field="phone">
+          <label class="label" for="nb-phone">Mobile number <span class="req">*</span></label>
+          <div class="phone">
+            <select id="nb-code" aria-label="Country code">
+              <option value="+248" selected>+248</option>
+              <option value="+230">+230</option>
+              <option value="+261">+261</option>
+              <option value="+254">+254</option>
+              <option value="+27">+27</option>
+              <option value="+971">+971</option>
+              <option value="+91">+91</option>
+              <option value="+44">+44</option>
+            </select>
+            <input class="input" id="nb-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="2 512 345" aria-describedby="err-phone" />
+          </div>
+          <span class="err" id="err-phone"></span>
+        </div>
+      </form>
+    </div>
+    <div class="dlg-foot" id="foot-fuse">
+      <span class="left" id="sel-count"></span>
+      <button class="btn-outline" data-close>Cancel</button>
+      <button class="btn-primary" id="send-fuse" disabled>Send invite</button>
+    </div>
+    <div class="dlg-foot" id="foot-new" hidden>
+      <button class="btn-outline" id="send-another">Send and add another</button>
+      <button class="btn-primary" id="send-new">Send invite</button>
+    </div>
+  </div>
+</div>
+
+<!-- KYB stub dialog -->
+<div class="overlay" id="kyb-dlg" hidden>
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="kyb-title">
+    <button class="dlg-close" data-close aria-label="Close"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M6 18 18 6M6 6l12 12"/></svg></button>
+    <div class="dlg-body" id="kyb-body"></div>
+    <div class="dlg-foot">
+      <span class="left">Read-only. Shared by the vendor.</span>
+      <button class="btn-primary" data-close>Done</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+// ---------- Data ----------
+const PALETTE = [['#FEF6CC','#C9A53A'],['#FDE8EF','#D98BAA'],['#ECEEFE','#8D96DB'],['#F1E4DC','#B98F74'],['#E3F1F2','#6FA9AE'],['#E7F4EA','#6FAF7F']];
+const VENDORS = [
+  ['atlas','Atlas Digital Systems','Mahé','accounts@atlasdigital.sc'],
+  ['emmanuel','Emmanuel Transports Pvt. Ltd.','Anse Royale','finance@emmanueltransports.sc'],
+  ['mitsuishi','Mitsuishi Engineering, Custom Metal works & Sheet fabrication','Grand Anse','office@mitsuishi.sc'],
+  ['paragon','Paragon Rentals','Victoria','hello@paragonrentals.sc'],
+  ['phoenix','Phoenix Analytics','Mahé','billing@phoenixanalytics.sc'],
+  ['coral','Coral Reef Resort','Praslin','purchasing@coralreef.sc'],
+  ['beauvallon','Beau Vallon Bistro','Beau Vallon','orders@beauvallonbistro.sc'],
+  ['takamaka','Takamaka Grocers','Takamaka','takamakagrocers@gmail.com'],
+  ['ladigue','La Digue Supermart','La Digue','manager@ladiguesupermart.sc'],
+  ['anseroyale','Anse Royale Café','Anse Royale','hello@anseroyalecafe.sc'],
+  ['victoria','Victoria Market Traders','Victoria','trade@victoriamarket.sc'],
+  ['eden','Eden Island Hotel','Eden Island','procurement@edenisland.sc'],
+].map(([id, name, area, email], i) => ({ id, name, type: area, email, pal: PALETTE[i % PALETTE.length] }));
+const byId = id => VENDORS.find(v => v.id === id);
+
+const STATUS = {
+  sent: ['Invite sent', 's-sent'], progress: ['In progress', 's-progress'], shared: ['Shared', 's-shared'],
+  expired: ['Expired', 's-expired'], declined: ['Declined', 's-declined'],
+};
+const FILTERS = [['all', 'All'], ['sent', 'Invite sent'], ['progress', 'In progress'], ['shared', 'Shared'], ['expired', 'Expired'], ['declined', 'Declined']];
+
+const BUILDING = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 6h3M7 10h3M7 14h3M7 18h3M17 14h1M17 18h1M12.4 22c.56 0 .84 0 1.054-.109a1 1 0 0 0 .437-.437C14 21.24 14 20.96 14 20.4V10m-1.6 12h7c.56 0 .84 0 1.054-.109a1 1 0 0 0 .437-.437C21 21.24 21 20.96 21 20.4v-7.2c0-1.12 0-1.68-.218-2.108a2 2 0 0 0-.874-.874C19.48 10 18.92 10 17.8 10H14m-1.6 12H4.6c-.56 0-.84 0-1.054-.109a1 1 0 0 1-.437-.437C3 21.24 3 20.96 3 20.4V5.2c0-1.12 0-1.68.218-2.108a2 2 0 0 1 .874-.874C4.52 2 5.08 2 6.2 2h4.6c1.12 0 1.68 0 2.108.218a2 2 0 0 1 .874.874C14 3.52 14 4.08 14 5.2V10"/></svg>';
+const CHECK = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>';
+const X_SM = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m3 9 6-6M3 3l6 6"/></svg>';
+const INFO = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 7.5v3M8 5.5h.01"/></svg>';
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const palFor = name => PALETTE[[...name].reduce((a, c) => a + c.charCodeAt(0), 0) % PALETTE.length];
+const avatar = (pal, cls = '') => `<span class="avatar ${cls}" style="background:${pal[0]};color:${pal[1]}">${BUILDING}</span>`;
+const today = () => new Date().toISOString().slice(0, 10);
+const daysAgo = n => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
+const fmtDate = iso => new Date(iso + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// ---------- State (localStorage, demo only) ----------
+const KEY = 'f360-credit-demo';
+const blank = () => ({ policy: false, invites: [] });
+let state = (() => { try { return JSON.parse(localStorage.getItem(KEY)) || blank(); } catch { return blank(); } })();
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} };
+const inviteFor = vendorId => state.invites.find(i => i.vendorId === vendorId);
+
+let filter = 'all';
+let fresh = new Set();
+
+// ---------- Render page ----------
+function render() {
+  const has = state.invites.length > 0;
+  document.getElementById('first-run').hidden = has;
+  document.getElementById('tracker').hidden = !has;
+  document.getElementById('head-invite').hidden = !has;
+  document.getElementById('policy-banner').hidden = state.policy;
+
+  // policy card
+  document.getElementById('policy-pill').hidden = !state.policy;
+  document.getElementById('policy-tile').classList.toggle('done', state.policy);
+  document.getElementById('policy-text').textContent = state.policy
+    ? 'Your policy is live. Everyone in your company now works within it, whether they add a vendor, create an order or record a payment.'
+    : 'Your policy is the rulebook for credit. Everyone in your company works within it, whether they add a vendor, create an order or record a payment.';
+  document.querySelectorAll('#policy-card [data-create-policy]').forEach(b => b.hidden = state.policy);
+  document.querySelector('[data-view-policy]').hidden = !state.policy;
+
+  if (has) renderTracker();
+}
+
+function renderTracker() {
+  const tabs = document.getElementById('status-tabs');
+  const counts = { all: state.invites.length };
+  state.invites.forEach(i => counts[i.status] = (counts[i.status] || 0) + 1);
+  tabs.querySelectorAll('.tab-btn').forEach(b => b.remove());
+  FILTERS.forEach(([key, label]) => {
+    const b = document.createElement('button');
+    b.className = 'tab-btn' + (key === filter ? ' active' : '');
+    b.setAttribute('role', 'tab');
+    b.setAttribute('aria-selected', key === filter);
+    b.dataset.filter = key;
+    b.innerHTML = `${label}<span class="tab-count">${counts[key] || 0}</span>`;
+    tabs.appendChild(b);
+  });
+  requestAnimationFrame(() => moveIndicator('status-indicator', tabs.querySelector('.active')));
+
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  const list = state.invites.filter(i => (filter === 'all' || i.status === filter) && (!q || i.name.toLowerCase().includes(q)));
+  document.getElementById('rows').innerHTML = list.length ? list.map(i => {
+    const [label, cls] = STATUS[i.status];
+    const pal = i.vendorId ? byId(i.vendorId).pal : palFor(i.name);
+    const sub = i.vendorId ? `${i.type} · On Fuse360` : `New business · ${esc(i.email)}`;
+    const act = i.status === 'shared' ? `<button class="btn-link" data-act="kyb" data-id="${i.id}">View KYB</button>`
+      : i.status === 'sent' ? `<button class="btn-link" data-act="resend" data-id="${i.id}">Resend</button><button class="btn-link" data-act="cancel" data-id="${i.id}" style="color:#CC2828">Cancel</button>`
+      : i.status === 'progress' ? '<span class="muted">—</span>'
+      : `<button class="btn-link" data-act="resend" data-id="${i.id}">Resend</button>`;
+    return `<div class="tr${fresh.has(i.id) ? ' fresh' : ''}" role="row">
+      <div class="td-vendor" role="cell">${avatar(pal)}<div style="min-width:0"><div class="v-name" title="${esc(i.name)}">${esc(i.name)}</div><div class="v-sub">${sub}</div></div></div>
+      <span class="td-date" role="cell">${fmtDate(i.date)}</span>
+      <span role="cell"><span class="pill ${cls}">${label}</span></span>
+      <div class="td-act" role="cell">${act}</div>
+    </div>`;
+  }).join('') : `<div class="empty-row">No vendors match${q ? ` "${esc(q)}"` : ''} in this view.</div>`;
+  fresh = new Set();
+}
+
+function moveIndicator(id, btn) {
+  if (!btn) return;
+  const ind = document.getElementById(id);
+  ind.style.width = btn.offsetWidth + 'px';
+  ind.style.transform = `translateX(${btn.offsetLeft - 4}px)`;
+}
+
+// ---------- Toast ----------
+function toast(msg, actionLabel, onAction) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.setAttribute('role', 'status');
+  t.innerHTML = `<span>${esc(msg)}</span>`;
+  if (actionLabel) {
+    const b = document.createElement('button');
+    b.textContent = actionLabel;
+    b.onclick = () => { onAction(); dismiss(); };
+    t.appendChild(b);
+  }
+  document.getElementById('toasts').appendChild(t);
+  const timer = setTimeout(dismiss, 4000);
+  function dismiss() { clearTimeout(timer); t.classList.add('out'); setTimeout(() => t.remove(), 200); }
+}
+
+// ---------- Busy button helper ----------
+function busy(btn, ms) {
+  const html = btn.innerHTML;
+  btn.classList.add('busy');
+  btn.innerHTML = '<span class="spinner"></span>';
+  btn.style.minWidth = btn.offsetWidth + 'px';
+  return new Promise(r => setTimeout(() => { btn.innerHTML = html; btn.classList.remove('busy'); btn.style.minWidth = ''; r(); }, ms));
+}
+
+// ---------- Policy (stub) ----------
+document.addEventListener('click', async e => {
+  const b = e.target.closest('[data-create-policy]');
+  if (!b) return;
+  await busy(b, 700);
+  state.policy = true; save(); render();
+  toast('Credit policy created. It now applies to everyone in your company.');
+});
+document.querySelector('[data-view-policy]').onclick = () => toast('The policy builder is coming soon.');
+
+// ---------- Dialog helpers ----------
+let lastFocus = null;
+function openDialog(el) {
+  lastFocus = document.activeElement;
+  el.hidden = false;
+  requestAnimationFrame(() => el.classList.add('open'));
+}
+function closeDialog(el) {
+  el.classList.remove('open');
+  closeList();
+  setTimeout(() => { el.hidden = true; lastFocus && lastFocus.focus(); }, reduceMotion ? 0 : 200);
+}
+document.querySelectorAll('.overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o || e.target.closest('[data-close]')) closeDialog(o); });
+});
+document.addEventListener('keydown', e => {
+  const d = document.querySelector('.overlay.open');
+  if (!d) return;
+  if (e.key === 'Escape') {
+    if (document.getElementById('combo').classList.contains('open')) { closeList(); return; }
+    closeDialog(d);
+  }
+  if (e.key === 'Tab') { // keep focus inside the dialog
+    const f = [...d.querySelectorAll('button:not([disabled]), input, select')].filter(x => x.offsetParent);
+    if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+    else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+  }
+});
+
+// ---------- Invite dialog ----------
+const dlg = document.getElementById('invite-dlg');
+const comboEl = document.getElementById('combo');
+const comboInput = document.getElementById('combo-input');
+const listEl = document.getElementById('combo-list');
+let selected = [];
+let activeIdx = -1;
+let shown = [];
+let lastAdded = null;
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('[data-invite]')) return;
+  selected = []; comboInput.value = ''; resetForm();
+  switchTab('fuse', false);
+  renderChips();
+  openDialog(dlg);
+  requestAnimationFrame(() => { moveIndicator('invite-indicator', dlg.querySelector('#invite-tabs .active')); comboInput.focus(); });
+});
+
+function switchTab(tab, focus = true) {
+  dlg.querySelectorAll('#invite-tabs .tab-btn').forEach(b => {
+    const on = b.dataset.tab === tab;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-selected', on);
+  });
+  document.getElementById('panel-fuse').hidden = tab !== 'fuse';
+  document.getElementById('foot-fuse').hidden = tab !== 'fuse';
+  document.getElementById('panel-new').hidden = tab !== 'new';
+  document.getElementById('foot-new').hidden = tab !== 'new';
+  closeList();
+  moveIndicator('invite-indicator', dlg.querySelector('#invite-tabs .active'));
+  if (focus) (tab === 'fuse' ? comboInput : document.getElementById('nb-name')).focus();
+}
+dlg.querySelectorAll('#invite-tabs .tab-btn').forEach(b => b.onclick = () => switchTab(b.dataset.tab));
+dlg.querySelectorAll('[data-goto-new]').forEach(b => b.onclick = () => switchTab('new'));
+listEl.addEventListener('mousedown', e => { if (e.target.closest('[data-goto-new]')) { e.preventDefault(); switchTab('new'); } });
+
+// Combobox
+function openList() { comboEl.classList.add('open'); comboInput.setAttribute('aria-expanded', 'true'); renderOptions(); }
+function closeList() { comboEl.classList.remove('open'); comboInput.setAttribute('aria-expanded', 'false'); activeIdx = -1; comboInput.removeAttribute('aria-activedescendant'); }
+
+function renderOptions() {
+  const q = comboInput.value.trim().toLowerCase();
+  shown = VENDORS.filter(v => !q || v.name.toLowerCase().includes(q) || v.type.toLowerCase().includes(q));
+  listEl.innerHTML = shown.length ? shown.map((v, i) => {
+    const inv = inviteFor(v.id);
+    const sel = selected.includes(v.id);
+    return `<li class="opt${i === activeIdx ? ' active' : ''}" role="option" id="opt-${v.id}" data-id="${v.id}" aria-selected="${sel}"${inv ? ' aria-disabled="true"' : ''}>
+      ${avatar(v.pal, 'lg')}
+      <span class="opt-text"><span class="opt-name" title="${esc(v.name)}">${esc(v.name)}</span><span class="opt-sub">${v.type}</span></span>
+      ${inv ? `<span class="tag">${STATUS[inv.status][0]}</span>` : `<span class="opt-check">${CHECK}</span>`}
+    </li>`;
+  }).join('') : `<li class="opt-empty">No vendors match "${esc(comboInput.value.trim())}".<button class="btn-link" data-goto-new>Invite as a new business</button></li>`;
+  if (activeIdx >= 0 && shown[activeIdx]) {
+    comboInput.setAttribute('aria-activedescendant', 'opt-' + shown[activeIdx].id);
+    document.getElementById('opt-' + shown[activeIdx].id).scrollIntoView({ block: 'nearest' });
+  }
+}
+
+function toggle(id) {
+  if (inviteFor(id)) return;
+  if (selected.includes(id)) selected = selected.filter(x => x !== id);
+  else { selected.push(id); lastAdded = id; }
+  renderChips(); renderOptions();
+}
+
+function renderChips() {
+  document.getElementById('chips').innerHTML = selected.map(id => {
+    const v = byId(id);
+    return `<span class="chip${id === lastAdded ? ' pop' : ''}"><span title="${esc(v.name)}">${esc(v.name)}</span><button type="button" data-remove="${id}" aria-label="Remove ${esc(v.name)}">${X_SM}</button></span>`;
+  }).join('');
+  lastAdded = null;
+  const n = selected.length;
+  const send = document.getElementById('send-fuse');
+  send.disabled = n === 0;
+  send.textContent = n > 1 ? `Send ${n} invites` : 'Send invite';
+  document.getElementById('sel-count').textContent = n ? `${n} selected` : '';
+}
+
+comboInput.addEventListener('focus', openList);
+comboInput.addEventListener('click', openList);
+comboInput.addEventListener('input', () => { activeIdx = 0; openList(); });
+comboInput.addEventListener('blur', () => setTimeout(() => { if (document.activeElement !== comboInput) closeList(); }, 100));
+comboInput.addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (!comboEl.classList.contains('open')) openList();
+    const dir = e.key === 'ArrowDown' ? 1 : -1;
+    activeIdx = Math.max(0, Math.min(shown.length - 1, activeIdx + dir));
+    renderOptions();
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    if (shown[activeIdx]) { toggle(shown[activeIdx].id); comboInput.value = ''; renderOptions(); }
+  } else if (e.key === 'Backspace' && !comboInput.value && selected.length) {
+    selected.pop(); renderChips(); renderOptions();
+  }
+});
+listEl.addEventListener('mousedown', e => {
+  const o = e.target.closest('.opt');
+  if (!o) return;
+  e.preventDefault(); // keep focus in the input
+  toggle(o.dataset.id);
+});
+listEl.addEventListener('mousemove', e => {
+  const o = e.target.closest('.opt');
+  if (!o) return;
+  const i = shown.findIndex(v => v.id === o.dataset.id);
+  if (i !== activeIdx) { activeIdx = i; listEl.querySelectorAll('.opt').forEach((el, j) => el.classList.toggle('active', j === i)); }
+});
+document.getElementById('chips').addEventListener('click', e => {
+  const b = e.target.closest('[data-remove]');
+  if (!b) return;
+  selected = selected.filter(x => x !== b.dataset.remove);
+  renderChips(); renderOptions(); comboInput.focus();
+});
+
+document.getElementById('send-fuse').onclick = async e => {
+  const n = selected.length;
+  await busy(e.currentTarget, 600);
+  addInvites(selected.map(id => { const v = byId(id); return { vendorId: id, name: v.name, type: v.type, email: v.email }; }));
+  toast(n === 1 ? `Invite sent to ${byId(selected[0]).name}` : `${n} invites sent`);
+  selected = [];
+  closeDialog(dlg);
+};
+
+// New business form
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const RULES = {
+  name: v => v.trim() ? '' : 'Enter the business name',
+  email: v => {
+    const e = v.trim().toLowerCase();
+    if (!e) return 'Enter the business email';
+    if (!EMAIL_RE.test(e)) return 'Enter a valid email, like name@business.com';
+    if (state.invites.some(i => i.email && i.email.toLowerCase() === e)) return 'An invite has already been sent to this email';
+    return '';
+  },
+  phone: v => {
+    const d = v.replace(/[\s-]/g, '');
+    if (!d) return 'Enter the mobile number';
+    return /^\d{7,12}$/.test(d) ? '' : 'Enter a valid mobile number, digits only';
+  },
+};
+const form = document.getElementById('panel-new');
+const touched = new Set();
+
+function validate(name) {
+  const msg = RULES[name](form.elements[name].value);
+  const f = form.querySelector(`[data-field="${name}"]`);
+  f.classList.toggle('invalid', !!msg);
+  form.elements[name].setAttribute('aria-invalid', !!msg);
+  document.getElementById('err-' + name).textContent = msg;
+  return !msg;
+}
+['name', 'email', 'phone'].forEach(n => {
+  form.elements[n].addEventListener('blur', () => { if (form.elements[n].value || touched.has(n)) { touched.add(n); validate(n); } });
+  form.elements[n].addEventListener('input', () => { if (touched.has(n)) validate(n); });
+});
+form.elements.email.addEventListener('input', dupHint);
+form.elements.email.addEventListener('blur', dupHint);
+
+function dupHint() {
+  const e = form.elements.email.value.trim().toLowerCase();
+  const v = VENDORS.find(x => x.email === e);
+  const box = document.getElementById('dup-hint');
+  const inv = v && inviteFor(v.id);
+  const key = v ? v.id + !!inv : '';
+  if (box.dataset.key === key) return; // re-rendering on blur would swap the link out mid-click
+  box.dataset.key = key;
+  if (!v) { box.innerHTML = ''; return; }
+  box.innerHTML = inv
+    ? `<div class="hint">${INFO}<span><b>${esc(v.name)}</b> is already on Fuse360 and has been invited.</span></div>`
+    : `<div class="hint">${INFO}<span><b>${esc(v.name)}</b> is already on Fuse360. <button type="button" class="btn-link" id="dup-go">Invite from Fuse360 vendors instead</button></span></div>`;
+  const go = document.getElementById('dup-go');
+  if (go) go.onclick = () => {
+    if (!selected.includes(v.id)) { selected.push(v.id); lastAdded = v.id; }
+    resetForm(); renderChips(); switchTab('fuse', false); comboInput.blur(); closeList();
+    document.getElementById('send-fuse').focus();
+  };
+}
+
+function resetForm() {
+  form.reset();
+  touched.clear();
+  form.querySelectorAll('.field').forEach(f => f.classList.remove('invalid'));
+  form.querySelectorAll('[aria-invalid]').forEach(i => i.removeAttribute('aria-invalid'));
+  document.getElementById('dup-hint').innerHTML = '';
+  document.getElementById('dup-hint').dataset.key = '';
+}
+
+async function sendNew(another, btn) {
+  ['name', 'email', 'phone'].forEach(n => touched.add(n));
+  const bad = ['name', 'email', 'phone'].filter(n => !validate(n));
+  if (bad.length) { form.elements[bad[0]].focus(); form.elements[bad[0]].scrollIntoView({ block: 'nearest' }); return; }
+  await busy(btn, 600);
+  const name = form.elements.name.value.trim();
+  addInvites([{
+    name, type: 'New business',
+    email: form.elements.email.value.trim(),
+    phone: `${document.getElementById('nb-code').value} ${form.elements.phone.value.trim()}`,
+  }]);
+  toast(`Invite sent to ${name}`);
+  if (another) { resetForm(); form.elements.name.focus(); }
+  else closeDialog(dlg);
+}
+form.addEventListener('submit', e => { e.preventDefault(); sendNew(false, document.getElementById('send-new')); });
+document.getElementById('send-new').onclick = e => sendNew(false, e.currentTarget);
+document.getElementById('send-another').onclick = e => sendNew(true, e.currentTarget);
+
+function addInvites(items) {
+  const base = Date.now();
+  const rows = items.map((it, i) => ({ id: String(base + i), date: today(), status: 'sent', ...it }));
+  rows.forEach(r => fresh.add(r.id));
+  state.invites.unshift(...rows);
+  filter = 'all';
+  document.getElementById('search').value = '';
+  save(); render();
+}
+
+// ---------- Table actions ----------
+document.getElementById('status-tabs').addEventListener('click', e => {
+  const b = e.target.closest('.tab-btn');
+  if (!b) return;
+  filter = b.dataset.filter;
+  renderTracker();
+});
+document.getElementById('search').addEventListener('input', renderTracker);
+
+document.getElementById('rows').addEventListener('click', e => {
+  const b = e.target.closest('[data-act]');
+  if (!b) return;
+  const idx = state.invites.findIndex(i => i.id === b.dataset.id);
+  const inv = state.invites[idx];
+  if (b.dataset.act === 'resend') {
+    inv.status = 'sent'; inv.date = today(); fresh.add(inv.id);
+    save(); renderTracker();
+    toast(`Invite resent to ${inv.name}`);
+  } else if (b.dataset.act === 'cancel') {
+    state.invites.splice(idx, 1);
+    save(); render();
+    toast(`Invite to ${inv.name} cancelled`, 'Undo', () => { state.invites.splice(idx, 0, inv); fresh.add(inv.id); save(); render(); });
+  } else if (b.dataset.act === 'kyb') {
+    openKyb(inv);
+  }
+});
+
+// ---------- KYB stub ----------
+function openKyb(inv) {
+  const pal = inv.vendorId ? byId(inv.vendorId).pal : palFor(inv.name);
+  const ok = '<span class="verified">Verified</span>';
+  const loc = esc(inv.vendorId ? inv.type : 'Mahé');
+  const rows = [
+    ['Legal name', esc(inv.name)], ['Location', loc],
+    ['Registration no.', '8429117' + ok], ['Tax ID (TIN)', '213 004 587' + ok],
+    ['Registered address', `${loc}, Seychelles`], ['Contact', esc(inv.email || '—')],
+    ['Director', 'Jean-Paul Hoareau' + ok], ['Bank account', 'MCB Seychelles •••• 4821' + ok],
+  ];
+  document.getElementById('kyb-body').innerHTML = `
+    <div class="kyb-head">${avatar(pal, 'lg')}<div style="min-width:0"><h2 class="dlg-title" id="kyb-title">${esc(inv.name)}</h2>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:4px"><span class="pill s-shared">Shared</span><span class="dlg-desc">KYB/KYC shared on ${fmtDate(inv.date)}</span></div></div></div>
+    <dl class="kyb-grid">${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>`;
+  openDialog(document.getElementById('kyb-dlg'));
+  requestAnimationFrame(() => document.querySelector('#kyb-dlg .btn-primary').focus());
+}
+
+// ---------- Demo controls ----------
+document.getElementById('demo-load').onclick = () => {
+  const fuse = (id, status, d) => { const v = byId(id); return { vendorId: id, name: v.name, type: v.type, email: v.email, status, date: daysAgo(d) }; };
+  state.invites = [
+    { name: 'Ocean Breeze Café', type: 'New business', email: 'hello@oceanbreeze.sc', phone: '+248 2 514 778', status: 'sent', date: daysAgo(1) },
+    fuse('atlas', 'sent', 2),
+    fuse('beauvallon', 'progress', 4),
+    { name: 'Sunset Villas Praslin', type: 'New business', email: 'stay@sunsetvillas.sc', phone: '+248 2 733 104', status: 'progress', date: daysAgo(6) },
+    fuse('takamaka', 'declined', 9),
+    fuse('coral', 'shared', 10),
+    fuse('paragon', 'shared', 15),
+    fuse('emmanuel', 'expired', 20),
+  ].map((r, i) => ({ id: 'seed' + i, ...r }));
+  filter = 'all';
+  save(); render();
+  toast('Sample data loaded');
+};
+document.getElementById('demo-reset').onclick = () => {
+  state = blank(); filter = 'all';
+  document.getElementById('search').value = '';
+  save(); render();
+  toast('Demo reset');
+};
+
+// ---------- Sidebar nav (F360) ----------
+function moveNavIndicator(item) {
+  const wrapper = document.getElementById('nav-wrapper');
+  let top = 0, el = item;
+  while (el && el !== wrapper) { top += el.offsetTop; el = el.offsetParent; }
+  const ind = document.getElementById('nav-indicator');
+  ind.style.top = top + 'px';
+  ind.style.height = item.offsetHeight + 'px';
+}
+document.querySelectorAll('.nav-item').forEach(item => item.addEventListener('click', () => {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  item.classList.add('active');
+  moveNavIndicator(item);
+}));
+(function initNav() {
+  const active = document.querySelector('[data-nav="Credit"]');
+  active.classList.add('active');
+  if (active.offsetHeight > 0) moveNavIndicator(active); else requestAnimationFrame(initNav);
+})();
+
+// ---------- Narrow screen overlay (F360) ----------
+function checkNarrow() { document.getElementById('narrow-overlay').style.display = innerWidth < 1250 ? 'flex' : 'none'; }
+checkNarrow();
+addEventListener('resize', () => {
+  checkNarrow();
+  moveIndicator('status-indicator', document.querySelector('#status-tabs .active'));
+  moveNavIndicator(document.querySelector('.nav-item.active'));
+});
+
+render();
+</script>
+</body>
+</html>
