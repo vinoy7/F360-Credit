@@ -636,7 +636,8 @@
       <div class="page-tools">
         <div class="tab-group" id="rc-tabs" role="tablist" aria-label="Credit sections">
           <div class="tab-indicator" id="rc-indicator"></div>
-          <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="rc-table">KYB/KYC</button>
+          <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="rc-table" data-rctab="main">KYB/KYC</button>
+          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="rc-table" data-rctab="all" id="rc-tab-all" tabindex="-1">KYB/KYC 2</button>
           <span class="tab-btn inert" role="tab" aria-selected="false" aria-disabled="true">Orders</span>
           <span class="tab-btn inert" role="tab" aria-selected="false" aria-disabled="true">Catalog</span>
         </div>
@@ -1542,6 +1543,12 @@ const OTHER_REQUESTERS = [
   { id: 'mahefoods', name: 'Mahé Wholesale Foods', area: 'Providence' },
   { id: 'islandpharma', name: 'Island Pharma Supplies', area: 'Victoria' },
 ];
+// Suppliers the FusePay user already has in their system but who haven't requested anything (KYB/KYC 2 tab)
+const SYSTEM_ONLY = [
+  { id: 'praslinbev', name: 'Praslin Beverages Co.', area: 'Praslin' },
+  { id: 'iod', name: 'Indian Ocean Distributors', area: 'Anse Royale' },
+  { id: 'vichw', name: 'Victoria Hardware Traders', area: 'Victoria' },
+];
 const PERSONA = { tx: GALAXY.name, rx: RX_BIZ, fx: 'Atlas Digital Systems' };
 const AUTOFILL = {
   'b-name': RX_BIZ, 'b-reg': 'C8429117', 'b-tin': '213004587', 'b-addr': 'Shop 4, Victoria Waterfront, Victoria, Mahé',
@@ -1953,9 +1960,16 @@ document.getElementById('setup-form').addEventListener('submit', async e => {
 // Only vendors that requested access: pending requests on top, accepted (access granted) below.
 // Declined or revoked requests drop off the list until the vendor asks again.
 let recvFresh = null;
+let recvTab = 'main';
 function renderRecv() {
   const r = state.recv[state.mode];
+  // KYB/KYC 2 exists only in the FusePay user demo
+  document.getElementById('rc-tab-all').hidden = state.mode !== 'fx';
+  if (state.mode !== 'fx') recvTab = 'main';
+  document.querySelectorAll('#rc-tabs [data-rctab]').forEach(t => { const on = t.dataset.rctab === recvTab; t.classList.toggle('active', on); t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; });
   requestAnimationFrame(() => moveIndicator('rc-indicator', document.querySelector('#rc-tabs .active')));
+  document.getElementById('rc-head').classList.toggle('all', recvTab === 'all');
+  if (recvTab === 'all') return renderRecvAll(r);
   const reqDate = v => v === GALAXY ? (personaInvite(state.mode) || {}).date || today() : r.reqDate[v.id];
   const rows = allVendors()
     .map(v => ({ v, pending: r.req[v.id] === 'pending', since: r.req[v.id] === 'accepted' && r.shared[v.id] }))
@@ -1979,18 +1993,46 @@ function renderRecv() {
   }).join('') : `<div class="empty-row" role="row"><span role="cell">${q ? `No vendors match "${esc(q)}".` : "No requests yet. When a business that supplies you asks to see your KYB/KYC, it shows up here."}</span></div>`;
   recvFresh = null;
 }
+// KYB/KYC 2: every vendor in the receiver's system, with Grant / Revoke access
+function renderRecvAll(r) {
+  const q = document.getElementById('rc-search').value.trim().toLowerCase();
+  const reqDate = v => v === GALAXY ? (personaInvite(state.mode) || {}).date || today() : r.reqDate[v.id];
+  document.getElementById('rc-head').innerHTML = '<span role="columnheader">Date</span><span role="columnheader">Vendor</span><span role="columnheader">Status</span><span role="columnheader">Action</span>';
+  // Requests on top (like KYB/KYC), then access granted, and vendors not shared with always at the bottom
+  const list = allVendors().map(v => {
+    const pending = r.req[v.id] === 'pending', since = r.shared[v.id];
+    return { v, pending, since, rank: pending ? 0 : since ? 1 : 2 };
+  }).sort((a, b) => a.rank - b.rank).filter(x => !q || x.v.name.toLowerCase().includes(q));
+  document.getElementById('rc-rows').innerHTML = list.length ? list.map(({ v, pending, since }) => {
+    const [label, cls] = pending ? ['Requested', 's-sent'] : since ? ['Access granted', 's-shared'] : ['Not shared', 's-expired'];
+    const date = pending ? fmtDate(reqDate(v)) : since ? fmtDate(since) : '';
+    const act = pending
+      ? `<button class="btn-link" data-accept="${v.id}" aria-label="Accept request from ${esc(v.name)}">Accept</button><button class="btn-link btn-neutral" data-decline="${v.id}" aria-label="Decline request from ${esc(v.name)}">Decline</button>`
+      : since
+        ? `<button class="btn-link" style="color:#CC2828" data-revoke="${v.id}" aria-label="Revoke access for ${esc(v.name)}">Revoke access</button>`
+        : `<button class="btn-link" data-grant="${v.id}" aria-label="Grant access to ${esc(v.name)}">Grant access</button>`;
+    return `<div class="tr rc-cols all${recvFresh === v.id ? ' fresh' : ''}" role="row">
+      <span class="td-date" role="cell">${date}</span>
+      <div class="td-vendor" role="cell">${avatar(palFor(v.name))}<div style="min-width:0"><div class="v-name">${esc(v.name)}</div><div class="v-sub">${esc(v.area)}</div></div></div>
+      <span role="cell"><span class="pill ${cls}">${label}</span></span>
+      <div class="td-act" role="cell">${act}</div>
+    </div>`;
+  }).join('') : `<div class="empty-row" role="row"><span role="cell">No vendors match "${esc(q)}"</span></div>`;
+  recvFresh = null;
+}
 document.getElementById('rc-search').addEventListener('input', renderRecv);
+document.querySelectorAll('#rc-tabs [data-rctab]').forEach(t => t.addEventListener('click', () => { recvTab = t.dataset.rctab; renderRecv(); }));
 
 // Confirmation modal for every share / stop-sharing
 const shareDlg = document.getElementById('share-dlg');
 let pendingAction = null;
-function confirmShare(v, on, action) {
-  document.getElementById('share-title').textContent = on ? `Accept request from ${v.name}?` : `Revoke access for ${v.name}?`;
+function confirmShare(v, on, action, grant = false) {
+  document.getElementById('share-title').textContent = !on ? `Revoke access for ${v.name}?` : grant ? `Grant access to ${v.name}?` : `Accept request from ${v.name}?`;
   document.getElementById('share-desc').textContent = on
     ? "They'll see your verified business registration, tax ID, address, owners and directors, and bank account. You can revoke access any time."
     : "They'll lose access to your KYB/KYC right away. They'll need to send a new request to see it again.";
   const go = document.getElementById('share-go');
-  go.textContent = on ? 'Accept' : 'Revoke access';
+  go.textContent = !on ? 'Revoke access' : grant ? 'Grant access' : 'Accept';
   go.classList.toggle('danger', !on);
   pendingAction = action;
   openDialog(shareDlg);
@@ -2002,19 +2044,21 @@ document.getElementById('share-go').onclick = async e => {
   pendingAction();
   closeDialog(shareDlg);
 };
-const allVendors = () => [GALAXY, ...OTHER_REQUESTERS];
+const allVendors = () => [GALAXY, ...OTHER_REQUESTERS, ...SYSTEM_ONLY];
 function commitRecv(msg, undo) { syncAll(); save(); renderRecv(); toast(msg, undo && 'Undo', undo); }
 document.getElementById('rc-rows').addEventListener('click', e => {
   const r = state.recv[state.mode];
-  const b = e.target.closest('[data-accept], [data-decline], [data-revoke]');
+  const b = e.target.closest('[data-accept], [data-decline], [data-revoke], [data-grant]');
   if (!b) return;
-  const id = b.dataset.accept || b.dataset.decline || b.dataset.revoke;
+  const id = b.dataset.accept || b.dataset.decline || b.dataset.revoke || b.dataset.grant;
   const v = allVendors().find(x => x.id === id);
   if (b.dataset.decline) {
     r.req[id] = 'declined';
     commitRecv(`Request from ${v.name} declined`, () => { r.req[id] = 'pending'; recvFresh = id; commitRecv('Request restored'); });
   } else if (b.dataset.accept) {
     confirmShare(v, true, () => { r.req[id] = 'accepted'; r.shared[id] = today(); recvFresh = id; commitRecv(`Access granted to ${v.name}`); });
+  } else if (b.dataset.grant) {
+    confirmShare(v, true, () => { if (r.req[id]) r.req[id] = 'accepted'; r.shared[id] = today(); recvFresh = id; commitRecv(`Access granted to ${v.name}`); }, true);
   } else {
     confirmShare(v, false, () => { r.shared[id] = null; commitRecv(`Access revoked for ${v.name}`); });
   }
