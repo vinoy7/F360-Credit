@@ -65,26 +65,26 @@
 
     .icon-tile { width: 48px; height: 48px; border-radius: 12px; background: #F3F0FF; color: #623CEA; display: flex; align-items: center; justify-content: center; }
     .icon-tile.done { background: #E7F6EE; color: #0A7343; }
-    /* Empty state: one primary job (invite), policy as a quieter side panel, preview of what appears next */
-    .start { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(280px, 1fr); gap: 40px; align-items: start; padding: 32px 24px; }
-    .start-main { display: flex; flex-direction: column; gap: 24px; max-width: 640px; }
-    .start-h { font-size: 28px; line-height: 36px; font-weight: 500; letter-spacing: -0.56px; }
-    .start-p { font-size: 16px; line-height: 24px; color: #6B6C6E; max-width: 60ch; margin-top: 8px; }
-    .start-steps { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; counter-reset: s; }
-    .start-steps li { display: grid; grid-template-columns: 28px 1fr; gap: 12px; align-items: baseline; font-size: 16px; line-height: 24px; counter-increment: s; }
-    .start-steps li::before { content: counter(s); font-size: 14px; font-weight: 500; color: #623CEA; text-align: right; font-variant-numeric: tabular-nums; }
-    .start-steps span { color: #6B6C6E; }
-    .start-preview { margin-top: 8px; }
-    .start-preview .cap { font-size: 14px; line-height: 20px; color: #6B6C6E; margin-bottom: 8px; }
-    .start-preview .table { -webkit-mask-image: linear-gradient(#000 55%, transparent); mask-image: linear-gradient(#000 55%, transparent); pointer-events: none; }
-    .start-preview .tr { grid-template-columns: minmax(0,1fr) 140px; }
-    .policy-panel { border: 1px solid #E3E3E5; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 16px; background: #FCFCFD; }
-    .policy-panel h2 { font-size: 18px; line-height: 28px; font-weight: 500; letter-spacing: -0.36px; display: flex; align-items: center; gap: 8px; }
-    .policy-panel p { font-size: 14px; line-height: 20px; color: #6B6C6E; }
-    .policy-panel ul { list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 14px; line-height: 20px; }
-    .policy-panel li { display: flex; gap: 8px; }
-    .policy-panel li .i { color: #623CEA; margin-top: 2px; }
-    .policy-panel .btn-primary { align-self: flex-start; }
+    /* Intro cards */
+    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .intro-card { border: 1px solid #E3E3E5; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 24px; }
+    .intro-top { display: flex; flex-direction: column; gap: 16px; flex: 1; }
+    .card-h { font-size: 20px; font-weight: 500; line-height: 28px; letter-spacing: -0.4px; display: flex; align-items: center; gap: 12px; }
+    .card-p { font-size: 16px; line-height: 24px; color: #6B6C6E; }
+    .ticks { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .ticks li { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; line-height: 20px; }
+    .ticks svg { flex-shrink: 0; margin-top: 2px; color: #623CEA; }
+    .intro-card .actions { display: flex; gap: 12px; align-items: center; }
+
+    /* How it works */
+    .how { display: flex; flex-direction: column; gap: 16px; }
+    .how-h { font-size: 20px; line-height: 28px; letter-spacing: -0.4px; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; list-style: none; }
+    .steps li { display: flex; flex-direction: column; gap: 8px; position: relative; }
+    .steps li:not(:last-child)::after { content: ''; position: absolute; top: 16px; left: 44px; right: -12px; height: 1px; background: #E3E3E5; }
+    .step-n { width: 32px; height: 32px; border-radius: 100px; background: #F4F4F5; font-size: 14px; font-weight: 500; display: flex; align-items: center; justify-content: center; }
+    .step-t { font-size: 16px; font-weight: 500; line-height: 24px; }
+    .step-d { font-size: 14px; line-height: 20px; color: #6B6C6E; }
 
     /* Pills */
     .pill { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: 100px; font-size: 12px; font-weight: 500; line-height: 16px; white-space: nowrap; }
@@ -587,39 +587,52 @@
       <div class="page-body">
 
       <!-- First run -->
-      <section class="view" id="first-run" hidden>
-        <div class="start">
-          <div class="start-main">
-            <div>
-              <h2 class="start-h">Invite the businesses you supply</h2>
-              <p class="start-p">They verify their business and owners with FusePay, then choose whether to share those details with you. Once they share, you can offer them credit.</p>
-            </div>
-            <ol class="start-steps">
-              <li><p>Invite vendors <span>from your list, or any business by email and SMS</span></p></li>
-              <li><p>They complete KYB/KYC <span>and FusePay verifies it</span></p></li>
-              <li><p>You review their details <span>and offer credit within your policy</span></p></li>
-            </ol>
-            <button class="btn-primary" data-invite style="align-self:flex-start">Invite vendors</button>
-            <div class="start-preview" aria-hidden="true">
-              <p class="cap">Your invites will appear here</p>
-              <div class="table">
-                <div class="tr th"><span>Vendor</span><span>Status</span></div>
-                <div class="tr"><div class="td-vendor"><span class="avatar" style="background:#E3F1F2;color:#6FA9AE"><svg viewBox="0 0 24 24"><use href="#i-avatar"/></svg></span><div><div class="v-name">Ocean Breeze Café</div><div class="v-sub">Victoria</div></div></div><span><span class="pill s-sent">Invite sent</span></span></div>
-                <div class="tr"><div class="td-vendor"><span class="avatar" style="background:#FEF6CC;color:#C9A53A"><svg viewBox="0 0 24 24"><use href="#i-avatar"/></svg></span><div><div class="v-name">Beau Vallon Bistro</div><div class="v-sub">Beau Vallon</div></div></div><span><span class="pill s-progress">In progress</span></span></div>
-                <div class="tr"><div class="td-vendor"><span class="avatar" style="background:#E7F4EA;color:#6FAF7F"><svg viewBox="0 0 24 24"><use href="#i-avatar"/></svg></span><div><div class="v-name">Coral Reef Resort</div><div class="v-sub">Praslin</div></div></div><span><span class="pill s-shared">Shared</span></span></div>
+      <section class="view" id="first-run" hidden style="padding:16px">
+        <div class="cards">
+          <article class="intro-card" id="policy-card">
+            <div class="intro-top">
+              <div class="icon-tile" id="policy-tile">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.75 4.75 5.5v5.6c0 4.5 3 8.4 7.25 10.15 4.25-1.75 7.25-5.65 7.25-10.15V5.5L12 2.75Z"/><path d="m9 12 2 2 4-4"/></svg>
               </div>
+              <h2 class="card-h">Set up your credit policy <span class="pill s-shared" id="policy-pill" hidden>Active</span></h2>
+              <p class="card-p" id="policy-text">Your policy is the rulebook for credit. Everyone in your company works within it, whether they add a vendor, create an order or record a payment.</p>
+              <ul class="ticks">
+                <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>Credit limits for each vendor</li>
+                <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>Payment terms and grace periods</li>
+                <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>Who can approve what, at every user level</li>
+              </ul>
             </div>
-          </div>
-          <aside class="policy-panel" id="policy-card" aria-labelledby="policy-h">
-            <h2 id="policy-h">Set up your credit policy <span class="pill s-shared" id="policy-pill" hidden>Active</span></h2>
-            <p id="policy-text">Your policy is the rulebook for credit. Everyone in your company works within it, whether they add a vendor, create an order or record a payment.</p>
-            <ul>
-              <li><svg class="i i16"><use href="#i-check"/></svg>Credit limits for each vendor</li>
-              <li><svg class="i i16"><use href="#i-check"/></svg>Payment terms and grace periods</li>
-              <li><svg class="i i16"><use href="#i-check"/></svg>Who can approve what, at every user level</li>
-            </ul>
-            <button class="btn-primary" data-create-policy>Create policy</button>
-          </aside>
+            <div class="actions">
+              <button class="btn-primary" data-create-policy>Create policy</button>
+            </div>
+          </article>
+
+          <article class="intro-card">
+            <div class="intro-top">
+              <div class="icon-tile">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9Z"/><path d="m3.5 7 7.4 5.2a2 2 0 0 0 2.2 0L20.5 7"/></svg>
+              </div>
+              <h2 class="card-h">Invite vendors for KYB/KYC</h2>
+              <p class="card-p">Ask the businesses you supply to share their verified details with you. Invite vendors already on Fuse360, or send an invite to any business by email and SMS.</p>
+              <ul class="ticks">
+                <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>Business registration and tax details (KYB)</li>
+                <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>Owner and director identity checks (KYC)</li>
+                <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>Shared with you only after the vendor agrees</li>
+              </ul>
+            </div>
+            <div class="actions">
+              <button class="btn-primary" data-invite>Invite vendors</button>
+            </div>
+          </article>
+        </div>
+
+        <div class="how">
+          <h3 class="how-h">How it works</h3>
+          <ol class="steps">
+            <li><span class="step-n">1</span><span class="step-t">Invite your vendors</span><span class="step-d">Pick vendors from your list, or add a business that's new to Fuse360.</span></li>
+            <li><span class="step-n">2</span><span class="step-t">They complete KYB/KYC</span><span class="step-d">Vendors verify their business and identity on Fuse360 and agree to share.</span></li>
+            <li><span class="step-n">3</span><span class="step-t">Review and offer credit</span><span class="step-d">See their verified details here and offer credit within your policy.</span></li>
+          </ol>
         </div>
       </section>
 
@@ -1025,6 +1038,7 @@ function renderTx() {
   document.getElementById('head-policy').hidden = !has; // empty state uses the card's solid button instead
 
   // policy card
+  document.getElementById('policy-tile').classList.toggle('done', state.policy);
   document.getElementById('policy-pill').hidden = !state.policy;
   document.getElementById('policy-text').textContent = state.policy
     ? 'Your policy is live. Everyone in your company now works within it, whether they add a vendor, create an order or record a payment.'
