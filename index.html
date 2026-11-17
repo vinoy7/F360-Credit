@@ -110,7 +110,9 @@
     .search input { width: 100%; height: 40px; padding: 0 12px 0 36px; border: 1px solid #D4D4D6; border-radius: 8px; font-size: 14px; outline: none; }
     .search input:focus { border-color: #623CEA; box-shadow: 0 0 0 3px rgba(98,60,234,0.15); }
     .table { border: 1px solid #E3E3E5; border-radius: 12px; overflow: hidden; }
-    .tr { display: grid; grid-template-columns: minmax(0,1fr) 140px 140px 200px; gap: 16px; align-items: center; padding: 12px 16px; border-bottom: 1px solid #EDEDED; }
+    .acct { display: inline-flex; align-items: center; gap: 4px; font-size: 14px; line-height: 20px; color: #623CEA; font-weight: 500; }
+    .acct-email { display: block; font-size: 14px; line-height: 20px; color: #6B6C6E; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .tr { display: grid; grid-template-columns: minmax(0,1fr) 200px 120px 140px 160px; gap: 16px; align-items: center; padding: 12px 16px; border-bottom: 1px solid #EDEDED; }
     .tr:last-child { border-bottom: none; }
     .th { background: #F9FAFB; padding-top: 8px; padding-bottom: 8px; font-size: 12px; font-weight: 500; line-height: 16px; color: #8C8D8F; }
     .th :last-child, .td-act { text-align: right; justify-content: flex-end; }
@@ -131,7 +133,7 @@
 
 
     /* ---------- Dialog ---------- */
-    .overlay { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 24px; background: rgba(26,26,26,0.3); backdrop-filter: blur(12.5px); -webkit-backdrop-filter: blur(12.5px); opacity: 0; transition: opacity 200ms ease; }
+    .overlay { position: fixed; inset: 0; z-index: 1600; display: flex; align-items: center; justify-content: center; padding: 24px; background: rgba(26,26,26,0.3); backdrop-filter: blur(12.5px); -webkit-backdrop-filter: blur(12.5px); opacity: 0; transition: opacity 200ms ease; }
     .overlay.open { opacity: 1; }
     .dialog { position: relative; width: 560px; max-width: 100%; background: #fff; border-radius: 12px; box-shadow: 0 16px 48px rgba(0,0,0,0.12); transform: scale(0.96) translateY(8px); transition: transform 250ms cubic-bezier(0.23,1,0.32,1); }
     .overlay.open .dialog { transform: none; }
@@ -195,7 +197,15 @@
 
     /* KYB stub */
     .kyb-head { display: flex; align-items: center; gap: 16px; }
-    .kyb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; }
+    .kyb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; margin: 0; }
+    .kyb-sec { display: flex; flex-direction: column; gap: 16px; padding-top: 24px; border-top: 1px solid #EDEDED; }
+    .kyb-sec h3 { font-size: 14px; line-height: 20px; font-weight: 500; color: #6B6C6E; }
+    .kyb-sec .full { grid-column: 1 / -1; }
+    /* Right-side drawer variant of .overlay */
+    .overlay.drawer { justify-content: flex-end; align-items: stretch; padding: 0; }
+    .overlay.drawer .dialog { width: 480px; height: 100%; border-radius: 16px 0 0 16px; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 300ms cubic-bezier(0.32,0.72,0,1); }
+    .overlay.drawer.open .dialog { transform: none; }
+    .overlay.drawer .dlg-body { flex: 1; overflow-y: auto; gap: 24px; }
     .kyb-grid dt { font-size: 12px; line-height: 16px; color: #8C8D8F; }
     .kyb-grid dd { margin: 4px 0 0; font-size: 14px; line-height: 20px; display: flex; gap: 8px; align-items: center; }
     .verified { color: #0E8F53; font-size: 12px; font-weight: 500; }
@@ -605,7 +615,7 @@
         </div>
 
         <div class="table" role="table" aria-label="Vendor KYB/KYC invites">
-          <div class="tr th" role="row"><span role="columnheader">Vendor</span><span role="columnheader">Invited</span><span role="columnheader">Status</span><span role="columnheader">Action</span></div>
+          <div class="tr th" role="row"><span role="columnheader">Vendor</span><span role="columnheader">Fuse360 account</span><span role="columnheader">Invited</span><span role="columnheader">Status</span><span role="columnheader">Action</span></div>
           <div id="rows" role="rowgroup"></div>
         </div>
       </section>
@@ -720,7 +730,7 @@
 </div>
 
 <!-- KYB stub dialog -->
-<div class="overlay" id="kyb-dlg" hidden>
+<div class="overlay drawer" id="kyb-dlg" hidden>
   <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="kyb-title">
     <button class="dlg-close" data-close aria-label="Close"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M6 18 18 6M6 6l12 12"/></svg></button>
     <div class="dlg-body" id="kyb-body"></div>
@@ -1048,13 +1058,17 @@ function renderTracker() {
   document.getElementById('rows').innerHTML = list.length ? list.map(i => {
     const [label, cls] = STATUS[i.status];
     const pal = i.vendorId ? byId(i.vendorId).pal : palFor(i.name);
-    const sub = i.vendorId ? `${i.type} · On Fuse360` : `New business · ${esc(i.email)}`;
+    const sub = esc(i.vendorId ? i.type : i.area || (i.email === RX_EMAIL ? 'Victoria' : ''));
+    const acct = i.vendorId
+      ? '<span class="acct"><svg class="i i16"><use href="#i-check"/></svg>Existing user</span>'
+      : `<span class="acct-email" title="Invite sent to ${esc(i.email)}">${esc(i.email)}</span>`;
     const act = i.status === 'shared' ? `<button class="btn-link" data-act="kyb" data-id="${i.id}">View KYB</button>`
       : i.status === 'sent' ? `<button class="btn-link" data-act="resend" data-id="${i.id}">Resend</button><button class="btn-link" data-act="cancel" data-id="${i.id}" style="color:#CC2828">Cancel</button>`
       : i.status === 'progress' || i.status === 'removed' ? '<span class="muted">—</span>'
       : `<button class="btn-link" data-act="resend" data-id="${i.id}">Resend</button>`;
     return `<div class="tr${fresh.has(i.id) ? ' fresh' : ''}" role="row">
-      <div class="td-vendor" role="cell">${avatar(pal)}<div style="min-width:0"><div class="v-name" title="${esc(i.name)}">${esc(i.name)}</div><div class="v-sub">${sub}</div></div></div>
+      <div class="td-vendor" role="cell">${avatar(pal)}<div style="min-width:0"><div class="v-name" title="${esc(i.name)}">${esc(i.name)}</div>${sub ? `<div class="v-sub">${sub}</div>` : ''}</div></div>
+      <span role="cell" style="min-width:0">${acct}</span>
       <span class="td-date" role="cell">${fmtDate(i.date)}</span>
       <span role="cell"><span class="pill ${cls}">${label}</span></span>
       <div class="td-act" role="cell">${act}</div>
@@ -1112,7 +1126,7 @@ function openDialog(el) {
 function closeDialog(el) {
   el.classList.remove('open');
   closeList();
-  setTimeout(() => { el.hidden = true; lastFocus && lastFocus.focus(); }, reduceMotion ? 0 : 200);
+  setTimeout(() => { el.hidden = true; lastFocus && lastFocus.focus(); }, reduceMotion ? 0 : 300);
 }
 document.querySelectorAll('.overlay').forEach(o => {
   o.addEventListener('click', e => { if (e.target === o || e.target.closest('[data-close]')) closeDialog(o); });
@@ -1381,18 +1395,21 @@ document.getElementById('rows').addEventListener('click', e => {
 function openKyb(inv) {
   const pal = inv.vendorId ? byId(inv.vendorId).pal : palFor(inv.name);
   const ok = '<span class="verified">Verified</span>';
-  const loc = esc(inv.vendorId ? inv.type : 'Mahé');
+  const loc = esc(inv.vendorId ? inv.type : inv.area || (inv.email === RX_EMAIL ? 'Victoria' : 'Mahé'));
   const k = inv.email === RX_EMAIL ? state.rx.kyb : null; // receiver's own KYB answers, when they submitted them
-  const rows = [
-    ['Legal name', esc(k ? k.name : inv.name)], ['Location', loc],
-    ['Registration no.', esc(k ? k.reg : '8429117') + ok], ['Tax ID (TIN)', esc(k ? k.tin : '213 004 587') + ok],
-    ['Registered address', k ? esc(k.addr) : `${loc}, Seychelles`], ['Contact', esc(inv.email || '—')],
-    ['Director', esc(k ? k.owner : 'Jean-Paul Hoareau') + ok], ['Bank account', 'MCB Seychelles •••• 4821' + ok],
+  const sections = [
+    ['Business (KYB)', [
+      ['Legal name', esc(k ? k.name : inv.name)], ['Location', loc],
+      ['Registration no.', esc(k ? k.reg : '8429117') + ok], ['Tax ID (TIN)', esc(k ? k.tin : '213 004 587') + ok],
+      ['Registered address', k ? esc(k.addr) : `${loc}, Seychelles`, 'full'], ['Contact', esc(inv.email || '—'), 'full'],
+    ]],
+    ['Owners and directors (KYC)', [['Director', esc(k ? k.owner : 'Jean-Paul Hoareau') + ok, 'full']]],
+    ['Bank account', [['Account', 'MCB Seychelles •••• 4821' + ok, 'full']]],
   ];
   document.getElementById('kyb-body').innerHTML = `
     <div class="kyb-head">${avatar(pal, 'lg')}<div style="min-width:0"><h2 class="dlg-title" id="kyb-title">${esc(inv.name)}</h2>
       <div style="display:flex;gap:8px;align-items:center;margin-top:4px"><span class="pill s-shared">Shared</span><span class="dlg-desc">KYB/KYC shared on ${fmtDate(inv.date)}</span></div></div></div>
-    <dl class="kyb-grid">${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>`;
+    ${sections.map(([h, rows]) => `<section class="kyb-sec"><h3>${h}</h3><dl class="kyb-grid">${rows.map(([k, v, c]) => `<div class="${c || ''}"><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl></section>`).join('')}`;
   openDialog(document.getElementById('kyb-dlg'));
   requestAnimationFrame(() => document.querySelector('#kyb-dlg .btn-primary').focus());
 }
@@ -1401,10 +1418,10 @@ function openKyb(inv) {
 document.getElementById('demo-load').onclick = () => {
   const fuse = (id, status, d) => { const v = byId(id); return { vendorId: id, name: v.name, type: v.type, email: v.email, status, date: daysAgo(d) }; };
   state.invites = [
-    { name: 'Ocean Breeze Café', type: 'New business', email: RX_EMAIL, phone: '+248 2 514 778', status: 'sent', date: daysAgo(1) },
+    { name: 'Ocean Breeze Café', type: 'New business', area: 'Victoria', email: RX_EMAIL, phone: '+248 2 514 778', status: 'sent', date: daysAgo(1) },
     fuse('atlas', 'sent', 2),
     fuse('beauvallon', 'progress', 4),
-    { name: 'Sunset Villas Praslin', type: 'New business', email: 'stay@sunsetvillas.sc', phone: '+248 2 733 104', status: 'progress', date: daysAgo(6) },
+    { name: 'Sunset Villas Praslin', type: 'New business', area: 'Praslin', email: 'stay@sunsetvillas.sc', phone: '+248 2 733 104', status: 'progress', date: daysAgo(6) },
     fuse('takamaka', 'declined', 9),
     fuse('coral', 'shared', 10),
     fuse('paragon', 'shared', 15),
@@ -1478,7 +1495,7 @@ const personaInvite = p => state.invites.find(i => p === 'rx' ? i.email === RX_E
 function ensureInvite(p) {
   if (personaInvite(p)) return;
   const base = p === 'rx'
-    ? { name: RX_BIZ, type: 'New business', email: RX_EMAIL, phone: '+248 2 514 778' }
+    ? { name: RX_BIZ, type: 'New business', area: 'Victoria', email: RX_EMAIL, phone: '+248 2 514 778' }
     : { vendorId: 'atlas', name: byId('atlas').name, type: byId('atlas').type, email: byId('atlas').email };
   state.invites.unshift({ id: 'p-' + p, date: today(), status: 'sent', ...base });
 }
