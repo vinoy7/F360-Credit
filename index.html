@@ -111,7 +111,7 @@
     .page-body > .table { flex: 1 0 auto; }
     .search { position: relative; width: 360px; min-width: 200px; flex-shrink: 1; }
     .search svg { position: absolute; left: 12px; top: 12px; color: #6B6C6E; pointer-events: none; }
-    .search input { width: 100%; height: 40px; padding: 0 12px 0 36px; border: 1px solid #8E8F91; border-radius: 8px; font-size: 14px; outline: none; }
+    .search input { width: 100%; height: 40px; padding: 0 12px 0 36px; border: 1px solid #D4D4D6; border-radius: 8px; font-size: 14px; outline: none; }
     .search input:focus { border-color: #623CEA; box-shadow: 0 0 0 3px rgba(98,60,234,0.35); }
     .table { border: 1px solid #EDEDED; border-radius: 8px; overflow: hidden; }
     .acct { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; line-height: 20px; color: #262626; }
@@ -159,17 +159,17 @@
     .label { font-size: 14px; font-weight: 500; line-height: 20px; letter-spacing: -0.28px; color: #262626; transition: color 0.15s; }
     .field.filled .label { color: #6B6C6E; }
     .label .req { color: #CC2828; }
-    .input { height: 48px; width: 100%; padding: 0 16px; border: 1px solid #8E8F91; border-radius: 8px; font-size: 16px; letter-spacing: -0.32px; background: #fff; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
+    .input { height: 48px; width: 100%; padding: 0 16px; border: 1px solid #D4D4D6; border-radius: 8px; font-size: 16px; letter-spacing: -0.32px; background: #fff; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
     .input::placeholder { color: #757678; }
     .input:focus { border-color: #623CEA; box-shadow: 0 0 0 3px rgba(98,60,234,0.35); }
     .invalid .input, .invalid .phone { border-color: #CC2828; }
     .invalid .input:focus { box-shadow: 0 0 0 3px rgba(204,40,40,0.12); }
     .err { font-size: 12px; line-height: 16px; color: #CC2828; display: none; }
     .invalid .err { display: block; }
-    .phone { display: flex; border: 1px solid #8E8F91; border-radius: 8px; transition: border-color 0.15s, box-shadow 0.15s; }
+    .phone { display: flex; border: 1px solid #D4D4D6; border-radius: 8px; transition: border-color 0.15s, box-shadow 0.15s; }
     .phone:focus-within { border-color: #623CEA; box-shadow: 0 0 0 3px rgba(98,60,234,0.35); }
     .invalid .phone:focus-within { border-color: #CC2828; box-shadow: 0 0 0 3px rgba(204,40,40,0.12); }
-    .phone select { height: 46px; padding: 0 8px 0 16px; border: none; border-right: 1px solid #E3E3E5; border-radius: 8px 0 0 8px; background: #F9FAFB; font-size: 16px; outline: none; cursor: pointer; }
+    .phone-cc { display: flex; align-items: center; flex-shrink: 0; padding: 0 12px 0 16px; border-right: 1px solid #E3E3E5; border-radius: 8px 0 0 8px; background: #F9FAFB; font-size: 16px; color: #262626; }
     .phone .input { border: none; box-shadow: none !important; height: 46px; }
     .hint { display: flex; gap: 8px; padding: 12px; border-radius: 8px; background: #F3F0FF; font-size: 14px; line-height: 20px; letter-spacing: -0.28px; animation: fade-up 200ms ease; }
     .hint svg { flex-shrink: 0; color: #623CEA; margin-top: 2px; }
@@ -334,7 +334,29 @@
     .meta p { display: flex; gap: 8px; align-items: center; }
     .meta .i { color: #6B6C6E; }
     .two { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .dd { position: relative; }
+    .dd-native { position: absolute; inset: 0; opacity: 0; pointer-events: none; }
+    .dd-btn { display: flex; align-items: center; justify-content: space-between; gap: 12px; text-align: left; cursor: pointer; color: #262626; }
+    .dd-btn.empty { color: #757678; }
+    .dd-btn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .dd-btn svg { flex-shrink: 0; color: #6B6C6E; transition: transform 200ms cubic-bezier(0.23,1,0.32,1); }
+    .dd.open .dd-btn { border-color: #623CEA; box-shadow: 0 0 0 3px rgba(98,60,234,0.35); }
+    .dd.open .dd-btn svg { transform: rotate(180deg); }
+    .dd-list { position: absolute; left: 0; right: 0; top: calc(100% + 8px); z-index: 20; list-style: none; margin: 0; padding: 8px; max-height: 256px; overscroll-behavior: contain; overflow-y: auto; background: #fff; border: 1px solid #EDEDED; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); opacity: 0; transform: translateY(-4px); pointer-events: none; transition: opacity 150ms ease, transform 150ms cubic-bezier(0.23,1,0.32,1); }
+    .dd.open .dd-list { opacity: 1; transform: none; pointer-events: auto; }
+    .dd.dd-up .dd-list { top: auto; bottom: calc(100% + 8px); transform: translateY(4px); }
+    .dd.dd-up.open .dd-list { transform: none; }
+    .dd-opt { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-radius: 8px; font-size: 16px; line-height: 24px; letter-spacing: -0.32px; color: #262626; cursor: pointer; }
+    .dd-opt.active { background: #F4F4F5; }
+    .dd-opt svg { flex-shrink: 0; color: #623CEA; visibility: hidden; }
+    .dd-opt[aria-selected="true"] svg { visibility: visible; }
+    .invalid .dd-btn { border-color: #CC2828; }
     select.input { appearance: none; padding-right: 48px; cursor: pointer; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' stroke='%23939596' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 7.5 5 5 5-5'/%3E%3C/svg%3E") no-repeat right 16px center; }
+    .field-note { display: flex; gap: 8px; align-items: flex-start; margin-top: 4px; padding: 8px 12px; border: 1px solid #E3E3E5; border-radius: 8px; font-size: 14px; line-height: 20px; color: #6B6C6E; }
+    .field-note .i { flex-shrink: 0; margin-top: 2px; color: #6B6C6E; }
+    .input-ic { position: relative; }
+    .input-ic > .i { position: absolute; left: 16px; top: 16px; color: #6B6C6E; pointer-events: none; }
+    .input-ic .input { padding-left: 44px; }
     .hint-text { font-size: 12px; line-height: 16px; color: #6B6C6E; }
     .invalid .hint-text { display: none; }
     .chk { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; line-height: 20px; cursor: pointer; }
@@ -421,6 +443,7 @@
   <symbol id="i-send" viewBox="0 0 24 24"><path d="M10 14l11 -11"/><path d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5"/></symbol>
   <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M5 12l6 6"/><path d="M5 12l6 -6"/></symbol>
   <symbol id="i-avatar" viewBox="0 0 24 24"><path d="M7 6h3M7 10h3M7 14h3M7 18h3M17 14h1M17 18h1M12.4 22c.56 0 .84 0 1.054-.109a1 1 0 0 0 .437-.437C14 21.24 14 20.96 14 20.4V10m-1.6 12h7c.56 0 .84 0 1.054-.109a1 1 0 0 0 .437-.437C21 21.24 21 20.96 21 20.4v-7.2c0-1.12 0-1.68-.218-2.108a2 2 0 0 0-.874-.874C19.48 10 18.92 10 17.8 10H14m-1.6 12H4.6c-.56 0-.84 0-1.054-.109a1 1 0 0 1-.437-.437C3 21.24 3 20.96 3 20.4V5.2c0-1.12 0-1.68.218-2.108a2 2 0 0 1 .874-.874C4.52 2 5.08 2 6.2 2h4.6c1.12 0 1.68 0 2.108.218a2 2 0 0 1 .874.874C14 3.52 14 4.08 14 5.2V10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"/><path d="M12 11v5"/><path d="M12 8h.01"/></symbol>
   <symbol id="i-circle" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/></symbol>
   <symbol id="i-square" viewBox="0 0 24 24"><path d="M4 6a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"/></symbol>
 </svg>
@@ -678,16 +701,7 @@
         <div class="field" data-field="phone">
           <label class="label" for="nb-phone">Mobile Number <span class="req">*</span></label>
           <div class="phone">
-            <select id="nb-code" aria-label="Country code">
-              <option value="+248" selected>+248</option>
-              <option value="+230">+230</option>
-              <option value="+261">+261</option>
-              <option value="+254">+254</option>
-              <option value="+27">+27</option>
-              <option value="+971">+971</option>
-              <option value="+91">+91</option>
-              <option value="+44">+44</option>
-            </select>
+            <span class="phone-cc">+248</span>
             <input class="input" id="nb-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="2 512 345" aria-describedby="err-phone" />
           </div>
           <span class="err" id="err-phone"></span>
@@ -789,13 +803,20 @@
   <section class="rx-screen rx-s" data-s="online">
     <div data-rx-hdr></div>
     <form class="rx-col" data-next="online-owner" novalidate>
-      <div class="rx-head"><p class="kicker">Step 3 of 3 · Part 1 of 4</p><h1 class="rx-h1">Business details</h1><p class="rx-sub">Your progress saves automatically.</p></div>
+      <div class="rx-head"><p class="kicker">Step 3 of 3 · Part 1 of 4</p><h1 class="rx-h1">Business information</h1><p class="rx-sub">Provide your company details for KYB verification. Your progress saves automatically.</p></div>
       <button type="button" class="demo-link" data-autofill>Demo: autofill</button>
       <div class="rx-card">
-        <div class="field"><label class="label" for="b-name">Registered Business Name <span class="req" aria-hidden="true">*</span></label><input class="input" id="b-name" required autocomplete="organization" data-err="Enter your registered business name" aria-describedby="b-name-err" /><span class="err" id="b-name-err"></span></div>
-        <div class="field"><label class="label" for="b-reg">Business Registration Number <span class="req" aria-hidden="true">*</span></label><input class="input" id="b-reg" required data-err="Enter your business registration number" aria-describedby="b-reg-h b-reg-err" /><span class="hint-text" id="b-reg-h">As shown on your registration certificate</span><span class="err" id="b-reg-err"></span></div>
-        <div class="field"><label class="label" for="b-tin">Tax Identification Number (TIN) <span class="req" aria-hidden="true">*</span></label><input class="input" id="b-tin" required data-err="Enter your tax identification number" aria-describedby="b-tin-err" /><span class="err" id="b-tin-err"></span></div>
-        <div class="field"><label class="label" for="b-addr">Registered Address <span class="req" aria-hidden="true">*</span></label><input class="input" id="b-addr" required autocomplete="street-address" data-err="Enter your registered address" aria-describedby="b-addr-err" /><span class="err" id="b-addr-err"></span></div>
+        <div class="field"><label class="label" for="b-name">Business/Company Name <span class="req" aria-hidden="true">*</span></label><input class="input" id="b-name" required placeholder="Enter business or company name" data-err="Enter the business or company name" aria-describedby="b-name-err" autocomplete="organization" /><span class="err" id="b-name-err"></span></div>
+        <div class="field"><label class="label" for="b-reg">Business Registration Number <span class="req" aria-hidden="true">*</span></label><input class="input" id="b-reg" required placeholder="Enter registration number" data-err="Enter the business registration number" aria-describedby="b-reg-err b-reg-hint" /><span class="hint-text" id="b-reg-hint">As shown on your registration certificate</span><span class="err" id="b-reg-err"></span></div>
+        <div class="field"><label class="label" for="b-tin">Tax Identification Number (9 digits) <span class="req" aria-hidden="true">*</span></label><input class="input" id="b-tin" required placeholder="Enter 9-digit TIN" data-err="Enter the 9-digit TIN" aria-describedby="b-tin-err" inputmode="numeric" maxlength="9" data-pattern="^\d{9}$" /><span class="err" id="b-tin-err"></span></div>
+        <div class="field"><label class="label" for="b-addr">Business Address <span class="req" aria-hidden="true">*</span></label><input class="input" id="b-addr" required placeholder="Enter full business address" data-err="Enter the full business address" aria-describedby="b-addr-err" autocomplete="street-address" /><span class="err" id="b-addr-err"></span></div>
+        <div class="field"><label class="label" for="b-phone">Mobile Number <span class="req" aria-hidden="true">*</span></label><div class="phone"><span class="phone-cc">+248</span><input class="input" id="b-phone" type="tel" inputmode="tel" required autocomplete="tel-national" placeholder="1234567" data-err="Enter a 7-digit mobile number" data-pattern="^\d{7}$" aria-describedby="b-phone-err b-phone-note" /></div><span class="err" id="b-phone-err"></span><p class="field-note" id="b-phone-note"><svg class="i i16"><use href="#i-info"/></svg><span>This number will be available to businesses on FusePay so they can contact you.</span></p></div>
+        <div class="field"><label class="label" for="b-email">Email <span class="req" aria-hidden="true">*</span></label><div class="input-ic"><svg class="i i16"><use href="#i-mail"/></svg><input class="input" id="b-email" type="email" required autocomplete="email" placeholder="Enter valid business email" data-err="Enter a valid email, like name@business.com" data-pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$" aria-describedby="b-email-err b-email-note" /></div><span class="err" id="b-email-err"></span><p class="field-note" id="b-email-note"><svg class="i i16"><use href="#i-info"/></svg><span>This email will be available to businesses on FusePay so they can contact you.</span></p></div>
+        <div class="field"><label class="label" for="b-cat">Business Category <span class="req" aria-hidden="true">*</span></label><select class="input" id="b-cat" required data-err="Select a business category" aria-describedby="b-cat-err"><option value="">Select business category</option><option>Wholesaler</option><option>Retailer</option><option>Bill Partner</option><option>Hospitality</option><option>Restaurants &amp; Catering</option><option>Other</option></select><span class="err" id="b-cat-err"></span></div>
+        <div class="field"><label class="label" for="b-send">Expected Monthly Send Volume <span class="req" aria-hidden="true">*</span></label><select class="input" id="b-send" required data-err="Select an expected send volume" aria-describedby="b-send-err"><option value="">Select send volume</option><option>Less than SR 1M</option><option>SR 1M – 10M</option><option>More than SR 10M</option></select><span class="err" id="b-send-err"></span></div>
+        <div class="field"><label class="label" for="b-recv">Expected Monthly Receive Volume <span class="req" aria-hidden="true">*</span></label><select class="input" id="b-recv" required data-err="Select an expected receive volume" aria-describedby="b-recv-err"><option value="">Select receive volume</option><option>Less than SR 1M</option><option>SR 1M – 10M</option><option>More than SR 10M</option></select><span class="err" id="b-recv-err"></span></div>
+        <div class="field"><label class="label" for="b-bank">Settlement Bank <span class="req" aria-hidden="true">*</span></label><select class="input" id="b-bank" required data-err="Select the settlement bank" aria-describedby="b-bank-err"><option value="">Select bank</option><option>ABSA</option><option>Al Rajhi Bank</option><option>Al Salam Bank</option><option>Bank of Baroda</option><option>Mauritius Commercial Bank</option><option>Nouvobanq</option><option>Seychelles Commercial Bank</option><option>Seychelles Credit Union</option></select><span class="err" id="b-bank-err"></span></div>
+        <div class="field"><label class="label" for="b-acct">Settlement Account Number <span class="req" aria-hidden="true">*</span></label><input class="input" id="b-acct" required placeholder="Enter bank account number" data-err="Enter a valid account number (6 to 16 digits)" aria-describedby="b-acct-err b-acct-note" inputmode="numeric" data-pattern="^\d{6,16}$" /><span class="err" id="b-acct-err"></span><p class="field-note" id="b-acct-note"><svg class="i i16"><use href="#i-info"/></svg><span>This must be a business bank account. FusePay will use it to settle any amount you receive from other businesses using FusePay.</span></p></div>
       </div>
       <div class="between"><button type="button" class="btn-link" data-rx="download">Switch to paper forms</button><button class="btn-primary">Save and continue</button></div>
     </form>
@@ -805,19 +826,18 @@
   <section class="rx-screen rx-s" data-s="online-owner">
     <div data-rx-hdr></div>
     <form class="rx-col" data-next="online-docs" novalidate>
-      <div class="rx-head"><p class="kicker">Step 3 of 3 · Part 2 of 4</p><h1 class="rx-h1">Owner details</h1><p class="rx-sub">Tell us about the main owner or director.</p></div>
+      <div class="rx-head"><p class="kicker">Step 3 of 3 · Part 2 of 4</p><h1 class="rx-h1">Owner information</h1><p class="rx-sub">Provide details of the owner, or any acting director of the business, for KYC verification.</p></div>
       <button type="button" class="demo-link" data-autofill>Demo: autofill</button>
       <div class="rx-card">
-        <div class="field"><label class="label" for="o-name">Full Name <span class="req" aria-hidden="true">*</span></label><input class="input" id="o-name" required autocomplete="name" data-err="Enter the owner's full name" aria-describedby="o-name-err" /><span class="err" id="o-name-err"></span></div>
-        <div class="two">
-          <div class="field"><label class="label" for="o-role">Role <span class="req" aria-hidden="true">*</span></label><select class="input" id="o-role" required data-err="Select a role" aria-describedby="o-role-err"><option value="">Select a role</option><option>Owner</option><option>Director</option><option>Partner</option></select><span class="err" id="o-role-err"></span></div>
-          <div class="field"><label class="label" for="o-dob">Date of Birth <span class="req" aria-hidden="true">*</span></label><input class="input" id="o-dob" type="date" required autocomplete="bday" data-err="Enter a date of birth" aria-describedby="o-dob-err" /><span class="err" id="o-dob-err"></span></div>
-        </div>
-        <div class="two">
-          <div class="field"><label class="label" for="o-nat">Nationality <span class="req" aria-hidden="true">*</span></label><input class="input" id="o-nat" required data-err="Enter a nationality" aria-describedby="o-nat-err" /><span class="err" id="o-nat-err"></span></div>
-          <div class="field"><label class="label" for="o-id">National ID or Passport Number <span class="req" aria-hidden="true">*</span></label><input class="input" id="o-id" required data-err="Enter an ID or passport number" aria-describedby="o-id-err" /><span class="err" id="o-id-err"></span></div>
-        </div>
-        <div class="field"><label class="label" for="o-addr">Residential Address <span class="req" aria-hidden="true">*</span></label><input class="input" id="o-addr" required autocomplete="street-address" data-err="Enter a residential address" aria-describedby="o-addr-err" /><span class="err" id="o-addr-err"></span></div>
+        <div class="field"><label class="label" for="o-first">First Name <span class="req" aria-hidden="true">*</span></label><input class="input" id="o-first" required placeholder="Enter first name" data-err="Enter the first name" aria-describedby="o-first-err" autocomplete="given-name" /><span class="err" id="o-first-err"></span></div>
+        <div class="field"><label class="label" for="o-last">Surname <span class="req" aria-hidden="true">*</span></label><input class="input" id="o-last" required placeholder="Enter surname" data-err="Enter the surname" aria-describedby="o-last-err" autocomplete="family-name" /><span class="err" id="o-last-err"></span></div>
+        <div class="field"><label class="label" for="o-role">Position Held <span class="req" aria-hidden="true">*</span></label><select class="input" id="o-role" required data-err="Select the position held" aria-describedby="o-role-err"><option value="">Select position</option><option>Owner</option><option>Director</option><option>Partner</option></select><span class="err" id="o-role-err"></span></div>
+        <div class="field"><label class="label" for="o-nat">Nationality <span class="req" aria-hidden="true">*</span></label><select class="input" id="o-nat" required data-err="Select a nationality" aria-describedby="o-nat-err"><option value="">Select nationality</option><option>Seychelles</option><option>Mauritius</option><option>Madagascar</option><option>India</option><option>South Africa</option><option>Kenya</option><option>United Arab Emirates</option><option>United Kingdom</option><option>France</option><option>Other</option></select><span class="err" id="o-nat-err"></span></div>
+        <div class="field"><label class="label" for="o-id">National ID / Passport Number <span class="req" aria-hidden="true">*</span></label><input class="input" id="o-id" required placeholder="Enter ID or passport number" data-err="Enter the ID or passport number" aria-describedby="o-id-err" /><span class="err" id="o-id-err"></span></div>
+        <div class="field"><label class="label" for="o-addr">Residential Address <span class="req" aria-hidden="true">*</span></label><input class="input" id="o-addr" required placeholder="Enter residential address" data-err="Enter the residential address" aria-describedby="o-addr-err" autocomplete="street-address" /><span class="err" id="o-addr-err"></span></div>
+        <div class="field"><label class="label" for="o-phone">Mobile Number <span class="req" aria-hidden="true">*</span></label><div class="phone"><span class="phone-cc">+248</span><input class="input" id="o-phone" type="tel" inputmode="tel" required autocomplete="tel-national" placeholder="1234567" data-err="Enter a 7-digit mobile number" data-pattern="^\d{7}$" aria-describedby="o-phone-err" /></div><span class="err" id="o-phone-err"></span></div>
+        <div class="field"><label class="label" for="o-email">Email <span class="req" aria-hidden="true">*</span></label><div class="input-ic"><svg class="i i16"><use href="#i-mail"/></svg><input class="input" id="o-email" type="email" required autocomplete="email" placeholder="Enter email address" data-err="Enter a valid email, like name@business.com" data-pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$" aria-describedby="o-email-err" /></div><span class="err" id="o-email-err"></span></div>
+        <div class="field"><label class="label" for="o-pep">PEP Declaration <span class="req" aria-hidden="true">*</span></label><select class="input" id="o-pep" required data-err="Select a PEP declaration" aria-describedby="o-pep-err o-pep-hint"><option value="">Select PEP status</option><option>No, I am not a PEP</option><option>Yes, I am a PEP</option><option>Yes, I am a family member or close associate of a PEP</option></select><span class="hint-text" id="o-pep-hint">A PEP (politically exposed person) holds, or has held, a prominent public role.</span><span class="err" id="o-pep-err"></span></div>
       </div>
       <div class="between"><button type="button" class="btn-outline" data-rx="online">Back</button><button class="btn-primary">Save and continue</button></div>
     </form>
@@ -839,8 +859,8 @@
     <div data-rx-hdr></div>
     <div class="rx-col">
       <div class="rx-head"><p class="kicker">Step 3 of 3 · Part 4 of 4</p><h1 class="rx-h1">Review and sign</h1><p class="rx-sub">Check your details, then sign to submit.</p></div>
-      <div class="rx-card"><div class="between"><h2>Business details</h2><button class="btn-link" data-rx="online">Edit</button></div><dl class="rv" data-from="online"></dl></div>
-      <div class="rx-card"><div class="between"><h2>Owner details</h2><button class="btn-link" data-rx="online-owner">Edit</button></div><dl class="rv" data-from="online-owner"></dl></div>
+      <div class="rx-card"><div class="between"><h2>Business information</h2><button class="btn-link" data-rx="online">Edit</button></div><dl class="rv" data-from="online"></dl></div>
+      <div class="rx-card"><div class="between"><h2>Owner information</h2><button class="btn-link" data-rx="online-owner">Edit</button></div><dl class="rv" data-from="online-owner"></dl></div>
       <div class="rx-card"><div class="between"><h2>Documents</h2><button class="btn-link" data-rx="online-docs">Edit</button></div><p style="font-size:14px;line-height:20px" id="doc-sum"></p></div>
       <div class="rx-card"><h2>Sign electronically</h2>
         <div class="field"><label class="label" for="sign">Type Your Full Name to Sign</label><input class="input" id="sign" autocomplete="name" /></div>
@@ -907,7 +927,7 @@
           <span class="err" id="su-pw-err"></span>
         </div>
         <div class="field"><label class="label" for="su-phone">Mobile Number</label>
-          <div class="code-row"><div class="phone"><select aria-label="Country code"><option>+248</option></select><input class="input" id="su-phone" type="tel" value="2 514 778" autocomplete="tel-national" /></div><button type="button" class="btn-outline" id="su-send">Send code</button></div>
+          <div class="code-row"><div class="phone"><span class="phone-cc">+248</span><input class="input" id="su-phone" type="tel" value="2 514 778" autocomplete="tel-national" /></div><button type="button" class="btn-outline" id="su-send">Send code</button></div>
         </div>
         <div class="field"><label class="label" for="su-code">Verification Code</label><input class="input" id="su-code" inputmode="numeric" maxlength="4" autocomplete="one-time-code" placeholder="4-digit code" disabled aria-describedby="su-code-err" /><span class="err" id="su-code-err"></span></div>
       </div>
@@ -1035,7 +1055,7 @@ function renderTracker() {
     const pal = i.vendorId ? byId(i.vendorId).pal : palFor(i.name);
     const sub = esc(i.vendorId ? i.type : i.area || (i.email === RX_EMAIL ? 'Victoria' : ''));
     const acct = i.vendorId
-      ? '<span class="acct"><svg class="i i16"><use href="#i-check"/></svg>Existing user</span>'
+      ? '<span class="acct"><svg class="i i16"><use href="#i-check"/></svg>FusePay user</span>'
       : `<span class="acct-email" title="Invite sent to ${esc(i.email)}">${esc(i.email)}</span>`;
     const act = i.status === 'shared' ? `<button class="btn-link" data-act="kyb" data-id="${i.id}">View KYB</button>`
       : i.status === 'sent' ? `<button class="btn-link" data-act="resend" data-id="${i.id}">Resend</button><button class="btn-link" data-act="cancel" data-id="${i.id}" style="color:#CC2828">Cancel</button>`
@@ -1376,7 +1396,7 @@ async function sendNew(another, btn) {
   addInvites([{
     name, type: 'New business',
     email: form.elements.email.value.trim(),
-    phone: `${document.getElementById('nb-code').value} ${form.elements.phone.value.trim()}`,
+    phone: `+248 ${form.elements.phone.value.trim()}`,
   }]);
   toast(`Invite sent to ${name}`);
   if (another) { resetForm(); form.elements.name.focus(); }
@@ -1437,7 +1457,7 @@ function openKyb(inv) {
       ['Registered Address', k ? esc(k.addr) : `${loc}, Seychelles`, 'full'], ['Contact', esc(inv.email || 'Not provided'), 'full'],
     ]],
     ['Owners and Directors (KYC)', [['Director', esc(k ? k.owner : 'Jean-Paul Hoareau') + ok, 'full']]],
-    ['Bank Account', [['Account', 'MCB Seychelles •••• 4821' + ok, 'full']]],
+    ['Bank Account', [['Settlement Account', esc(k && k.bank ? `${k.bank} •••• ${String(k.acct).slice(-4)}` : 'Mauritius Commercial Bank •••• 4821') + ok, 'full']]],
   ];
   document.getElementById('kyb-body').innerHTML = `
     <div class="kyb-head">${avatar(pal)}<h3 class="dlg-title" style="font-size:18px;padding:0">${esc(inv.name)}</h3>
@@ -1525,7 +1545,10 @@ const OTHER_REQUESTERS = [
 const PERSONA = { tx: GALAXY.name, rx: RX_BIZ, fx: 'Atlas Digital Systems' };
 const AUTOFILL = {
   'b-name': RX_BIZ, 'b-reg': 'C8429117', 'b-tin': '213004587', 'b-addr': 'Shop 4, Victoria Waterfront, Victoria, Mahé',
-  'o-name': 'Marie Laporte', 'o-role': 'Owner', 'o-dob': '1986-04-12', 'o-nat': 'Seychellois', 'o-id': 'SC 0481 2297', 'o-addr': 'Mont Fleuri, Mahé',
+  'b-phone': '2514778', 'b-email': 'hello@oceanbreeze.sc', 'b-cat': 'Restaurants & Catering', 'b-send': 'Less than SR 1M', 'b-recv': 'SR 1M – 10M',
+  'b-bank': 'Mauritius Commercial Bank', 'b-acct': '000451264821',
+  'o-first': 'Marie', 'o-last': 'Laporte', 'o-role': 'Owner', 'o-nat': 'Seychelles', 'o-id': 'SC04812297', 'o-addr': 'Mont Fleuri, Mahé',
+  'o-phone': '2533190', 'o-email': 'marie@oceanbreeze.sc', 'o-pep': 'No, I am not a PEP',
 };
 const KYB_SCREENS = ['welcome', 'choice', 'online', 'online-owner', 'online-docs', 'online-review', 'download', 'upload'];
 
@@ -1669,24 +1692,100 @@ const choiceForm = document.getElementById('choice-form');
 choiceForm.addEventListener('change', () => document.getElementById('choice-err').hidden = true);
 choiceForm.addEventListener('submit', e => { e.preventDefault(); if (!choiceForm.method.value) { document.getElementById('choice-err').hidden = false; return choiceForm.querySelector('input[name=method]').focus(); } state.rx.method = choiceForm.method.value; goRx(state.rx.method === 'online' ? 'online' : 'download'); });
 
+// ---------- Dropdowns: styled listbox over a native <select> ----------
+const DD_CHEV = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 7.5 5 5 5-5"/></svg>';
+const DD_TICK = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4.5 10.5 3.5 3.5 7.5-8"/></svg>';
+function enhanceSelect(sel) {
+  const wrap = document.createElement('div');
+  wrap.className = 'dd';
+  sel.before(wrap);
+  wrap.appendChild(sel);
+  sel.classList.add('dd-native');
+  sel.tabIndex = -1;
+  sel.setAttribute('aria-hidden', 'true');
+  const label = document.querySelector(`label[for="${sel.id}"]`);
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'input dd-btn';
+  btn.id = sel.id + '-dd';
+  btn.setAttribute('role', 'combobox');
+  btn.setAttribute('aria-haspopup', 'listbox');
+  btn.setAttribute('aria-expanded', 'false');
+  btn.setAttribute('aria-controls', sel.id + '-list');
+  btn.setAttribute('aria-describedby', sel.getAttribute('aria-describedby') || '');
+  if (label) { label.htmlFor = btn.id; label.id = label.id || sel.id + '-lbl'; }
+  const list = document.createElement('ul');
+  list.className = 'dd-list';
+  list.id = sel.id + '-list';
+  list.setAttribute('role', 'listbox');
+  if (label) list.setAttribute('aria-labelledby', label.id);
+  const opts = [...sel.options].filter(o => o.value);
+  list.innerHTML = opts.map((o, i) => `<li class="dd-opt" role="option" id="${sel.id}-o${i}" data-v="${esc(o.value)}" aria-selected="false"><span>${esc(o.text)}</span>${DD_TICK}</li>`).join('');
+  wrap.append(btn, list);
+  let active = -1;
+  const items = () => [...list.children];
+  const paint = () => {
+    btn.innerHTML = `<span>${esc(sel.value ? sel.selectedOptions[0].text : sel.options[0].text)}</span>${DD_CHEV}`;
+    btn.classList.toggle('empty', !sel.value);
+    items().forEach((li, i) => { li.setAttribute('aria-selected', li.dataset.v === sel.value); li.classList.toggle('active', i === active); });
+    if (active >= 0) { btn.setAttribute('aria-activedescendant', items()[active].id); items()[active].scrollIntoView({ block: 'nearest' }); }
+    else btn.removeAttribute('aria-activedescendant');
+  };
+  // Open upwards when the list would spill past the bottom of the white container and there's more room above
+  const place = () => {
+    const box = (wrap.closest('.rx-card, .dialog') || document.body).getBoundingClientRect(), b = btn.getBoundingClientRect();
+    const need = Math.min(list.scrollHeight, 256) + 8, below = box.bottom - b.bottom, above = b.top - box.top;
+    wrap.classList.toggle('dd-up', need > below && above > below);
+  };
+  const open = () => { place(); wrap.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); active = Math.max(0, opts.findIndex(o => o.value === sel.value)); paint(); };
+  const close = () => { wrap.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); active = -1; paint(); };
+  const choose = i => { sel.value = opts[i].value; sel.dispatchEvent(new Event('change', { bubbles: true })); close(); btn.focus(); };
+  btn.addEventListener('click', () => wrap.classList.contains('open') ? close() : open());
+  btn.addEventListener('keydown', e => {
+    const isOpen = wrap.classList.contains('open');
+    if (['ArrowDown', 'ArrowUp'].includes(e.key)) {
+      e.preventDefault();
+      if (!isOpen) return open();
+      active = Math.max(0, Math.min(opts.length - 1, active + (e.key === 'ArrowDown' ? 1 : -1)));
+      paint();
+    } else if ((e.key === 'Enter' || e.key === ' ') && isOpen) { e.preventDefault(); choose(active); }
+    else if (e.key === 'Escape' && isOpen) { e.preventDefault(); e.stopPropagation(); close(); }
+    else if (e.key === 'Tab' && isOpen) close();
+    else if (e.key.length === 1 && /\S/.test(e.key)) { // type a letter to jump
+      const i = opts.findIndex(o => o.text.toLowerCase().startsWith(e.key.toLowerCase()));
+      if (i >= 0) { if (!isOpen) open(); active = i; paint(); }
+    }
+  });
+  list.addEventListener('mousedown', e => { const li = e.target.closest('.dd-opt'); if (li) { e.preventDefault(); choose(items().indexOf(li)); } });
+  list.addEventListener('mousemove', e => { const li = e.target.closest('.dd-opt'); if (li && items().indexOf(li) !== active) { active = items().indexOf(li); paint(); } });
+  document.addEventListener('mousedown', e => { if (!wrap.contains(e.target) && wrap.classList.contains('open')) close(); });
+  sel.addEventListener('change', paint);
+  sel.ddPaint = paint;
+  paint();
+}
+document.querySelectorAll('select.input').forEach(enhanceSelect);
+const syncDropdowns = () => document.querySelectorAll('select.dd-native').forEach(s => s.ddPaint());
+
 // ---------- KYB: online forms ----------
+const visibleControl = i => i.classList.contains('dd-native') ? i.parentElement.querySelector('.dd-btn') : i;
 function setFieldErr(i, msg) {
   const f = i.closest('.field');
   f.classList.toggle('invalid', !!msg);
   f.querySelector('.err').textContent = msg;
-  i.setAttribute('aria-invalid', !!msg);
+  visibleControl(i).setAttribute('aria-invalid', !!msg);
 }
 document.querySelectorAll('#rx-flow form[data-next]').forEach(f => f.addEventListener('submit', e => {
   e.preventDefault();
   let first = null;
-  f.querySelectorAll('[required]').forEach(i => { const ok = i.value.trim() !== ''; setFieldErr(i, ok ? '' : i.dataset.err); if (!ok && !first) first = i; });
-  if (first) first.focus(); else goRx(f.dataset.next);
+  f.querySelectorAll('[required]').forEach(i => { const v = i.value.trim(); const ok = v !== '' && (!i.dataset.pattern || new RegExp(i.dataset.pattern).test(v.replace(/\s/g, ''))); setFieldErr(i, ok ? '' : i.dataset.err); if (!ok && !first) first = i; });
+  if (first) visibleControl(first).focus(); else goRx(f.dataset.next);
 }));
 ['input', 'change'].forEach(ev => document.getElementById('rx-flow').addEventListener(ev, e => {
-  if (e.target.closest('.field.invalid') && e.target.value.trim() && e.target.dataset.err) setFieldErr(e.target, '');
+  const t = e.target; if (t.closest('.field.invalid') && t.dataset.err && t.value.trim() && (!t.dataset.pattern || new RegExp(t.dataset.pattern).test(t.value.replace(/\s/g, '')))) setFieldErr(t, '');
 }));
 document.querySelectorAll('[data-autofill]').forEach(b => b.onclick = () => {
   Object.entries(AUTOFILL).forEach(([id, v]) => { const i = document.getElementById(id); i.value = v; setFieldErr(i, ''); });
+  syncDropdowns();
   syncFilled();
   toast('Demo: filled with sample details');
 });
@@ -1694,9 +1793,9 @@ const val = id => document.getElementById(id).value.trim();
 function fillReview() {
   document.querySelectorAll('dl[data-from]').forEach(dl => {
     dl.innerHTML = [...document.querySelectorAll(`[data-s="${dl.dataset.from}"] .field`)].map(f => {
-      const i = f.querySelector('input, select');
+      const i = f.querySelector('.input');
       let v = i.value;
-      if (i.type === 'date' && v) v = fmtDate(v);
+      if (f.querySelector('.phone') && v) v = `+248 ${v}`;
       return `<dt>${f.querySelector('label').textContent}</dt><dd>${esc(v || 'Not provided')}</dd>`;
     }).join('');
   });
@@ -1712,13 +1811,15 @@ sign.addEventListener('input', signOk); agree.addEventListener('change', signOk)
 // ---------- KYB: uploads (shared by online part 3 and manual) ----------
 const SIGNED = ['Signed form', [['KYB/KYC application form', 'All pages signed and stamped']]];
 const DOCS = [
-  ['Business documents', [['Business registration certificate'], ['Tax identification document'], ['Business address proof', 'Utility, broadband or landline bill, or bank statement'], ['Business licence']]],
-  ['Owner documents', [['National ID or passport', 'For each owner or director'], ['Proof of address', 'Utility, broadband or landline bill, or bank statement']]],
+  ['Business Documents', [['Business Registration Certificate'], ['Tax Identification Document'],
+    ['Business Address Proof', 'A PUC, broadband or landline bill, or any other official document in the business name, no older than three months'], ['Business Licence']]],
+  ['Personal Documents', [['National ID / Passport', 'For the owner or acting director'],
+    ['Proof of Address', 'A PUC, broadband or landline bill, no older than three months']]],
 ];
 const SAMPLE_FILES = {
-  'KYB/KYC application form': ['application-form-signed.pdf', 2.4e6], 'Business registration certificate': ['registration-certificate.pdf', 860e3],
-  'Tax identification document': ['tin-certificate.jpg', 1.1e6], 'Business address proof': ['utility-bill-oct.pdf', 1.6e6],
-  'Business licence': ['business-licence.pdf', 740e3], 'National ID or passport': ['passport-scan.jpg', 2.1e6], 'Proof of address': ['owner-address-proof.pdf', 1.3e6],
+  'KYB/KYC application form': ['application-form-signed.pdf', 2.4e6], 'Business Registration Certificate': ['registration-certificate.pdf', 860e3],
+  'Tax Identification Document': ['tin-certificate.jpg', 1.1e6], 'Business Address Proof': ['utility-bill-oct.pdf', 1.6e6],
+  'Business Licence': ['business-licence.pdf', 740e3], 'National ID / Passport': ['passport-scan.jpg', 2.1e6], 'Proof of Address': ['owner-address-proof.pdf', 1.3e6],
 };
 const MAX = 10 * 1024 * 1024;
 const fmtSize = b => b < 1048576 ? Math.round(b / 1024) + ' KB' : +(b / 1048576).toFixed(1) + ' MB';
@@ -1792,7 +1893,7 @@ async function submitKyb(method, btn) {
   const pick = id => (online && val(id)) || AUTOFILL[id];
   Object.assign(state.rx, {
     submitted: true, method, docs: doneCount(online ? 'online-docs' : 'upload'),
-    kyb: { name: pick('b-name'), reg: pick('b-reg'), tin: pick('b-tin'), addr: pick('b-addr'), owner: pick('o-name') },
+    kyb: { name: pick('b-name'), reg: pick('b-reg'), tin: pick('b-tin'), addr: pick('b-addr'), owner: `${pick('o-first')} ${pick('o-last')}`, bank: pick('b-bank'), acct: pick('b-acct') },
   });
   goRx('submitted');
 }
