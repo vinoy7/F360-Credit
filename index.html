@@ -1155,7 +1155,7 @@ document.addEventListener('keydown', e => {
 document.addEventListener('keydown', e => {
   const tab = e.target.closest?.('[role="tab"]');
   if (!tab || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
-  const list = tab.closest('[role="tablist"]'), live = () => [...list.querySelectorAll('[role="tab"]:not([aria-disabled="true"])')];
+  const list = tab.closest('[role="tablist"]'), live = () => [...list.querySelectorAll('[role="tab"]:not([aria-disabled="true"]):not([hidden])')];
   const tabs = live();
   let i = tabs.indexOf(tab);
   i = e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : (i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
@@ -1974,12 +1974,15 @@ document.getElementById('setup-form').addEventListener('submit', async e => {
 // Only vendors that requested access: pending requests on top, accepted (access granted) below.
 // Declined or revoked requests drop off the list until the vendor asks again.
 let recvFresh = null;
+const SHOW_KYB2 = false;
 let recvTab = 'main';
 function renderRecv() {
   const r = state.recv[state.mode];
   // KYB/KYC 2 exists only in the FusePay user demo
-  document.getElementById('rc-tab-all').hidden = state.mode !== 'fx';
-  if (state.mode !== 'fx') recvTab = 'main';
+  // ponytail: KYB/KYC 2 parked — set SHOW_KYB2 = true to bring the tab back
+  const showAll = SHOW_KYB2 && state.mode === 'fx';
+  document.getElementById('rc-tab-all').hidden = !showAll;
+  if (!showAll) recvTab = 'main';
   document.querySelectorAll('#rc-tabs [data-rctab]').forEach(t => { const on = t.dataset.rctab === recvTab; t.classList.toggle('active', on); t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; });
   requestAnimationFrame(() => moveIndicator('rc-indicator', document.querySelector('#rc-tabs .active')));
   document.getElementById('rc-head').classList.toggle('all', recvTab === 'all');
